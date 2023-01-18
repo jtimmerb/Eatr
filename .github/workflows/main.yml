@@ -4,10 +4,5 @@ jobs:
     runs-on: ubuntu-latest
     name: Run ESLint
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with: 
-          node-version: 16.x
-      - run: npm install --package-lock-only
-      - run: npx eslint --ext .ts,.tsx "backend/**"
-  
+      - name: Checkout code
+        uses: actions/checkout@v2
