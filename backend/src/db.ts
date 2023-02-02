@@ -1,3 +1,5 @@
+import {MySqlParameters} from 'aws-sdk/clients/quicksight';
+
 const mysql = require('mysql');
 
 export class db_conn {
@@ -42,7 +44,7 @@ export class db_conn {
   }
 
   getUser(userID: number) {
-    let sql = `SELECT name FROM users WHERE user_id=${userID}`;
+    let sql = `SELECT * FROM users WHERE user_id=${userID}`;
     this.db_connection.query(sql, function (err: any, result: any) {
       if (err) throw err;
       console.log(result);
