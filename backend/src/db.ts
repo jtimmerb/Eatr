@@ -23,9 +23,10 @@ export class db_conn {
       port: db_port,
       database: 'sys',
     });
+    this.initializeCon();
   }
 
-  initializeCon() {
+  private initializeCon() {
     this.db_connection.connect(function (err: {stack: string}) {
       if (err) {
         console.error('Database connection failed: ' + err.stack);
@@ -35,23 +36,25 @@ export class db_conn {
     });
   }
 
-  createUser(userID: number, name: string) {
-    let sql = `INSERT INTO users (user_id, name) VALUES (${userID}, '${name}')`;
-    this.db_connection.query(sql, function (err: any, result: any) {
+  public createUser(userID: number, name: string, res: any) {
+    let query = `INSERT INTO users (user_id, name) VALUES (${userID}, '${name}')`;
+    this.db_connection.query(query, function (err: any, result: any) {
       if (err) throw err;
       console.log('1 record inserted');
+      res.send(result);
     });
   }
 
-  getUser(userID: number) {
-    let sql = `SELECT * FROM users WHERE user_id=${userID}`;
-    this.db_connection.query(sql, function (err: any, result: any) {
+  public getUser(userID: any, res: any) {
+    let query = `SELECT * FROM users WHERE user_id=${userID}`;
+    this.db_connection.query(query, function (err: any, result: any) {
       if (err) throw err;
       console.log(result);
+      res.send(result);
     });
   }
 
-  getUsersTable() {
+  public getUsersTable() {
     this.db_connection.query('SELECT * FROM users', function (err: {stack: string}, result: any, fields: any) {
       if (err) throw err;
       console.log(result);
