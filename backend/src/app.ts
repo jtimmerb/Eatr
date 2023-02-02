@@ -1,23 +1,11 @@
 import express from 'express';
+import {db_conn} from './db';
 
-const {db_host, db_user, db_pwd, db_name, db_port} = require('./db.config.json');
-var mysql = require('mysql');
 const app = express();
+const bodyparser = require('body-parser');
+const {db_host, db_user, db_pwd, db_name, db_port} = require('./db.config.json');
 
-var db_connection = mysql.createConnection({
-  host: db_host,
-  user: db_user,
-  password: db_pwd,
-  port: db_port,
-});
-
-db_connection.connect(function (err: {stack: string}) {
-  if (err) {
-    console.error('Database connection failed: ' + err.stack);
-    return;
-  }
-  console.log('Connected to database.');
-});
+app.use(bodyparser.json());
 
 app.get('/', (req, res) => {
   res.send('Hello world');
@@ -26,3 +14,7 @@ app.get('/', (req, res) => {
 app.listen(8080, () => {
   console.log('server running');
 });
+
+let database = new db_conn(db_host, db_user, db_pwd, db_name, db_port);
+database.initializeCon();
+database.getUsersTable();
