@@ -30,12 +30,14 @@ export class db_conn {
         return;
       }
       console.log('Connected to database.');
-      /*var sql = "INSERT INTO users (user_id, name) VALUES (2, 'Tony Ni')";
-        db_connection.query(sql, function (err: any, result: any) {
-          if (err) throw err;
-          console.log('1 record inserted');
-        });
-      */
+    });
+  }
+
+  createUser(userID: number, name: string) {
+    let sql = `INSERT INTO users (user_id, name) VALUES (${userID}, '${name}')`;
+    this.db_connection.query(sql, function (err: any, result: any) {
+      if (err) throw err;
+      console.log('1 record inserted');
     });
   }
 
