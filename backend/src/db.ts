@@ -41,6 +41,14 @@ export class db_conn {
     });
   }
 
+  getUser(userID: number) {
+    let sql = `SELECT * FROM users WHERE user_id=${userID}`;
+    this.db_connection.query(sql, function (err: any, result: any) {
+      if (err) throw err;
+      console.log(result);
+    });
+  }
+
   getUsersTable() {
     this.db_connection.query('SELECT * FROM users', function (err: {stack: string}, result: any, fields: any) {
       if (err) throw err;
