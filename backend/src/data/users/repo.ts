@@ -1,6 +1,6 @@
 import {User} from './entity';
 import {Repo} from '..';
-import {ID_LENGTH, ID_GENERATION_ATTEMPTS} from '../../config';
+import {ID_MAX, ID_GENERATION_ATTEMPTS} from '../../config';
 import {int} from 'aws-sdk/clients/datapipeline';
 import {UserMapper} from './mapper';
 
@@ -20,14 +20,15 @@ export default class UserRepo implements InterfaceUserRepo {
 
   /** UTILITY */
   /** Generate a random ID for user */
+
   public async getRandomID(): Promise<int> {
-    let key = Math.floor(Math.random() * ID_LENGTH);
+    let key = Math.floor(Math.random() * ID_MAX);
     for (let i = 0; i <= ID_GENERATION_ATTEMPTS; i++) {
       if (i === ID_GENERATION_ATTEMPTS) {
         throw new Error('Failed to create player try again');
       }
       if (await this.exists({userID: key, name: ''})) {
-        key = Math.floor(Math.random() * ID_LENGTH);
+        key = Math.floor(Math.random() * ID_MAX);
       } else {
         break;
       }
@@ -56,7 +57,7 @@ export default class UserRepo implements InterfaceUserRepo {
   }
 
   /** Deletes player in DB */
-  public async delete(t: User): Promise<void> {
+  public async delete(userID: int): Promise<void> {
     /*
     const params = {
       TableName: DYNAMO_TABLE,
@@ -68,10 +69,15 @@ export default class UserRepo implements InterfaceUserRepo {
 
     await this.dynamodb.send(new DeleteItemCommand(params));
     */
+    let query = `DELETE FROM users WHERE user_id=${userID}`;
+    this.mysqldb.query(query, function (err: any, result: any) {
+      if (err) throw err;
+      //console.log(result);
+    });
   }
 
   /** Updates player in DB, but if player does not exist Creates new Player Entity */
-  public async save(t: User): Promise<void> {
+  public async save(name: string): Promise<User> {
     /*const player = PlayerMapper.toDB(t);
     const params = {
       TableName: DYNAMO_TABLE,
@@ -80,14 +86,19 @@ export default class UserRepo implements InterfaceUserRepo {
 
     await this.dynamodb.send(new PutItemCommand(params));
     */
-    let query = `INSERT INTO users (user_id, name) VALUES (${t.userID}, '${t.name}')`;
-    this.mysqldb.query(query, function (err: any, result: any) {
-      if (err) throw err;
-      console.log('1 record inserted');
+    let id = await this.getRandomID();
+    let query = `INSERT INTO users (user_id, name) VALUES (${id}, '${name}')`;
+    return new Promise(resolve => {
+      let tempUser = {userID: id as int, name: name as string} as User;
+      this.mysqldb.query(query, function (err: any) {
+        if (err) throw err;
+        //console.log(result);
+      });
+      resolve(tempUser);
     });
   }
 
-  /** Get player by userID */
+  /** Get user by userID */
   public async getUserByID(userID: string): Promise<User> {
     let conn = this.mysqldb;
     return new Promise(function (resolve, reject) {

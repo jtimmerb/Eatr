@@ -1,7 +1,7 @@
 export interface Repo<T> {
   exists(t: T): Promise<boolean>;
-  delete(t: T): Promise<void>;
-  save(t: T): Promise<void>;
+  delete(t: any): Promise<void>;
+  save(t: any): Promise<T>;
 }
 
 export interface Mapper<T> {

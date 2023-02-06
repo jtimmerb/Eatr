@@ -1,4 +1,6 @@
+import {errorMonitor} from 'events';
 import express from 'express';
+import {stringify} from 'querystring';
 import db_conn from './service/db_conn';
 import EatrService from './service/service';
 
@@ -21,12 +23,28 @@ app.post('/users', async (req, res) => {
   res.send('Inserted\n');
 });
 
-app.get('/users/:user_id', async (req, res) => {
-  //database.getUser(req.params.user_id);
-  let user = await service.userRepo.getUserByID(req.params.user_id);
+app.post('/create_user', async (req, res) => {
+  let user = await service.userRepo.save(req.body.name);
   res.send(JSON.stringify(user) + '\n');
 });
 
-//database.getUsersTable();
+app.get('/users/:user_id', async (req, res) => {
+  //database.getUser(req.params.user_id);
+  let user = await service.userRepo.getUserByID(req.params.user_id).catch(err => {
+    throw err;
+  });
+  res.send(JSON.stringify(user) + '\n');
+});
+
+app.delete('/users/:user_id', async (req, res) => {
+  //database.getUser(req.params.user_id);
+  let user = await service.userRepo.delete(parseInt(req.params.user_id)).catch(err => {
+    throw err;
+  });
+  res.send('Deleted User #' + req.params.user_id + '\n');
+  database.getUsersTable();
+});
+
+database.getUsersTable();
 
 //sqlize
