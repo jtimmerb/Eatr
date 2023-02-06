@@ -1,6 +1,4 @@
-import {errorMonitor} from 'events';
 import express from 'express';
-import {stringify} from 'querystring';
 import db_conn from './service/db_conn';
 import EatrService from './service/service';
 

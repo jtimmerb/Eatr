@@ -4,13 +4,13 @@ import {ID_MAX, ID_GENERATION_ATTEMPTS} from '../../config';
 import {int} from 'aws-sdk/clients/datapipeline';
 import {UserMapper} from './mapper';
 
-/** This Interface extends the base Repo and implement new methods uniqe to Player Entity */
+/** This Interface extends the base Repo and implement new methods uniqe to User Entity */
 interface InterfaceUserRepo extends Repo<User> {
   getRandomID(): Promise<int>;
   getUserByID(userID: string): Promise<User>;
 }
 
-/** The Player Repo persists and fetches object from DB */
+/** The User Repo persists and fetches object from DB */
 export default class UserRepo implements InterfaceUserRepo {
   public mysqldb: any;
 
@@ -37,7 +37,7 @@ export default class UserRepo implements InterfaceUserRepo {
   }
 
   /** DB INTERACTIONS */
-  /** Checks if player exists in DB */
+  /** Checks if user exists in DB */
   public async exists(t: User): Promise<boolean> {
     /*
     const params = {
@@ -56,7 +56,7 @@ export default class UserRepo implements InterfaceUserRepo {
     return false;
   }
 
-  /** Deletes player in DB */
+  /** Deletes user in DB */
   public async delete(userID: int): Promise<void> {
     /*
     const params = {
@@ -76,7 +76,7 @@ export default class UserRepo implements InterfaceUserRepo {
     });
   }
 
-  /** Updates player in DB, but if player does not exist Creates new Player Entity */
+  /** Updates user in DB, but if player does not exist Creates new User Entity */
   public async save(name: string): Promise<User> {
     /*const player = PlayerMapper.toDB(t);
     const params = {
