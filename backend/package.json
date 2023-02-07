@@ -6,8 +6,10 @@
   "scripts": {
     "start": "node ./dist/app.js",
     "dev": "nodemon ./src/app.ts",
-    "lint": "eslint . --ext .ts",
-    "build": "tsc -p ."
+    "build": "tsc -p .",
+    "lint": "eslint . --ext js,jsx,ts,tsx --fix",
+    "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write",
+    "prettier-check": "prettier --config .prettierrc 'src/**/*.ts' --check"
   },
   "keywords": [],
   "author": "",
