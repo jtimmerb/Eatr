@@ -13,10 +13,10 @@ jobs:
           node-version: 14
 
       - name: Install NPM packages
-        run: npm install
+        run: cd backend/ && npm install
 
       - name: Lint
-        run: npm run lint
+        run: cd backend/ && npm run lint
 
       - name: Check formatting
-        run: npm run prettier-check
+        run: cd backedn/ && npm run prettier-check
