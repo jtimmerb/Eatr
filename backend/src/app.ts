@@ -24,6 +24,7 @@ app.post('/users', async (req, res) => {
 app.post('/create_user', async (req, res) => {
   let user = await service.userRepo.save(req.body.name);
   res.send(JSON.stringify(user) + '\n');
+  database.getUsersTable();
 });
 
 app.get('/users/:user_id', async (req, res) => {
