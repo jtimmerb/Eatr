@@ -1,12 +1,10 @@
 import {User} from './entity';
 import {Repo} from '..';
-import {ID_MAX, ID_GENERATION_ATTEMPTS} from '../../config';
 import {int} from 'aws-sdk/clients/datapipeline';
 import {UserMapper} from './mapper';
 
 /** This Interface extends the base Repo and implement new methods uniqe to User Entity */
 interface InterfaceUserRepo extends Repo<User> {
-  getRandomID(): Promise<int>;
   getUserByID(userID: string): Promise<User>;
 }
 
@@ -16,24 +14,6 @@ export default class UserRepo implements InterfaceUserRepo {
 
   constructor(mysqldb: any) {
     this.mysqldb = mysqldb;
-  }
-
-  /** UTILITY */
-  /** Generate a random ID for user */
-
-  public async getRandomID(): Promise<int> {
-    let key = Math.floor(Math.random() * ID_MAX);
-    for (let i = 0; i <= ID_GENERATION_ATTEMPTS; i++) {
-      if (i === ID_GENERATION_ATTEMPTS) {
-        throw new Error('Failed to create player try again');
-      }
-      if (await this.exists({userID: key, name: ''})) {
-        key = Math.floor(Math.random() * ID_MAX);
-      } else {
-        break;
-      }
-    }
-    return key;
   }
 
   /** DB INTERACTIONS */
@@ -86,10 +66,10 @@ export default class UserRepo implements InterfaceUserRepo {
 
     await this.dynamodb.send(new PutItemCommand(params));
     */
-    let id = await this.getRandomID();
-    let query = `INSERT INTO users (user_id, name) VALUES (${id}, '${name}')`;
+    //let id = await this.getRandomID();
+    let query = `INSERT INTO users (name) VALUES ('${name}')`;
     return new Promise(resolve => {
-      let tempUser = {userID: id as int, name: name as string} as User;
+      let tempUser = {userID: 0 as int, name: name as string} as User;
       this.mysqldb.query(query, function (err: any) {
         if (err) throw err;
         //console.log(result);

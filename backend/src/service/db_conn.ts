@@ -1,5 +1,3 @@
-import {Sql} from 'aws-sdk/clients/cloudwatchevents';
-
 const mysql = require('mysql');
 
 export default class db_conn {
@@ -25,15 +23,7 @@ export default class db_conn {
     });
   }
 
-  public createUser(userID: number, name: string) {
-    let query = `INSERT INTO users (user_id, name) VALUES (${userID}, '${name}')`;
-    this.db_connection.query(query, function (err: any, result: any) {
-      if (err) throw err;
-      console.log('1 record inserted');
-    });
-  }
-
-  public getUsersTable() {
+  public async getUsersTable() {
     this.db_connection.query('SELECT * FROM users', function (err: {stack: string}, result: any, fields: any) {
       if (err) throw err;
       console.log(result);
