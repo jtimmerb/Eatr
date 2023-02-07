@@ -6,3 +6,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+     
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Install NPM packages
+        run: cd backend/ && npm install
+
+      - name: Lint
+        run: cd backend/ && npm run lint
+
+      - name: Check formatting
+        run: cd backedn/ && npm run prettier-check
