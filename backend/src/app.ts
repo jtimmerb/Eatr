@@ -1,11 +1,11 @@
 import express from 'express';
 import db_conn from './service/db_conn';
 import EatrService from './service/service';
+import bodyparser from 'body-parser';
+import {db_auth} from './db.config';
 
 const app = express();
-const bodyparser = require('body-parser');
-const {db_host, db_user, db_pwd, db_name, db_port} = require('./db.config.json');
-let database = new db_conn(db_host, db_user, db_pwd, db_name, db_port);
+let database = new db_conn(db_auth.db_host, db_auth.db_user, db_auth.db_pwd, db_auth.db_name, db_auth.db_port);
 let service = new EatrService(app, database);
 
 service.listen(8080);
