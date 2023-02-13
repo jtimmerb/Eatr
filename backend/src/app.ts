@@ -17,7 +17,13 @@ app.get('/', (req, res) => {
 });
 
 app.post('/create_user', async (req, res) => {
-  let user = await service.userRepo.save(req.body.name);
+  let user = await service.userRepo.create(req.body.name);
+  res.send(JSON.stringify(user) + '\n');
+  database.getUsersTable();
+});
+
+app.put('/users', async (req, res) => {
+  let user = await service.userRepo.update(req.body.name, req.body.user_id);
   res.send(JSON.stringify(user) + '\n');
   database.getUsersTable();
 });

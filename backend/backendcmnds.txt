@@ -1,3 +1,4 @@
 curl -X DELETE -H "Content-Type:application/json" http://localhost:8080/users/825069
 curl -X POST -H "Content-Type:application/json" http://localhost:8080/create_user -d '{"name": "Javon Timmerberg"}'
 curl -X GET -H "Content-Type:application/json" http://localhost:8080/users/3
+curl -X PUT -H "Content-Type:application/json" http://localhost:8080/users -d '{"name": "Javonito", "user_id":1}'

@@ -19,62 +19,45 @@ export default class UserRepo implements InterfaceUserRepo {
   /** DB INTERACTIONS */
   /** Checks if user exists in DB */
   public async exists(t: User): Promise<boolean> {
-    /*
-    const params = {
-      TableName: DYNAMO_TABLE,
-      ExpressionAttributeValues: {
-        ':id': {S: `player-${t.playerID}`},
-      },
-      KeyConditionExpression: 'pk = :id',
-      Limit: 1,
-    };
-
-    const data = await this.dynamodb.send(new QueryCommand(params));
-
-    return data.Count !== 0;
-    */
     return false;
   }
 
   /** Deletes user in DB */
   public async delete(userID: int): Promise<void> {
-    /*
-    const params = {
-      TableName: DYNAMO_TABLE,
-      Key: {
-        pk: {S: `player-${t.playerID}`},
-        sk: {S: t.name},
-      },
-    };
-
-    await this.dynamodb.send(new DeleteItemCommand(params));
-    */
     let query = `DELETE FROM users WHERE user_id=${userID}`;
-    this.mysqldb.query(query, function (err: any, result: any) {
+    await this.mysqldb.query(query, function (err: any) {
       if (err) throw err;
-      //console.log(result);
     });
   }
 
-  /** Updates user in DB, but if player does not exist Creates new User Entity */
-  public async save(name: string): Promise<User> {
-    /*const player = PlayerMapper.toDB(t);
-    const params = {
-      TableName: DYNAMO_TABLE,
-      Item: player,
-    };
-
-    await this.dynamodb.send(new PutItemCommand(params));
-    */
-    //let id = await this.getRandomID();
+  /** Creates user in DB*/
+  public async create(name: string): Promise<User> {
+    let conn = this.mysqldb;
     let query = `INSERT INTO users (name) VALUES ('${name}')`;
     return new Promise(resolve => {
-      let tempUser = {userID: 0 as int, name: name as string} as User;
-      this.mysqldb.query(query, function (err: any) {
+      conn.query(query, function (err: any, result: any) {
         if (err) throw err;
-        //console.log(result);
+        //console.log(JSON.parse(JSON.stringify(result)));
+        resolve({
+          userID: JSON.parse(JSON.stringify(result)).insertId,
+          name: name,
+        });
       });
-      resolve(tempUser);
+    });
+  }
+
+  public async update(name: string, id: int): Promise<User> {
+    let conn = this.mysqldb;
+    let query = `UPDATE users SET name='${name}' WHERE user_id='${id}'`;
+    return new Promise(resolve => {
+      conn.query(query, function (err: any, result: any) {
+        if (err) throw err;
+        //console.log(JSON.parse(JSON.stringify(result)));
+        resolve({
+          userID: id,
+          name: name,
+        });
+      });
     });
   }
 

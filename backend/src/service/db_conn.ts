@@ -23,7 +23,7 @@ export default class db_conn {
     });
   }
 
-  public async getUsersTable() {
+  async getUsersTable() {
     this.db_connection.query('SELECT * FROM users', function (err: {stack: string}, result: any, fields: any) {
       if (err) throw err;
       console.log(result);
