@@ -19,4 +19,4 @@ jobs:
         run: cd backend/ && npm run lint
 
       - name: Check formatting
-        run: cd backedn/ && npm run prettier-check
+        run: cd backend/ && npm run prettier-check
