@@ -1,10 +1,10 @@
-const mysql = require('mysql');
+import {createPool} from 'mysql';
 
 export default class db_conn {
   db_connection: any;
 
-  constructor(db_host: string, db_user: string, db_pwd: string, db_name: string, db_port: string) {
-    this.db_connection = mysql.createPool({
+  constructor(db_host: string, db_user: string, db_pwd: string, db_name: string, db_port: number) {
+    this.db_connection = createPool({
       connectionLimit: 10,
       host: db_host,
       user: db_user,
