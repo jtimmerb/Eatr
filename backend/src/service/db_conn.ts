@@ -21,11 +21,4 @@ export default class db_conn {
       });
     });
   }
-
-  async getUsersTable() {
-    this.db_connection.query('SELECT * FROM users', function (err: {stack: string}, result: any) {
-      if (err) throw err;
-      console.log(result.rows);
-    });
-  }
 }
