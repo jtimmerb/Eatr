@@ -36,7 +36,6 @@ export default class UserRepo implements InterfaceUserRepo {
     return new Promise(resolve => {
       conn.query(query, function (err: any, result: any) {
         if (err) throw err;
-        //console.log(JSON.parse(JSON.stringify(result)));
         resolve({
           userID: JSON.parse(JSON.stringify(result)).insertId,
           name: name,
@@ -49,9 +48,8 @@ export default class UserRepo implements InterfaceUserRepo {
     let conn = this.mysqldb;
     let query = `UPDATE users SET name='${name}' WHERE user_id='${id}'`;
     return new Promise(resolve => {
-      conn.query(query, function (err: any, result: any) {
+      conn.query(query, function (err: any) {
         if (err) throw err;
-        //console.log(JSON.parse(JSON.stringify(result)));
         resolve({
           userID: id,
           name: name,
@@ -69,7 +67,6 @@ export default class UserRepo implements InterfaceUserRepo {
         if (err) {
           return reject(err);
         }
-        //console.log(results);
         resolve(UserMapper.fromDB(results.rows));
       });
     });
