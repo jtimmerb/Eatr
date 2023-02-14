@@ -1,6 +1,4 @@
-import {int} from 'aws-sdk/clients/datapipeline';
-
 export interface User {
-  userID: int;
+  userID: number;
   name: string;
 }

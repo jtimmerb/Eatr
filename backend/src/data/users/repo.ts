@@ -1,6 +1,5 @@
 import {User} from './entity';
 import {Repo} from '..';
-import {int} from 'aws-sdk/clients/datapipeline';
 import {UserMapper} from './mapper';
 
 /** This Interface extends the base Repo and implement new methods uniqe to User Entity */
@@ -23,7 +22,7 @@ export default class UserRepo implements InterfaceUserRepo {
   }
 
   /** Deletes user in DB */
-  public async delete(userID: int): Promise<void> {
+  public async delete(userID: number): Promise<void> {
     let query = `DELETE FROM users WHERE user_id=${userID}`;
     await this.mysqldb.query(query, function (err: any) {
       if (err) throw err;
@@ -46,7 +45,7 @@ export default class UserRepo implements InterfaceUserRepo {
     });
   }
 
-  public async update(name: string, id: int): Promise<User> {
+  public async update(name: string, id: number): Promise<User> {
     let conn = this.mysqldb;
     let query = `UPDATE users SET name='${name}' WHERE user_id='${id}'`;
     return new Promise(resolve => {
@@ -66,11 +65,12 @@ export default class UserRepo implements InterfaceUserRepo {
     let conn = this.mysqldb;
     return new Promise(function (resolve, reject) {
       let query = `SELECT * FROM users WHERE user_id=${userID}`;
-      conn.query(query, function (err: any, rows: string) {
+      conn.query(query, (err: any, results: any) => {
         if (err) {
           return reject(err);
         }
-        resolve(UserMapper.fromDB(rows));
+        //console.log(results);
+        resolve(UserMapper.fromDB(results.rows));
       });
     });
   }

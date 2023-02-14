@@ -38,7 +38,7 @@ app.get('/users/:user_id', async (req, res) => {
 
 app.delete('/users/:user_id', async (req, res) => {
   //database.getUser(req.params.user_id);
-  let user = await service.userRepo.delete(parseInt(req.params.user_id)).catch(err => {
+  service.userRepo.delete(parseInt(req.params.user_id)).catch(err => {
     throw err;
   });
   res.send('Deleted User #' + req.params.user_id + '\n');

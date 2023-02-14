@@ -1,16 +1,15 @@
-import {createPool} from 'mysql';
+import PG from 'pg';
 
 export default class db_conn {
   db_connection: any;
 
   constructor(db_host: string, db_user: string, db_pwd: string, db_name: string, db_port: number) {
-    this.db_connection = createPool({
-      connectionLimit: 10,
+    this.db_connection = new PG.Pool({
       host: db_host,
       user: db_user,
       password: db_pwd,
       port: db_port,
-      database: 'sys',
+      database: db_name,
     });
   }
 
@@ -24,9 +23,9 @@ export default class db_conn {
   }
 
   async getUsersTable() {
-    this.db_connection.query('SELECT * FROM users', function (err: {stack: string}, result: any, fields: any) {
+    this.db_connection.query('SELECT * FROM users', function (err: {stack: string}, result: any) {
       if (err) throw err;
-      console.log(result);
+      console.log(result.rows);
     });
   }
 }
