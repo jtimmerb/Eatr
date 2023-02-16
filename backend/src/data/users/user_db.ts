@@ -1,4 +1,5 @@
-import {Response} from 'express';
+import {Response, Request} from 'express';
+import {UserMapper} from './mapper';
 import EatrService from '../../service/service';
 
 export async function createUser(name: Request, res: Response, service: EatrService) {
@@ -25,4 +26,11 @@ export async function deleteUser(user_id: Request, res: Response, service: EatrS
     throw err;
   });
   res.send('Deleted User #' + user_id + '\n');
+}
+
+export async function getUserExists(name: Request, res: Response, service: EatrService) {
+  let result = await service.userRepo.exists(name).catch(err => {
+    throw err;
+  });
+  res.send(result + '\n');
 }
