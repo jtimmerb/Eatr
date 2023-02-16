@@ -1,5 +1,5 @@
-import express from 'express';
-import db_conn from './service/db_conn';
+import express, {Response} from 'express';
+import db_conn from './data/db_conn';
 import EatrService from './service/service';
 import bodyparser from 'body-parser';
 import {db_auth} from './db.config';
