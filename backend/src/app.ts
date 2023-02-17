@@ -1,8 +1,9 @@
-import express from 'express';
-import db_conn from './service/db_conn';
+import express, {Response} from 'express';
+import db_conn from './data/db_conn';
 import EatrService from './service/service';
 import bodyparser from 'body-parser';
 import {db_auth} from './db.config';
+import {createUser, updateUser, getUser, deleteUser, getUserExists} from './data/users/user_db';
 
 const app = express();
 let database = new db_conn(db_auth.db_host, db_auth.db_user, db_auth.db_pwd, db_auth.db_name, db_auth.db_port);
@@ -16,35 +17,24 @@ app.get('/test', (req, res) => {
   res.send("HELLO");
 });
 
-app.post('/create_user', async (req, res) => {
-  let user = await service.userRepo.create(req.body.name);
-  res.send(JSON.stringify(user) + '\n');
-  database.getUsersTable();
+app.post('/create_user', (req, res) => {
+  createUser(req.body.name, res, service);
 });
 
 app.put('/users', async (req, res) => {
-  let user = await service.userRepo.update(req.body.name, req.body.user_id);
-  res.send(JSON.stringify(user) + '\n');
-  database.getUsersTable();
+  updateUser(req.body.name, req.body.user_id, res, service);
 });
 
-app.get('/users/:user_id', async (req, res) => {
-  //database.getUser(req.params.user_id);
-  let user = await service.userRepo.getUserByID(req.params.user_id).catch(err => {
-    throw err;
-  });
-  res.send(JSON.stringify(user) + '\n');
+app.get('/users', async (req, res) => {
+  getUser(req.body.user_id, res, service);
 });
 
-app.delete('/users/:user_id', async (req, res) => {
-  //database.getUser(req.params.user_id);
-  service.userRepo.delete(parseInt(req.params.user_id)).catch(err => {
-    throw err;
-  });
-  res.send('Deleted User #' + req.params.user_id + '\n');
-  database.getUsersTable();
+app.delete('/users', async (req, res) => {
+  deleteUser(req.body.user_id, res, service);
 });
 
-database.getUsersTable();
+app.get('/users_e', async (req, res) => {
+  getUserExists(req.body.name, res, service);
+});
 
-//sqlize
+service.userRepo.getUsersTable();

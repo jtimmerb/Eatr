@@ -1,20 +1,20 @@
-import {User} from './entity';
+import {Recipe} from './entity';
 import {Mapper} from '..';
 import PG from 'pg';
 
 /** Mapper method that maps User Entity to User DB entity and vice versa */
-export const UserMapper: Mapper<User> = class {
+export const RecipeMapper: Mapper<Recipe> = class {
   /** Mapping from User DB Entity to User Entity  */
-  public static fromDB(d: PG.QueryResultRow): User {
+  public static fromDB(d: PG.QueryResultRow): Recipe {
     return {
-      userID: d[0].user_id,
+      recipeID: d[0].recipe_id,
       name: d[0].name,
     };
   }
 
-  public static toDB(user_id: number, name: string): User {
+  public static toDB(recipe_id: number, name: string): Recipe {
     return {
-      userID: user_id,
+      recipeID: recipe_id,
       name: name,
     };
   }
