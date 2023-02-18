@@ -5,12 +5,12 @@ import {Request} from 'express';
 import PG from 'pg';
 
 /** This Interface extends the base Repo and implement new methods uniqe to User Entity */
-interface InterfaceUserRepo extends Repo<Recipe> {
-  getRecipeByID(recipeID: Request): Promise<Recipe>;
+interface RecipeRepoInterface extends Repo<Recipe> {
+  getRecipeSteps(recipe_id: number): Promise<string[]>;
 }
 
 /** The User Repo persists and fetches object from DB */
-export default class RecipeRepo implements InterfaceUserRepo {
+export default class RecipeRepo implements RecipeRepoInterface {
   public psql: any;
 
   constructor(psql: any) {
