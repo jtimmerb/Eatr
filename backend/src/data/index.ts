@@ -1,5 +1,4 @@
 import PG from 'pg';
-import EatrService from '../service/service';
 export interface Repo<T> {
   exists(t: T): Promise<boolean>;
   delete(t: T): Promise<void>;

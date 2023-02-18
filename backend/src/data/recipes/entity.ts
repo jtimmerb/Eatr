@@ -3,3 +3,9 @@ export interface Recipe {
   name: string;
   steps: string[];
 }
+
+export interface RecipeEntity {
+  recipeID: number;
+  name: string;
+  recipeStep: string;
+}

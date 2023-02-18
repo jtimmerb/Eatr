@@ -7,7 +7,7 @@ export const UserMapper: Mapper<User> = class {
   /** Mapping from User DB Entity to User Entity  */
   public static fromDB(d: PG.QueryResultRow): User {
     return {
-      userID: d[0].user_id,
+      userId: d[0].user_id,
       name: d[0].name,
     };
   }

@@ -29,7 +29,7 @@ export default class UserRepo implements InterfaceUserRepo {
 
   /** Deletes user in DB */
   public async delete(user: User): Promise<void> {
-    let query = `DELETE FROM users WHERE user_id=${user.userID}`;
+    let query = `DELETE FROM users WHERE user_id=${user.userId}`;
     await this.psql.query(query, function (err: Error) {
       if (err) throw err;
     });
@@ -43,7 +43,7 @@ export default class UserRepo implements InterfaceUserRepo {
       conn.query(query, function (err: Error, result: PG.QueryResult) {
         if (err) throw err;
         resolve({
-          userID: JSON.parse(JSON.stringify(result)).insertId,
+          userId: JSON.parse(JSON.stringify(result)).insertId,
           name: user.name,
         });
       });
@@ -52,7 +52,7 @@ export default class UserRepo implements InterfaceUserRepo {
 
   public async update(user: User): Promise<User> {
     let conn = this.psql;
-    let query = `UPDATE users SET name='${user.name}' WHERE user_id='${user.userID}'`;
+    let query = `UPDATE users SET name='${user.name}' WHERE user_id='${user.userId}'`;
     conn.query(query, null);
     return user;
   }
@@ -61,7 +61,7 @@ export default class UserRepo implements InterfaceUserRepo {
   public async getUserByID(user: User): Promise<User> {
     let conn = this.psql;
     return new Promise(function (resolve, reject) {
-      let query = `SELECT * FROM users WHERE user_id=${user.userID}`;
+      let query = `SELECT * FROM users WHERE user_id=${user.userId}`;
       conn.query(query, (err: Error, results: PG.QueryResult) => {
         if (err) {
           return reject(err);
