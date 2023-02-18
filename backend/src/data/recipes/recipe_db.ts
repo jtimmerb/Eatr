@@ -1,36 +1,40 @@
 import {Response, Request} from 'express';
-import {RecipeMapper} from './mapper';
+import {Recipe} from './entity';
 import EatrService from '../../service/service';
 
-export async function createRecipe(name: Request, res: Response, service: EatrService) {
-  let recipe = await service.recipeRepo.create(name);
-  res.send(JSON.stringify(recipe) + '\n');
-  service.userRepo.getUsersTable();
-}
+export default class recipeCmnds {
+  async create(recipe: Recipe, service: EatrService): Promise<Recipe> {
+    let recipeRet = await service.recipeRepo.create(recipe);
+    service.recipeRepo.getRecipesTable();
+    return recipeRet;
+  }
 
-export async function updateRecipe(name: Request, recipe_id: Request, res: Response, service: EatrService) {
-  let recipe = await service.userRepo.update(name, recipe_id);
-  res.send(JSON.stringify(recipe) + '\n');
-  service.userRepo.getUsersTable();
-}
+  async update(recipe: Recipe, service: EatrService): Promise<Recipe> {
+    let recipeRet = await service.recipeRepo.update(recipe);
+    //res.send(JSON.stringify(recipe) + '\n');
+    service.recipeRepo.getRecipesTable();
+    return recipeRet;
+  }
 
-export async function getUser(recipe_id: Request, res: Response, service: EatrService) {
-  let recipe = await service.recipeRepo.getRecipeByID(recipe_id).catch(err => {
-    throw err;
-  });
-  res.send(JSON.stringify(recipe) + '\n');
-}
+  async get(recipe: Recipe, service: EatrService): Promise<Recipe> {
+    let recipeRet = await service.recipeRepo.getRecipeByID(recipe).catch(err => {
+      throw err;
+    });
+    //res.send(JSON.stringify(recipe) + '\n');
+    return recipeRet;
+  }
 
-export async function deleteUser(recipe_id: Request, res: Response, service: EatrService) {
-  service.recipeRepo.delete(recipe_id).catch(err => {
-    throw err;
-  });
-  res.send('Deleted User #' + recipe_id + '\n');
-}
+  async delete(recipe: Recipe, service: EatrService) {
+    service.recipeRepo.delete(recipe).catch(err => {
+      throw err;
+    });
+    //res.send('Deleted User #' + recipe.recipeID + '\n');
+  }
 
-export async function getUserExists(name: Request, res: Response, service: EatrService) {
-  let result = await service.recipeRepo.exists(name).catch(err => {
-    throw err;
-  });
-  res.send(result + '\n');
+  async exists(recipe: Recipe, service: EatrService) {
+    let result = await service.recipeRepo.exists(recipe).catch(err => {
+      throw err;
+    });
+    //res.send(result + '\n');
+  }
 }

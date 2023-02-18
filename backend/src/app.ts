@@ -1,40 +1,56 @@
-import express, {Response} from 'express';
+import express from 'express';
 import db_conn from './data/db_conn';
 import EatrService from './service/service';
 import bodyparser from 'body-parser';
-import {db_auth} from './db.config';
-import {createUser, updateUser, getUser, deleteUser, getUserExists} from './data/users/user_db';
+import {dbAuth} from './db.config';
+import userCmnds from './data/users/user_db';
+import recipeCmnds from './data/recipes/recipe_db';
 
 const app = express();
-let database = new db_conn(db_auth.db_host, db_auth.db_user, db_auth.db_pwd, db_auth.db_name, db_auth.db_port);
+let database = new db_conn(dbAuth.dbHost, dbAuth.dbUser, dbAuth.dbPwd, dbAuth.dbName, dbAuth.dbPort);
 let service = new EatrService(app, database);
+let userBack = new userCmnds();
+let recipeBack = new recipeCmnds();
 
 service.listen(8080);
 
 app.use(bodyparser.json());
 
-app.get('/test', (req, res) => {
-  res.send("HELLO");
+app.post('/create_recipe', async (req, res) => {
+  recipeBack.create(
+    {
+      recipeID: 0,
+      name: 'Tonys Famous Cookies',
+      steps: ['add butter', 'add sugar', 'add baking powder', 'and tonys secret ingredient'],
+    },
+    service,
+  );
 });
 
-app.post('/create_user', (req, res) => {
-  createUser(req.body.name, res, service);
+app.get('/test', (req, res) => {
+  res.send('HELLO');
+});
+
+app.post('/create_user', async (req, res) => {
+  res.send(await userBack.create({name: req.body.name, userID: 0}, service));
 });
 
 app.put('/users', async (req, res) => {
-  updateUser(req.body.name, req.body.user_id, res, service);
+  res.send(await userBack.update({name: req.body.name, userID: req.body.user_id}, service));
 });
 
 app.get('/users', async (req, res) => {
-  getUser(req.body.user_id, res, service);
+  res.send(await userBack.get({name: '', userID: req.body.user_id}, service));
 });
 
-app.delete('/users', async (req, res) => {
-  deleteUser(req.body.user_id, res, service);
+app.delete('/users/:user_id', async (req, res) => {
+  userBack.delete({userID: parseInt(req.params.user_id), name: ''}, service);
+  res.send('Deleted User\n');
 });
 
 app.get('/users_e', async (req, res) => {
-  getUserExists(req.body.name, res, service);
+  res.send(await userBack.exists({name: req.body.name, userID: 0}, service));
 });
 
 service.userRepo.getUsersTable();
+service.recipeRepo.getRecipesTable();

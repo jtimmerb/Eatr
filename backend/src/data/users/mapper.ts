@@ -11,11 +11,4 @@ export const UserMapper: Mapper<User> = class {
       name: d[0].name,
     };
   }
-
-  public static toDB(user_id: number, name: string): User {
-    return {
-      userID: user_id,
-      name: name,
-    };
-  }
 };
