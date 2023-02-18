@@ -10,7 +10,8 @@
     "lint": "eslint . --ext js,jsx,ts,tsx --fix",
     "test": "jest",
     "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write",
-    "prettier-check": "prettier --config .prettierrc 'src/**/*.ts' --check"
+    "prettier-check": "prettier --config .prettierrc 'src/**/*.ts' --check",
+    "build_check": "npm run build && mv dist dist_orig && npm run build && diff -qr dist dist_orig && rm -r dist_orig"
   },
   "keywords": [],
   "author": "",
