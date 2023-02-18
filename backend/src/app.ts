@@ -13,8 +13,8 @@ service.listen(8080);
 
 app.use(bodyparser.json());
 
-app.get('/', (req, res) => {
-  res.send('Hello world');
+app.get('/test', (req, res) => {
+  res.send("HELLO");
 });
 
 app.post('/create_user', (req, res) => {
