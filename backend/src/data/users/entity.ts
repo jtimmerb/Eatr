@@ -1,9 +1,9 @@
 export interface User {
-  userId: number;
+  userID: number;
   name: string;
 }
 
 export interface UserEntity {
-  userId: number;
+  userID: number;
   name: string;
 }
