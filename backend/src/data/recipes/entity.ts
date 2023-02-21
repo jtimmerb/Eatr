@@ -7,5 +7,5 @@ export interface Recipe {
 export interface RecipeEntity {
   recipeID: number;
   name: string;
-  recipeStep: string;
+  steps: string;
 }

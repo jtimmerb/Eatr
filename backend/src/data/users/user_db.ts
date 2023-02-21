@@ -17,7 +17,7 @@ export default class userCmnds {
   }
 
   async get(user: User, service: EatrService): Promise<User> {
-    let userDB = await service.userRepo.getUserByID(user).catch(err => {
+    let userDB = await service.userRepo.get(user).catch(err => {
       throw err;
     });
     //res.send(JSON.stringify(user) + '\n');
