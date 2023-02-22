@@ -7,10 +7,10 @@ import userCmnds from './data/users/user_db';
 import recipeCmnds from './data/recipes/recipe_db';
 
 const app = express();
-let database = new db_conn(dbAuth.dbHost, dbAuth.dbUser, dbAuth.dbPwd, dbAuth.dbName, dbAuth.dbPort);
-let service = new EatrService(app, database);
-let userBack = new userCmnds();
-let recipeBack = new recipeCmnds();
+const database = new db_conn(dbAuth.dbHost, dbAuth.dbUser, dbAuth.dbPwd, dbAuth.dbName, dbAuth.dbPort);
+const service = new EatrService(app, database);
+const userBack = new userCmnds();
+const recipeBack = new recipeCmnds();
 
 service.listen(8080);
 
