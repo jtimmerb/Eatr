@@ -3,20 +3,20 @@ import EatrService from '../../service/service';
 
 export default class recipeCmnds {
   async create(recipe: Recipe, service: EatrService): Promise<Recipe> {
-    let recipeRet = await service.recipeRepo.create(recipe);
+    const recipeRet = await service.recipeRepo.create(recipe);
     service.recipeRepo.getRecipesTable();
     return recipeRet;
   }
 
   async update(recipe: Recipe, service: EatrService): Promise<Recipe> {
-    let recipeRet = await service.recipeRepo.update(recipe);
+    const recipeRet = await service.recipeRepo.update(recipe);
     //res.send(JSON.stringify(recipe) + '\n');
     service.recipeRepo.getRecipesTable();
     return recipeRet;
   }
 
   async get(recipe: Recipe, service: EatrService): Promise<Recipe> {
-    let recipeRet = await service.recipeRepo.get(recipe).catch(err => {
+    const recipeRet = await service.recipeRepo.get(recipe).catch(err => {
       throw err;
     });
     //res.send(JSON.stringify(recipe) + '\n');
@@ -31,7 +31,7 @@ export default class recipeCmnds {
   }
 
   async exists(recipe: Recipe, service: EatrService): Promise<boolean> {
-    let result = await service.recipeRepo.exists(recipe).catch(err => {
+    const result = await service.recipeRepo.exists(recipe).catch(err => {
       throw err;
     });
     return result;

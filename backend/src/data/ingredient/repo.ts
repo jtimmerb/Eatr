@@ -3,7 +3,7 @@ import {IngredientMapper} from './mapper';
 import {Repo} from '..';
 import PG from 'pg';
 
-interface IngredientRepoInterface extends Repo<Ingredient> {}
+type IngredientRepoInterface = Repo<Ingredient>;
 
 export default class IngredientRepo implements IngredientRepoInterface {
   private psql: any;
@@ -81,5 +81,25 @@ export default class IngredientRepo implements IngredientRepoInterface {
       if (err) throw err;
       console.log(result.rows);
     });
+  }
+
+  public async delete(t: Ingredient): Promise<void> {
+    return;
+  }
+
+  public async create(t: Ingredient): Promise<Ingredient> {
+    return t;
+  }
+
+  public async update(t: Ingredient): Promise<Ingredient> {
+    return t;
+  }
+
+  public async exists(t: Ingredient): Promise<boolean> {
+    return true;
+  }
+
+  public async get(t: Ingredient): Promise<Ingredient> {
+    return t;
   }
 }
