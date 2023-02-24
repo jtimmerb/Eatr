@@ -31,7 +31,7 @@ export default class RecipeRepo implements RecipeRepoInterface {
 
   /** Deletes user in DB */
   public async delete(recipe: Recipe): Promise<void> {
-    let query = `DELETE FROM recipes WHERE recipe_id=${recipe.recipeID}`;
+    let query = `DELETE FROM recipes WHERE recipe_id=${recipe.recipeId}`;
     await this.psql.query(query, function (err: Error) {
       if (err) throw err;
     });
@@ -46,7 +46,7 @@ export default class RecipeRepo implements RecipeRepoInterface {
       conn.query(query, function (err: Error, result: PG.QueryResult) {
         if (err) throw err;
         resolve({
-          recipeID: JSON.parse(JSON.stringify(result)).insertId,
+          recipeId: JSON.parse(JSON.stringify(result)).insertId,
           name: recipe.name,
           steps: recipe.steps,
         });
@@ -56,7 +56,7 @@ export default class RecipeRepo implements RecipeRepoInterface {
 
   public async update(recipe: Recipe): Promise<Recipe> {
     let conn = this.psql;
-    let query = `UPDATE recipes SET name='${recipe.name}', steps='${recipe.steps}' WHERE recipe_id='${recipe.recipeID}'`;
+    let query = `UPDATE recipes SET name='${recipe.name}', steps='${recipe.steps}' WHERE recipe_id='${recipe.recipeId}'`;
     conn.query(query, null);
     return recipe;
   }
@@ -65,7 +65,7 @@ export default class RecipeRepo implements RecipeRepoInterface {
   public async get(recipe: Recipe): Promise<Recipe> {
     let conn = this.psql;
     return new Promise(function (resolve, reject) {
-      let query = `SELECT * FROM recipes WHERE recipe_id=${recipe.recipeID}`;
+      let query = `SELECT * FROM recipes WHERE recipe_id=${recipe.recipeId}`;
       conn.query(query, (err: Error, results: PG.QueryResult) => {
         if (err) {
           return reject(err);

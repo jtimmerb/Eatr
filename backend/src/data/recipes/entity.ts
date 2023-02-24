@@ -1,11 +1,11 @@
 export interface Recipe {
-  recipeID: number;
+  recipeId: number;
   name: string;
   steps: string[];
 }
 
 export interface RecipeEntity {
-  recipeID: number;
+  recipeId: number;
   name: string;
   steps: string;
 }
