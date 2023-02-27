@@ -1,9 +1,9 @@
 import {Ingredient, IngredientEntity} from './entity';
-import {IngredientMapper} from './mapper';
+import {IngredientMapper as Mapper} from './mapper';
 import {Repo} from '..';
 import PG from 'pg';
 
-type IngredientRepoInterface = Repo<Ingredient>;
+interface IngredientRepoInterface extends Repo<Ingredient> {}
 
 export default class IngredientRepo implements IngredientRepoInterface {
   private psql: any;
@@ -13,8 +13,8 @@ export default class IngredientRepo implements IngredientRepoInterface {
   }
 
   public async exists(ingredient: Ingredient): Promise<boolean> {
-    let query = `SELECT EXISTS (SELECT 1 FROM ingredients WHERE name='${ingredient.name}')`;
-    let conn = this.psql;
+    const query = `SELECT EXISTS (SELECT 1 FROM ingredients WHERE name='${ingredient.name}')`;
+    const conn = this.psql;
     return new Promise(resolve => {
       conn.query(query, function (err: Error, result: PG.QueryResult) {
         if (err) console.log(err);
@@ -25,7 +25,7 @@ export default class IngredientRepo implements IngredientRepoInterface {
 
   /** Deletes user in DB */
   public async delete(ingredient: Ingredient): Promise<void> {
-    let query = `DELETE FROM ingredients WHERE ingredient_id=${ingredient.ingredientId}`;
+    const query = `DELETE FROM ingredients WHERE ingredient_id=${ingredient.ingredientId}`;
     await this.psql.query(query, function (err: Error) {
       if (err) throw err;
     });
@@ -33,9 +33,9 @@ export default class IngredientRepo implements IngredientRepoInterface {
 
   /** Creates recipe in DB*/
   public async create(ingredient: Ingredient): Promise<Ingredient> {
-    let conn = this.psql;
-    let ingredientEnt = IngredientMapper.toDB(ingredient);
-    let query = `INSERT INTO ingredients (name, servingSize, calories, proteins, carbohydrates, fats) VALUES ('${ingredientEnt.name}', '${ingredientEnt.servingSize}',
+    const conn = this.psql;
+    const ingredientEnt = Mapper.toDB(ingredient);
+    const query = `INSERT INTO ingredients (name, servingSize, calories, proteins, carbohydrates, fats) VALUES ('${ingredientEnt.name}', '${ingredientEnt.servingSize}',
     '${ingredientEnt.calories}','${ingredientEnt.proteins}','${ingredientEnt.carbohydrates}','${ingredientEnt.fats}',)`;
     return new Promise(resolve => {
       conn.query(query, function (err: Error, result: PG.QueryResult) {
@@ -54,9 +54,9 @@ export default class IngredientRepo implements IngredientRepoInterface {
   }
 
   public async update(ingredient: Ingredient): Promise<Ingredient> {
-    let conn = this.psql;
-    let ingredientEnt = IngredientMapper.toDB(ingredient);
-    let query = `UPDATE recipes SET (name, servingSize, calories, proteins, carbohydrates, fats) VALUES ('${ingredientEnt.name}', '${ingredientEnt.servingSize}',
+    const conn = this.psql;
+    const ingredientEnt = Mapper.toDB(ingredient);
+    const query = `UPDATE ingredients SET (name, servingSize, calories, proteins, carbohydrates, fats) VALUES ('${ingredientEnt.name}', '${ingredientEnt.servingSize}',
     '${ingredientEnt.calories}','${ingredientEnt.proteins}','${ingredientEnt.carbohydrates}','${ingredientEnt.fats}',) WHERE ingredient_id='${ingredient.ingredientId}'`;
     conn.query(query, null);
     return ingredient;
@@ -64,14 +64,14 @@ export default class IngredientRepo implements IngredientRepoInterface {
 
   /** Get user by userID */
   public async get(ingredient: Ingredient): Promise<Ingredient> {
-    let conn = this.psql;
+    const conn = this.psql;
     return new Promise(function (resolve, reject) {
-      let query = `SELECT * FROM ingredients WHERE ingredient_id=${ingredient.ingredientId}`;
+      const query = `SELECT * FROM ingredients WHERE ingredient_id=${ingredient.ingredientId}`;
       conn.query(query, (err: Error, results: PG.QueryResult) => {
         if (err) {
           return reject(err);
         }
-        resolve(IngredientMapper.fromDB(results.rows[0] as IngredientEntity));
+        resolve(Mapper.fromDB(results.rows[0] as IngredientEntity));
       });
     });
   }

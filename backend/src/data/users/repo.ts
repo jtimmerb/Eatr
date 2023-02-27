@@ -1,6 +1,6 @@
 import {User} from './entity';
 import {Repo} from '..';
-import {UserMapper} from './mapper';
+import {UserMapper as Mapper} from './mapper';
 import PG from 'pg';
 import db_conn from '../db_conn';
 
@@ -66,7 +66,7 @@ export default class UserRepo implements InterfaceUserRepo {
         if (err) {
           return reject(err);
         }
-        resolve(UserMapper.fromDB(results.rows[0]));
+        resolve(Mapper.fromDB(results.rows[0]));
       });
     });
   }

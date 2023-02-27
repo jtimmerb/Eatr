@@ -19,7 +19,7 @@ app.use(bodyparser.json());
 app.post('/create_recipe', async (req, res) => {
   recipeBack.create(
     {
-      recipeID: 0,
+      recipeId: 0,
       name: 'Tonys Famous Cookies',
       steps: ['add butter', 'add sugar', 'add baking powder', 'and tonys secret ingredient'],
     },
@@ -32,28 +32,28 @@ app.get('/test', (req, res) => {
 });
 
 app.post('/create_user', async (req, res) => {
-  res.send(await userBack.create({name: req.body.name, userID: 0}, service));
+  res.send(await userBack.create({name: req.body.name, userId: 0}, service));
 });
 
 app.put('/users', async (req, res) => {
-  res.send(await userBack.update({name: req.body.name, userID: req.body.user_id}, service));
+  res.send(await userBack.update({name: req.body.name, userId: req.body.user_id}, service));
 });
 
 app.get('/users', async (req, res) => {
-  res.send(await userBack.get({name: '', userID: req.body.user_id}, service));
+  res.send(await userBack.get({name: '', userId: req.body.user_id}, service));
 });
 
 app.delete('/users/:user_id', async (req, res) => {
-  userBack.delete({userID: parseInt(req.params.user_id), name: ''}, service);
+  userBack.delete({userId: parseInt(req.params.user_id), name: ''}, service);
   res.send('Deleted User\n');
 });
 
 app.get('/users_e', async (req, res) => {
-  res.send(await userBack.exists({name: req.body.name, userID: 0}, service));
+  res.send(await userBack.exists({name: req.body.name, userId: 0}, service));
 });
 
 //service.userRepo.getUsersTable();
 //service.recipeRepo.getRecipesTable();
-recipeBack.get({recipeID: 2, name: '', steps: []}, service).then(recipeRet => {
+recipeBack.get({recipeId: 2, name: '', steps: []}, service).then(recipeRet => {
   console.log(recipeRet);
 });

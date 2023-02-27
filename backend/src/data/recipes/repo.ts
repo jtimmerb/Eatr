@@ -1,12 +1,12 @@
 import {Recipe, RecipeEntity} from './entity';
 import {Repo} from '..';
-import {RecipeMapper} from './mapper';
+import {RecipeMapper as Mapper} from './mapper';
 import PG from 'pg';
 import db_conn from '../db_conn';
 
 /** This Interface extends the base Repo and implement new methods uniqe to User Entity */
 
-type RecipeRepoInterface = Repo<Recipe>;
+interface RecipeRepoInterface extends Repo<Recipe> {}
 /** The Recipe Repo persists and fetches object from DB */
 export default class RecipeRepo implements RecipeRepoInterface {
   public psql: db_conn;
@@ -38,7 +38,7 @@ export default class RecipeRepo implements RecipeRepoInterface {
   /** Creates recipe in DB*/
   public async create(recipe: Recipe): Promise<Recipe> {
     const conn = this.psql;
-    const recipeEnt = RecipeMapper.toDB(recipe);
+    const recipeEnt = Mapper.toDB(recipe);
     const query = `INSERT INTO recipes (name, steps) VALUES ('${recipeEnt.name}', '${recipeEnt.steps}')`;
     return new Promise(resolve => {
       conn.query(query, function (err: Error, result: PG.QueryResult) {
@@ -68,7 +68,7 @@ export default class RecipeRepo implements RecipeRepoInterface {
         if (err) {
           return reject(err);
         }
-        resolve(RecipeMapper.fromDB(results.rows[0] as RecipeEntity));
+        resolve(Mapper.fromDB(results.rows[0] as RecipeEntity));
       });
     });
   }
