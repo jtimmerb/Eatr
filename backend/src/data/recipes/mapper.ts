@@ -6,7 +6,7 @@ export const RecipeMapper: Mapper<Recipe, RecipeEntity> = class {
   /** Mapping from User DB Entity to User Entity  */
   public static fromDB(d: RecipeEntity): Recipe {
     return {
-      recipeId: d.recipeId,
+      recipeId: d.recipe_id,
       name: d.name,
       steps: JSON.parse(d.steps),
     };
@@ -14,7 +14,7 @@ export const RecipeMapper: Mapper<Recipe, RecipeEntity> = class {
 
   public static toDB(d: Recipe): RecipeEntity {
     return {
-      recipeId: d.recipeId,
+      recipe_id: d.recipeId,
       name: d.name,
       steps: JSON.stringify(d.steps),
     };

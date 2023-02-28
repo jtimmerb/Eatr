@@ -6,8 +6,8 @@ export interface UserPantry {
 }
 
 export interface UserPantryEntity {
-  upMembershipId: number;
-  userId: number;
-  ingredientId: number;
-  ingredientAmount: string;
+  up_membership_id: number;
+  user_id: number;
+  ingredient_id: number;
+  ingredient_amount: string;
 }

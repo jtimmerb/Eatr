@@ -12,7 +12,8 @@ export default class UserPantryRepo implements UserRecipeRepoInterface {
     this.psql = psql;
   }
   public async exists(userPantry: UserPantry): Promise<boolean> {
-    const query = `SELECT EXISTS (SELECT 1 FROM user_pantries WHERE upMembershipId='${userPantry.upMembershipId}')`;
+    const userPantryEnt = Mapper.toDB(userPantry);
+    const query = `SELECT EXISTS (SELECT 1 FROM user_pantries WHERE up_membership_id='${userPantryEnt.up_membership_id}')`;
     const conn = this.psql;
     return new Promise(resolve => {
       conn.query(query, function (err: Error, result: PG.QueryResult) {
@@ -24,7 +25,8 @@ export default class UserPantryRepo implements UserRecipeRepoInterface {
 
   /** Deletes user in DB */
   public async delete(userPantry: UserPantry): Promise<void> {
-    const query = `DELETE FROM user_pantries WHERE upMembershipId=${userPantry.upMembershipId}`;
+    const userPantryEnt = Mapper.toDB(userPantry);
+    const query = `DELETE FROM user_pantries WHERE up_membership_id=${userPantryEnt.up_membership_id}`;
     await this.psql.query(query, function (err: Error) {
       if (err) throw err;
     });
@@ -34,8 +36,8 @@ export default class UserPantryRepo implements UserRecipeRepoInterface {
   public async create(userPantry: UserPantry): Promise<UserPantry> {
     const conn = this.psql;
     const userPantryEnt = Mapper.toDB(userPantry);
-    const query = `INSERT INTO user_pantries (userId, ingredientId, ingredientAmount) VALUES ('${userPantryEnt.userId}',
-    '${userPantryEnt.ingredientId}, '${userPantryEnt.ingredientAmount}')`;
+    const query = `INSERT INTO user_pantries (user_id, ingredient_id, ingredient_amount) VALUES ('${userPantryEnt.user_id}',
+    '${userPantryEnt.ingredient_id}, '${userPantryEnt.ingredient_amount}')`;
     return new Promise(resolve => {
       conn.query(query, function (err: Error, result: PG.QueryResult) {
         if (err) throw err;
@@ -52,8 +54,8 @@ export default class UserPantryRepo implements UserRecipeRepoInterface {
   public async update(userPantry: UserPantry): Promise<UserPantry> {
     const conn = this.psql;
     const userPantryEnt = Mapper.toDB(userPantry);
-    const query = `UPDATE user_pantries SET (userId, ingredientId, ingredientAmount) VALUES ('${userPantryEnt.userId}',
-    '${userPantryEnt.ingredientId}, '${userPantryEnt.ingredientAmount}') WHERE upMembershipId='${userPantryEnt.upMembershipId}'`;
+    const query = `UPDATE user_pantries SET (user_id, ingredient_id, ingredient_amount) VALUES ('${userPantryEnt.user_id}',
+    '${userPantryEnt.ingredient_id}, '${userPantryEnt.ingredient_amount}') WHERE up_membership_id='${userPantryEnt.up_membership_id}'`;
     conn.query(query, null);
     return userPantry;
   }
@@ -63,7 +65,7 @@ export default class UserPantryRepo implements UserRecipeRepoInterface {
     const conn = this.psql;
     const userPantryEnt = Mapper.toDB(userPantry);
     return new Promise(function (resolve, reject) {
-      const query = `SELECT * FROM user_pantries WHERE upMembershipId=${userPantryEnt.upMembershipId}`;
+      const query = `SELECT * FROM user_pantries WHERE up_membershipId=${userPantryEnt.up_membership_id}`;
       conn.query(query, (err: Error, results: PG.QueryResult) => {
         if (err) {
           return reject(err);

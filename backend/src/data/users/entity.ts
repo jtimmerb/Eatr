@@ -4,6 +4,6 @@ export interface User {
 }
 
 export interface UserEntity {
-  userId: number;
+  user_id: number;
   name: string;
 }

@@ -4,19 +4,19 @@ import {Mapper} from '..';
 export const RecipeIngredientMapper: Mapper<RecipeIngredient, RecipeIngredientEntity> = class {
   public static toDB(t: RecipeIngredient): RecipeIngredientEntity {
     return {
-      recipeIngredientMembershipId: t.recipeIngredientMembershipId,
-      recipeId: t.recipeId,
-      ingredientId: t.ingredientId,
-      ingredientAmount: t.ingredientAmount,
+      recipe_ingredient_membership_id: t.recipeIngredientMembershipId,
+      recipe_id: t.recipeId,
+      ingredient_id: t.ingredientId,
+      ingredient_amount: t.ingredientAmount,
     };
   }
 
   public static fromDB(d: RecipeIngredientEntity): RecipeIngredient {
     return {
-      recipeIngredientMembershipId: d.recipeIngredientMembershipId,
-      recipeId: d.recipeId,
-      ingredientId: d.ingredientId,
-      ingredientAmount: d.ingredientAmount,
+      recipeIngredientMembershipId: d.recipe_ingredient_membership_id,
+      recipeId: d.recipe_id,
+      ingredientId: d.ingredient_id,
+      ingredientAmount: d.ingredient_amount,
     };
   }
 };

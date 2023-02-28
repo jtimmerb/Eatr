@@ -5,14 +5,15 @@ import PG from 'pg';
 
 interface UserRecipeRepoInterface extends Repo<UserRecipe> {}
 
-export default class RecipeIngredientRepo implements UserRecipeRepoInterface {
+export default class UserRecipeRepo implements UserRecipeRepoInterface {
   private psql: any;
 
   constructor(psql: any) {
     this.psql = psql;
   }
   public async exists(userRecipe: UserRecipe): Promise<boolean> {
-    const query = `SELECT EXISTS (SELECT 1 FROM user_recipes WHERE userRecipeMembershipId='${userRecipe.userRecipeMembershipId}')`;
+    const userRecipeEnt = Mapper.toDB(userRecipe);
+    const query = `SELECT EXISTS (SELECT 1 FROM user_recipes WHERE user_recipe_membership_id='${userRecipeEnt.user_recipe_membership_id}')`;
     const conn = this.psql;
     return new Promise(resolve => {
       conn.query(query, function (err: Error, result: PG.QueryResult) {
@@ -24,7 +25,8 @@ export default class RecipeIngredientRepo implements UserRecipeRepoInterface {
 
   /** Deletes user in DB */
   public async delete(userRecipe: UserRecipe): Promise<void> {
-    const query = `DELETE FROM user_recipes WHERE userRecipeMembershipId=${userRecipe.userRecipeMembershipId}`;
+    const userRecipeEnt = Mapper.toDB(userRecipe);
+    const query = `DELETE FROM user_recipes WHERE user_recipe_membership_id=${userRecipeEnt.user_recipe_membership_id}`;
     await this.psql.query(query, function (err: Error) {
       if (err) throw err;
     });
@@ -34,8 +36,8 @@ export default class RecipeIngredientRepo implements UserRecipeRepoInterface {
   public async create(userRecipe: UserRecipe): Promise<UserRecipe> {
     const conn = this.psql;
     const userRecipeEnt = Mapper.toDB(userRecipe);
-    const query = `INSERT INTO user_recipes (userId, recipeId) VALUES ('${userRecipeEnt.userId}',
-    '${userRecipeEnt.recipeId}')`;
+    const query = `INSERT INTO user_recipes (user_id, recipe_id) VALUES ('${userRecipeEnt.user_id}',
+    '${userRecipeEnt.recipe_id}')`;
     return new Promise(resolve => {
       conn.query(query, function (err: Error, result: PG.QueryResult) {
         if (err) throw err;
@@ -51,8 +53,8 @@ export default class RecipeIngredientRepo implements UserRecipeRepoInterface {
   public async update(userRecipe: UserRecipe): Promise<UserRecipe> {
     const conn = this.psql;
     const userRecipeEnt = Mapper.toDB(userRecipe);
-    const query = `UPDATE user_recipes SET (userId, recipeId) VALUES ('${userRecipeEnt.userId}',
-    '${userRecipeEnt.recipeId}') WHERE userRecipeMembershipId='${userRecipeEnt.userRecipeMembershipId}'`;
+    const query = `UPDATE user_recipes SET (user_id, recipe_id) VALUES ('${userRecipeEnt.user_id}',
+    '${userRecipeEnt.recipe_id}') WHERE user_recipe_membership_id='${userRecipeEnt.user_recipe_membership_id}'`;
     conn.query(query, null);
     return userRecipe;
   }
@@ -62,7 +64,7 @@ export default class RecipeIngredientRepo implements UserRecipeRepoInterface {
     const conn = this.psql;
     const userRecipeEnt = Mapper.toDB(userRecipe);
     return new Promise(function (resolve, reject) {
-      const query = `SELECT * FROM user_recipes WHERE userRecipeMembershipId=${userRecipeEnt.userRecipeMembershipId}`;
+      const query = `SELECT * FROM user_recipes WHERE user_recipe_membership_id=${userRecipeEnt.user_recipe_membership_id}`;
       conn.query(query, (err: Error, results: PG.QueryResult) => {
         if (err) {
           return reject(err);

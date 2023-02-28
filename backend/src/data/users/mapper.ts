@@ -6,13 +6,13 @@ export const UserMapper: Mapper<User, UserEntity> = class {
   /** Mapping from User DB Entity to User Entity  */
   public static fromDB(d: UserEntity): User {
     return {
-      userId: d.userId,
+      userId: d.user_id,
       name: d.name,
     };
   }
   public static toDB(d: User): UserEntity {
     return {
-      userId: d.userId,
+      user_id: d.userId,
       name: d.name,
     };
   }
