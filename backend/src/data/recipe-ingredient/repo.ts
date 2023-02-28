@@ -77,4 +77,23 @@ export default class RecipeIngredientRepo implements RecipeIngredientRepoInterfa
       });
     });
   }
+
+  public async getByIngredientID(recipeIngredient: RecipeIngredient): Promise<RecipeIngredient[]> {
+    const conn = this.psql;
+    const recipeIngredientEnt = Mapper.toDB(recipeIngredient);
+    return new Promise(function (resolve, reject) {
+      const query = `SELECT 10 FROM recipe_ingredients WHERE ingredientId=${recipeIngredientEnt.ingredientId}`;
+      conn.query(query, (err: Error, results: PG.QueryResult) => {
+        if (err) {
+          return reject(err);
+        }
+        //console.log(results.rows.length);
+        let entityList = [];
+        for (let i = 0; i < results.rows.length; i++) {
+          entityList.push(Mapper.fromDB(results.rows[i] as RecipeIngredientEntity));
+        }
+        resolve(entityList);
+      });
+    });
+  }
 }
