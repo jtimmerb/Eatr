@@ -1,12 +1,12 @@
 import {Recipe, RecipeEntity} from './entity';
 import {Repo} from '..';
-import {RecipeMapper} from './mapper';
+import {RecipeMapper as Mapper} from './mapper';
 import PG from 'pg';
 import db_conn from '../db_conn';
 
 /** This Interface extends the base Repo and implement new methods uniqe to User Entity */
 
-type RecipeRepoInterface = Repo<Recipe>;
+interface RecipeRepoInterface extends Repo<Recipe> {}
 /** The Recipe Repo persists and fetches object from DB */
 export default class RecipeRepo implements RecipeRepoInterface {
   public psql: db_conn;
@@ -29,7 +29,7 @@ export default class RecipeRepo implements RecipeRepoInterface {
 
   /** Deletes user in DB */
   public async delete(recipe: Recipe): Promise<void> {
-    const query = `DELETE FROM recipes WHERE recipe_id=${recipe.recipeID}`;
+    const query = `DELETE FROM recipes WHERE recipe_id=${recipe.recipeId}`;
     await this.psql.query(query, function (err: Error) {
       if (err) throw err;
     });
@@ -38,13 +38,13 @@ export default class RecipeRepo implements RecipeRepoInterface {
   /** Creates recipe in DB*/
   public async create(recipe: Recipe): Promise<Recipe> {
     const conn = this.psql;
-    const recipeEnt = RecipeMapper.toDB(recipe);
+    const recipeEnt = Mapper.toDB(recipe);
     const query = `INSERT INTO recipes (name, steps) VALUES ('${recipeEnt.name}', '${recipeEnt.steps}')`;
     return new Promise(resolve => {
       conn.query(query, function (err: Error, result: PG.QueryResult) {
         if (err) throw err;
         resolve({
-          recipeID: JSON.parse(JSON.stringify(result)).insertId,
+          recipeId: JSON.parse(JSON.stringify(result)).insertId,
           name: recipe.name,
           steps: recipe.steps,
         });
@@ -54,7 +54,7 @@ export default class RecipeRepo implements RecipeRepoInterface {
 
   public async update(recipe: Recipe): Promise<Recipe> {
     const conn = this.psql;
-    const query = `UPDATE recipes SET name='${recipe.name}', steps='${recipe.steps}' WHERE recipe_id='${recipe.recipeID}'`;
+    const query = `UPDATE recipes SET name='${recipe.name}', steps='${recipe.steps}' WHERE recipe_id='${recipe.recipeId}'`;
     conn.query(query, null);
     return recipe;
   }
@@ -63,12 +63,12 @@ export default class RecipeRepo implements RecipeRepoInterface {
   public async get(recipe: Recipe): Promise<Recipe> {
     const conn = this.psql;
     return new Promise(function (resolve, reject) {
-      const query = `SELECT * FROM recipes WHERE recipe_id=${recipe.recipeID}`;
+      const query = `SELECT * FROM recipes WHERE recipe_id=${recipe.recipeId}`;
       conn.query(query, (err: Error, results: PG.QueryResult) => {
         if (err) {
           return reject(err);
         }
-        resolve(RecipeMapper.fromDB(results.rows[0] as RecipeEntity));
+        resolve(Mapper.fromDB(results.rows[0] as RecipeEntity));
       });
     });
   }

@@ -3,13 +3,13 @@ import PG from 'pg';
 export default class db_conn {
   db_connection: any;
 
-  constructor(dbHost: string, dbUser: string, dbPwd: string, dbName: string, dbPort: number) {
+  constructor(host: string, user: string, password: string, database: string, port: number) {
     this.db_connection = new PG.Pool({
-      host: dbHost,
-      user: dbUser,
-      password: dbPwd,
-      port: dbPort,
-      database: dbName,
+      host: host,
+      user: user,
+      password: password,
+      database: database,
+      port: port,
     });
   }
 
