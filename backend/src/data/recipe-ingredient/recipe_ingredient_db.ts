@@ -1,5 +1,6 @@
 import {RecipeIngredient} from './entity';
 import EatrService from '../../service/service';
+import {Ingredient} from '../ingredient/entity';
 
 export default class recipeIngredientCmnds {
   async create(user: RecipeIngredient, service: EatrService): Promise<RecipeIngredient> {
@@ -36,10 +37,11 @@ export default class recipeIngredientCmnds {
     //res.send(result + '\n');
   }
 
-  async getRecipesById(obj: RecipeIngredient, service: EatrService): Promise<RecipeIngredient[]> {
+  async getRecipesById(obj: Ingredient, service: EatrService): Promise<RecipeIngredient[]> {
     const recipeIngrList = await service.recipeIngredientRepo.getByIngredientID(obj).catch(err => {
       throw err;
     });
+    console.log(recipeIngrList);
     return recipeIngrList;
   }
 

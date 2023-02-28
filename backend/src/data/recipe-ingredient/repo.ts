@@ -2,6 +2,7 @@ import {RecipeIngredient, RecipeIngredientEntity} from './entity';
 import {RecipeIngredientMapper as Mapper} from './mapper';
 import {Repo} from '..';
 import PG from 'pg';
+import {Ingredient} from '../ingredient/entity';
 
 interface IngredientAmount {
   ingredientId: number;
@@ -80,11 +81,10 @@ export default class RecipeIngredientRepo implements RecipeIngredientRepoInterfa
     });
   }
 
-  public async getByIngredientID(recipeIngredient: RecipeIngredient): Promise<RecipeIngredient[]> {
+  public async getByIngredientID(ingredient: Ingredient): Promise<RecipeIngredient[]> {
     const conn = this.psql;
-    const recipeIngredientEnt = Mapper.toDB(recipeIngredient);
     return new Promise(function (resolve, reject) {
-      const query = `SELECT * FROM recipe_ingredients WHERE ingredient_id=${recipeIngredientEnt.ingredient_id} LIMIT 10`;
+      const query = `SELECT * FROM recipe_ingredients WHERE ingredient_id=${ingredient.ingredientId} LIMIT 20`;
       conn.query(query, (err: Error, results: PG.QueryResult) => {
         if (err) {
           return reject(err);

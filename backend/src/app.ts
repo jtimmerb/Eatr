@@ -62,9 +62,9 @@ app.use(bodyparser.json());
 //   res.send(await userBack.exists({name: req.body.name, userId: 0}, service));
 // });
 
-//service.userRepo.getUsersTable();
-//service.recipeRepo.getRecipesTable();
-//recipeIngredientBack.getTable(service);
+// service.userRepo.getUsersTable();
+// service.recipeRepo.getRecipesTable();
+// recipeIngredientBack.getTable(service);
 // recipeIngredientBack.getRecipesById(
 //   {
 //     recipeIngredientMembershipId: 0,
