@@ -5,7 +5,7 @@ export interface Recipe {
 }
 
 export interface RecipeEntity {
-  recipeId: number;
+  recipe_id: number;
   name: string;
   steps: string;
 }

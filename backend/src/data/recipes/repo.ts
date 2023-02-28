@@ -17,7 +17,8 @@ export default class RecipeRepo implements RecipeRepoInterface {
   /** DB INTERACTIONS */
   /** Checks if user exists in DB */
   public async exists(recipe: Recipe): Promise<boolean> {
-    const query = `SELECT EXISTS (SELECT 1 FROM recipes WHERE name='${recipe.name}')`;
+    const recipeEnt = Mapper.toDB(recipe);
+    const query = `SELECT EXISTS (SELECT 1 FROM recipes WHERE name='${recipeEnt.name}')`;
     const conn = this.psql;
     return new Promise(resolve => {
       conn.query(query, function (err: Error, result: PG.QueryResult) {
@@ -29,7 +30,8 @@ export default class RecipeRepo implements RecipeRepoInterface {
 
   /** Deletes user in DB */
   public async delete(recipe: Recipe): Promise<void> {
-    const query = `DELETE FROM recipes WHERE recipe_id=${recipe.recipeId}`;
+    const recipeEnt = Mapper.toDB(recipe);
+    const query = `DELETE FROM recipes WHERE recipe_id=${recipeEnt.recipe_id}`;
     await this.psql.query(query, function (err: Error) {
       if (err) throw err;
     });
@@ -54,7 +56,8 @@ export default class RecipeRepo implements RecipeRepoInterface {
 
   public async update(recipe: Recipe): Promise<Recipe> {
     const conn = this.psql;
-    const query = `UPDATE recipes SET name='${recipe.name}', steps='${recipe.steps}' WHERE recipe_id='${recipe.recipeId}'`;
+    const recipeEnt = Mapper.toDB(recipe);
+    const query = `UPDATE recipes SET name='${recipeEnt.name}', steps='${recipeEnt.steps}' WHERE recipe_id='${recipeEnt.recipe_id}'`;
     conn.query(query, null);
     return recipe;
   }
@@ -62,8 +65,9 @@ export default class RecipeRepo implements RecipeRepoInterface {
   /** Get user by userID */
   public async get(recipe: Recipe): Promise<Recipe> {
     const conn = this.psql;
+    const recipeEnt = Mapper.toDB(recipe);
     return new Promise(function (resolve, reject) {
-      const query = `SELECT * FROM recipes WHERE recipe_id=${recipe.recipeId}`;
+      const query = `SELECT * FROM recipes WHERE recipe_id=${recipeEnt.recipe_id}`;
       conn.query(query, (err: Error, results: PG.QueryResult) => {
         if (err) {
           return reject(err);
@@ -74,7 +78,8 @@ export default class RecipeRepo implements RecipeRepoInterface {
   }
 
   async getRecipesTable() {
-    this.psql.query('SELECT * FROM recipes', function (err: Error, result: PG.QueryResult) {
+    const query = 'SELECT * FROM recipes';
+    this.psql.query(query, function (err: Error, result: PG.QueryResult) {
       if (err) throw err;
       console.log(result.rows);
     });

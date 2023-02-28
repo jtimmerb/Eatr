@@ -9,9 +9,9 @@ export interface Ingredient {
 }
 
 export interface IngredientEntity {
-  ingredientId: number;
+  ingredient_id: number;
   name: string;
-  servingSize: string;
+  serving_size: string;
   calories: number;
   proteins: number;
   carbohydrates: number;

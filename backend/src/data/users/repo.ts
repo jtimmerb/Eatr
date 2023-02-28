@@ -72,7 +72,8 @@ export default class UserRepo implements InterfaceUserRepo {
   }
 
   async getUsersTable() {
-    this.psql.query('SELECT * FROM users', function (err: Error, result: PG.QueryResult) {
+    const query = 'SELECT * FROM users';
+    this.psql.query(query, function (err: Error, result: PG.QueryResult) {
       if (err) throw err;
       console.log(result.rows);
     });

@@ -5,7 +5,7 @@ export interface UserRecipe {
 }
 
 export interface UserRecipeEntity {
-  userRecipeMembershipId: number;
-  userId: number;
-  recipeId: number;
+  user_recipe_membership_id: number;
+  user_id: number;
+  recipe_id: number;
 }

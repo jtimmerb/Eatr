@@ -70,38 +70,35 @@ CREATE TABLE ingredients
 (
     ingredient_id integer NOT NULL DEFAULT nextval('ingredients_ingredient_id_seq'::regclass),
     name text COLLATE pg_catalog."default" NOT NULL,
-    servingSize text NOT NULL, 
+    serving_size text NOT NULL, 
     calories integer NOT NULL,
     proteins integer NOT NULL,
     carbohydrates integer NOT NULL,
     fats integer NOT NULL,
-    CONSTRAINT ingredient_pkey PRIMARY KEY (ingredient_id)
+    CONSTRAINT ingredient_pkey PRIMARY KEY (ingredientId)
 );
 
 CREATE TABLE recipe_ingredients
 (
-    recipeIngredientMembershipId integer NOT NULL DEFAULT nextval('recipe_ingredients_membership_id_seq'::regclass),
-    recipeId integer NOT NULL,
-    ingredientId integer NOT NULL,
-    ingredientAmount text NOT NULL
+    recipe_ingredient_membership_id integer NOT NULL DEFAULT nextval('recipe_ingredients_membership_id_seq'::regclass),
+    recipe_id integer NOT NULL,
+    ingredient_id integer NOT NULL,
+    ingredient_amount text NOT NULL
 );
 
 CREATE TABLE user_recipes
 (
-    userRecipeMembershipId integer NOT NULL DEFAULT nextval('user_recipes_membership_id_seq'::regclass),
-    userId integer NOT NULL,
-    recipeId integer NOT NULL
+    user_recipe_membership_id integer NOT NULL DEFAULT nextval('user_recipes_membership_id_seq'::regclass),
+    user_id integer NOT NULL,
+    recipe_id integer NOT NULL
 );
 
 CREATE TABLE user_pantries
 (
-    upMembershipId integer NOT NULL DEFAULT nextval('up_membership_id_seq'::regclass),
-    userId integer NOT NULL,
-    ingredientId integer NOT NULL,
-    ingredientAmount text NOT NULL
+    up_membership_id integer NOT NULL DEFAULT nextval('up_membership_id_seq'::regclass),
+    user_id integer NOT NULL,
+    ingredient_id integer NOT NULL,
+    ingredient_amount text NOT NULL
 );
 
 COMMIT;
-
-ANALYZE recipes;
-ANALYZE users;
