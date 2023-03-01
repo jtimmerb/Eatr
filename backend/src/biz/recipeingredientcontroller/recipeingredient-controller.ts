@@ -18,17 +18,19 @@ export default class RecipeIngredientController{
     this.recipeController = recipeController
   }
 
+  
+
   public createRecipeIngredient = async (newRecipeIngredient: RecipeIngredient): Promise<RecipeIngredient> => {
-    const recipeIngredient = await this.getRepo().create(newRecipeIngredient);
+    const recipeIngredient = await this.repo.create(newRecipeIngredient);
     return recipeIngredient;
   };
 
   public deleteRecipe = async (recipeIngredient: RecipeIngredient): Promise<void> => {
-    const res = await this.getRepo().delete(recipeIngredient);
+    const res = await this.repo.delete(recipeIngredient);
   };
 
   public updateRecipe = async (newRecipeIngredient: RecipeIngredient): Promise<void> => {
-    const res = await this.getRepo().update(newRecipeIngredient);
+    const res = await this.repo.update(newRecipeIngredient);
   };
 
   public getRecipeIngredient = async (recipeIngredientMembershipID: number): Promise<RecipeIngredient> => {
@@ -38,7 +40,7 @@ export default class RecipeIngredientController{
         ingredientId: 0,
         ingredientAmount: ""
     }
-    const recipeReceivedIngredient = await this.getRepo().get(recipeIngredient);
+    const recipeReceivedIngredient = await this.repo.get(recipeIngredient);
     return recipeReceivedIngredient
   };
 
@@ -52,7 +54,7 @@ export default class RecipeIngredientController{
         carbohydrates: 0,
         fats: 0,
       }
-    const recipeReceivedIngredient = await this.getRepo().getByIngredientID(ingredient);
+    const receivedRecipeIngredient = await this.repo.getByIngredientID(ingredient);
     const randomNums = new Array(5)
     const randomRecipes = new Array(5)
     let i = 0
@@ -60,11 +62,10 @@ export default class RecipeIngredientController{
         const randomInt = (randomIntFromInterval(0 ,randomRecipes.length))
         if(randomNums.includes(randomInt) == false){
             randomNums.push(randomInt)
-            randomRecipes.push(this.recipeController.getRecipe())
+            randomRecipes.push(await this.recipeController.getRecipe(receivedRecipeIngredient[randomInt].recipeId))
             i += 1
         }
     }
-
     return randomRecipes
   };
 }
