@@ -19,10 +19,10 @@ export default class RecipeController extends RepoController<RecipeRepo> {
   public getRecipe = async (recipeID: number): Promise<Recipe> => {
     const recipe: Recipe = {
       recipeId: recipeID,
-      name : "",
-      steps: []
-  }
+      name: '',
+      steps: [],
+    };
     const recipeReceived = await this.getRepo().get(recipe);
-    return recipeReceived
+    return recipeReceived;
   };
 }

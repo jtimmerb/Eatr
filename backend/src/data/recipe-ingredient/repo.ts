@@ -9,7 +9,7 @@ interface IngredientAmount {
   ingredientAmount: string;
 }
 
-interface RecipeIngredientRepoInterface extends Repo<RecipeIngredient> {}
+type RecipeIngredientRepoInterface = Repo<RecipeIngredient>;
 
 export default class RecipeIngredientRepo implements RecipeIngredientRepoInterface {
   private psql: db_conn;

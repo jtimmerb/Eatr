@@ -3,7 +3,7 @@ import {IngredientMapper as Mapper} from './mapper';
 import {Repo} from '..';
 import PG from 'pg';
 
-interface IngredientRepoInterface extends Repo<Ingredient> {}
+type IngredientRepoInterface = Repo<Ingredient>;
 
 export default class IngredientRepo implements IngredientRepoInterface {
   private psql: any;

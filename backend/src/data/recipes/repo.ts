@@ -5,7 +5,7 @@ import db_conn from '../db_conn';
 
 /** This Interface extends the base Repo and implement new methods uniqe to User Entity */
 
-interface RecipeRepoInterface extends Repo<Recipe> {}
+type RecipeRepoInterface = Repo<Recipe>;
 /** The Recipe Repo persists and fetches object from DB */
 export default class RecipeRepo implements RecipeRepoInterface {
   public psql: db_conn;

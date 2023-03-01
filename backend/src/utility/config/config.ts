@@ -7,3 +7,5 @@ export const Postgres = {
 };
 
 export const LOG_LEVEL = process.env.LOG_LEVEL || 'info';
+export const API_VERSION = '/api/v1';
+export const PORT = 8080;
