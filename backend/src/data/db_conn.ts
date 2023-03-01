@@ -1,7 +1,9 @@
 import PG from 'pg';
+import PgErrorHandler from '../utility/error/postgres_error/pgErrorHandler';
 
 export default class db_conn {
-  db_connection: any;
+  db_connection: PG.Pool;
+  errorHandler: PgErrorHandler;
 
   constructor(host: string, user: string, password: string, database: string, port: number) {
     this.db_connection = new PG.Pool({
@@ -11,14 +13,19 @@ export default class db_conn {
       database: database,
       port: port,
     });
+    this.errorHandler = new PgErrorHandler();
   }
 
-  query(sql: string, args: any) {
-    return new Promise((resolve, reject) => {
-      this.db_connection.query(sql, args, (err: any, rows: any) => {
-        if (err) return reject(err);
-        resolve(rows);
-      });
+  query(sql: string) {
+    return new Promise<PG.QueryResult>(resolve => {
+      this.db_connection
+        .query(sql)
+        .then((res: PG.QueryResult) => {
+          resolve(res);
+        })
+        .catch((err: PG.DatabaseError) => {
+          this.errorHandler.handleError(err);
+        });
     });
   }
 }

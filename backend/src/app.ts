@@ -67,10 +67,13 @@ app.use(bodyparser.json());
 // recipeIngredientBack.getTable(service);
 // recipeIngredientBack.getRecipesById(
 //   {
-//     recipeIngredientMembershipId: 0,
-//     recipeId: 123,
 //     ingredientId: 456,
-//     ingredientAmount: 'testing',
+//     name: 'test',
+//     servingSize: 'test',
+//     calories: 0,
+//     proteins: 0,
+//     carbohydrates: 0,
+//     fats: 0,
 //   },
 //   service,
 // );
