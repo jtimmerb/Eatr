@@ -2,7 +2,7 @@ import {UserRecipe, UserRecipeEntity} from './entity';
 import {UserRecipeMapper as Mapper} from './mapper';
 import {Repo} from '..';
 
-interface UserRecipeRepoInterface extends Repo<UserRecipe> {}
+type UserRecipeRepoInterface = Repo<UserRecipe>;
 
 export default class UserRecipeRepo implements UserRecipeRepoInterface {
   private psql: any;
