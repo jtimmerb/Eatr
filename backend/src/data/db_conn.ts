@@ -1,5 +1,5 @@
 import PG from 'pg';
-import PgErrorHandler from '../utility/error/postgres_error/pgErrorHandler';
+import PgErrorHandler from '../utility/error/pgErrorHandler';
 
 export default class db_conn {
   db_connection: PG.Pool;
