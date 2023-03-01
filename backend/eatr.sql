@@ -75,7 +75,7 @@ CREATE TABLE ingredients
     proteins integer NOT NULL,
     carbohydrates integer NOT NULL,
     fats integer NOT NULL,
-    CONSTRAINT ingredient_pkey PRIMARY KEY (ingredientId)
+    CONSTRAINT ingredient_pkey PRIMARY KEY (ingredient_id)
 );
 
 CREATE TABLE recipe_ingredients
