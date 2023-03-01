@@ -12,10 +12,6 @@ import RecipeIngredientRepo from './data/recipe-ingredient/repo';
 import UserPantryRepo from './data/user-pantry/repo';
 import UserRecipeRepo from './data/user-recipe/repo';
 
-// import userCmnds from './data/users/user_db';
-// import recipeCmnds from './data/recipes/recipe_db';
-// import recipeIngredientCmnds from './data/recipe-ingredient/recipe_ingredient_db';
-
 const app = express();
 const database = new db_conn(Postgres.host, Postgres.user, Postgres.password, Postgres.database, Postgres.port);
 
