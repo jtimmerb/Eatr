@@ -3,27 +3,17 @@ import db_conn from './data/db_conn';
 import EatrService from './service/service';
 import bodyparser from 'body-parser';
 import {Postgres} from './utility/config/config';
-// import {dbAuth, dbAuthDock} from './db.config';
 // import userCmnds from './data/users/user_db';
 // import recipeCmnds from './data/recipes/recipe_db';
 // import recipeIngredientCmnds from './data/recipe-ingredient/recipe_ingredient_db';
 
 const app = express();
 const database = new db_conn(Postgres.host, Postgres.user, Postgres.password, Postgres.database, Postgres.port);
-// const database = new db_conn(
-//   dbAuthDock.host,
-//   dbAuthDock.user,
-//   dbAuthDock.password,
-//   dbAuthDock.database,
-//   dbAuthDock.port,
-// );
 const service = new EatrService(app, database);
 // const userBack = new userCmnds();
 // const recipeBack = new recipeCmnds();
 // const recipeIngredientBack = new recipeIngredientCmnds();
-
 service.listen(8080);
-
 app.use(bodyparser.json());
 
 // app.post('/create_recipe', async (req, res) => {
@@ -62,7 +52,7 @@ app.use(bodyparser.json());
 //   res.send(await userBack.exists({name: req.body.name, userId: 0}, service));
 // });
 
-// service.userRepo.getUsersTable();
+service.userRepo.getUsersTable();
 // service.recipeRepo.getRecipesTable();
 // recipeIngredientBack.getTable(service);
 // recipeIngredientBack.getRecipesById(
