@@ -12,7 +12,6 @@ import RecipeIngredientRepo from './data/recipe-ingredient/repo';
 import UserPantryRepo from './data/user-pantry/repo';
 import UserRecipeRepo from './data/user-recipe/repo';
 
-// import {dbAuth, dbAuthDock} from './db.config';
 // import userCmnds from './data/users/user_db';
 // import recipeCmnds from './data/recipes/recipe_db';
 // import recipeIngredientCmnds from './data/recipe-ingredient/recipe_ingredient_db';
