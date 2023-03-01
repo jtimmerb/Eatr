@@ -83,14 +83,16 @@ CREATE TABLE recipe_ingredients
     recipe_ingredient_membership_id integer NOT NULL DEFAULT nextval('recipe_ingredients_membership_id_seq'::regclass),
     recipe_id integer NOT NULL,
     ingredient_id integer NOT NULL,
-    ingredient_amount text NOT NULL
+    ingredient_amount text NOT NULL,
+    CONSTRAINT recipe_ingredient_pkey PRIMARY KEY (recipe_ingredient_membership_id)
 );
 
 CREATE TABLE user_recipes
 (
     user_recipe_membership_id integer NOT NULL DEFAULT nextval('user_recipes_membership_id_seq'::regclass),
     user_id integer NOT NULL,
-    recipe_id integer NOT NULL
+    recipe_id integer NOT NULL,
+    CONSTRAINT user_recipe_pkey PRIMARY KEY (user_recipe_membership_id)
 );
 
 CREATE TABLE user_pantries
@@ -98,7 +100,8 @@ CREATE TABLE user_pantries
     up_membership_id integer NOT NULL DEFAULT nextval('up_membership_id_seq'::regclass),
     user_id integer NOT NULL,
     ingredient_id integer NOT NULL,
-    ingredient_amount text NOT NULL
+    ingredient_amount text NOT NULL,
+    CONSTRAINT user_pantry_pkey PRIMARY KEY (up_membership_id)
 );
 
 COMMIT;
