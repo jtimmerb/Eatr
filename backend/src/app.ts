@@ -14,10 +14,11 @@ import UserRecipeRepo from './data/user-recipe/repo';
 
 const app = express();
 const database = new db_conn(Postgres.host, Postgres.user, Postgres.password, Postgres.database, Postgres.port);
+//console.log(database);
 
 app.use(express.json());
 app.use(express.urlencoded());
-app.use(bodyparser.json());
+//app.use(bodyparser.json());
 
 const userRepo = new UserRepo(database);
 const recipeRepo = new RecipeRepo(database);

@@ -7,7 +7,7 @@ export default class RoutesGroup {
     this.router = Router();
   }
 
-  //public init(): void {}
+  public init(): void {}
 
   public getRouter(): Router {
     return this.router;
@@ -15,7 +15,7 @@ export default class RoutesGroup {
 
   /** Mount the router to the application */
   public mount(prefix: string, app: Application): void {
-    //this.init();
+    this.init();
     app.use(prefix, this.router);
   }
 }

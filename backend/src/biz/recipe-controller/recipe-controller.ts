@@ -4,7 +4,10 @@ import RepoController from '../repoController';
 
 export default class RecipeController extends RepoController<RecipeRepo> {
   public createRecipe = async (newRecipe: Recipe): Promise<Recipe> => {
+    console.log('create recipe controller');
+    console.log(this.getRepo());
     const recipe = await this.getRepo().create(newRecipe);
+    console.log('past recipe');
     return recipe;
   };
 
