@@ -17,8 +17,7 @@ export default class UserRepo implements InterfaceUserRepo {
   /** Checks if user exists in DB */
   public async exists(user: User): Promise<boolean> {
     const query = `SELECT EXISTS (SELECT 1 FROM users WHERE name='${user.name}')`;
-    const conn = this.psql;
-    const result = await conn.query(query);
+    const result = await this.psql.query(query);
     return result.rows[0].exists;
   }
 
@@ -30,9 +29,8 @@ export default class UserRepo implements InterfaceUserRepo {
 
   /** Creates user in DB*/
   public async create(user: User): Promise<User> {
-    const conn = this.psql;
     const query = `INSERT INTO users (name) VALUES ('${user.name}')`;
-    const result = await conn.query(query);
+    const result = await this.psql.query(query);
     return {
       userId: JSON.parse(JSON.stringify(result)).insertId,
       name: user.name,
@@ -40,24 +38,21 @@ export default class UserRepo implements InterfaceUserRepo {
   }
 
   public async update(user: User): Promise<User> {
-    const conn = this.psql;
     const query = `UPDATE users SET name='${user.name}' WHERE user_id='${user.userId}'`;
-    conn.query(query);
+    this.psql.query(query);
     return user;
   }
 
   /** Get user by userID */
   public async get(user: User): Promise<User> {
-    const conn = this.psql;
     const query = `SELECT * FROM users WHERE user_id=${user.userId}`;
-    const result = await conn.query(query);
+    const result = await this.psql.query(query);
     return Mapper.fromDB(result.rows[0]);
   }
 
   async getUsersTable() {
     const query = 'SELECT * FROM users';
-    const conn = this.psql;
-    const result = await conn.query(query);
+    const result = await this.psql.query(query);
     console.log(result.rows);
   }
 }

@@ -20,8 +20,7 @@ export default class RecipeIngredientRepo implements RecipeIngredientRepoInterfa
   public async exists(recipeIngredient: RecipeIngredient): Promise<boolean> {
     const recipeIngredientEnt = Mapper.toDB(recipeIngredient);
     const query = `SELECT EXISTS (SELECT 1 FROM recipe_ingredients WHERE recipe_ingredient_membership_id='${recipeIngredientEnt.recipe_ingredient_membership_id}')`;
-    const conn = this.psql;
-    const result = await conn.query(query);
+    const result = await this.psql.query(query);
     return result.rows[0].exists;
   }
 
@@ -34,11 +33,10 @@ export default class RecipeIngredientRepo implements RecipeIngredientRepoInterfa
 
   /** Creates RecipeIngredient in DB*/
   public async create(recipeIngredient: RecipeIngredient): Promise<RecipeIngredient> {
-    const conn = this.psql;
     const recipeIngredientEnt = Mapper.toDB(recipeIngredient);
     const query = `INSERT INTO recipe_ingredients (recipe_id, ingredient_id, ingredient_amount) VALUES ('${recipeIngredientEnt.recipe_id}',
     '${recipeIngredientEnt.ingredient_id}','${recipeIngredientEnt.ingredient_amount}')`;
-    const result = await conn.query(query);
+    const result = await this.psql.query(query);
     return {
       recipeIngredientMembershipId: JSON.parse(JSON.stringify(result)).insertId,
       recipeId: recipeIngredient.recipeId,
@@ -48,27 +46,24 @@ export default class RecipeIngredientRepo implements RecipeIngredientRepoInterfa
   }
 
   public async update(recipeIngredient: RecipeIngredient): Promise<RecipeIngredient> {
-    const conn = this.psql;
     const recipeIngredientEnt = Mapper.toDB(recipeIngredient);
     const query = `UPDATE recipe_ingredients SET (recipe_id, ingredient_id, ingredient_amount) VALUES ('${recipeIngredientEnt.recipe_id}',
     '${recipeIngredientEnt.ingredient_id}','${recipeIngredientEnt.ingredient_amount}') WHERE recipe_ingredient_membership_id='${recipeIngredientEnt.recipe_ingredient_membership_id}'`;
-    conn.query(query);
+    this.psql.query(query);
     return recipeIngredient;
   }
 
   /** Get RecipeIngredient by membershipId */
   public async get(recipeIngredient: RecipeIngredient): Promise<RecipeIngredient> {
-    const conn = this.psql;
     const recipeIngredientEnt = Mapper.toDB(recipeIngredient);
     const query = `SELECT * FROM recipe_ingredients WHERE recipe_ingredient_membership_id=${recipeIngredientEnt.recipe_ingredient_membership_id}`;
-    const result = await conn.query(query);
+    const result = await this.psql.query(query);
     return Mapper.fromDB(result.rows[0] as RecipeIngredientEntity);
   }
 
   public async getByIngredientID(ingredient: Ingredient): Promise<RecipeIngredient[]> {
-    const conn = this.psql;
     const query = `SELECT * FROM recipe_ingredients WHERE ingredient_id=${ingredient.ingredientId} LIMIT 20`;
-    const result = await conn.query(query);
+    const result = await this.psql.query(query);
     const entityList = [];
     for (let i = 0; i < result.rowCount; i++) {
       const ent = Mapper.fromDB(result.rows[i] as RecipeIngredientEntity);

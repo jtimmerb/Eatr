@@ -13,8 +13,7 @@ export default class UserRecipeRepo implements UserRecipeRepoInterface {
   public async exists(userRecipe: UserRecipe): Promise<boolean> {
     const userRecipeEnt = Mapper.toDB(userRecipe);
     const query = `SELECT EXISTS (SELECT 1 FROM user_recipes WHERE user_recipe_membership_id='${userRecipeEnt.user_recipe_membership_id}')`;
-    const conn = this.psql;
-    const result = await conn.query(query);
+    const result = await this.psql.query(query);
     return result.rows[0].exists;
   }
 
@@ -27,11 +26,10 @@ export default class UserRecipeRepo implements UserRecipeRepoInterface {
 
   /** Creates recipe in DB*/
   public async create(userRecipe: UserRecipe): Promise<UserRecipe> {
-    const conn = this.psql;
     const userRecipeEnt = Mapper.toDB(userRecipe);
     const query = `INSERT INTO user_recipes (user_id, recipe_id) VALUES ('${userRecipeEnt.user_id}',
     '${userRecipeEnt.recipe_id}')`;
-    const result = conn.query(query);
+    const result = this.psql.query(query);
     return {
       userRecipeMembershipId: JSON.parse(JSON.stringify(result)).insertId,
       recipeId: userRecipe.recipeId,
@@ -40,20 +38,18 @@ export default class UserRecipeRepo implements UserRecipeRepoInterface {
   }
 
   public async update(userRecipe: UserRecipe): Promise<UserRecipe> {
-    const conn = this.psql;
     const userRecipeEnt = Mapper.toDB(userRecipe);
     const query = `UPDATE user_recipes SET (user_id, recipe_id) VALUES ('${userRecipeEnt.user_id}',
     '${userRecipeEnt.recipe_id}') WHERE user_recipe_membership_id='${userRecipeEnt.user_recipe_membership_id}'`;
-    conn.query(query);
+    this.psql.query(query);
     return userRecipe;
   }
 
   /** Get user by userID */
   public async get(userRecipe: UserRecipe): Promise<UserRecipe> {
-    const conn = this.psql;
     const userRecipeEnt = Mapper.toDB(userRecipe);
     const query = `SELECT * FROM user_recipes WHERE user_recipe_membership_id=${userRecipeEnt.user_recipe_membership_id}`;
-    const result = await conn.query(query);
+    const result = await this.psql.query(query);
     return Mapper.fromDB(result.rows[0] as UserRecipeEntity);
   }
 }

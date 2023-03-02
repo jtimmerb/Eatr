@@ -18,8 +18,7 @@ export default class RecipeRepo implements RecipeRepoInterface {
   public async exists(recipe: Recipe): Promise<boolean> {
     const recipeEnt = Mapper.toDB(recipe);
     const query = `SELECT EXISTS (SELECT 1 FROM recipes WHERE name='${recipeEnt.name}')`;
-    const conn = this.psql;
-    const result = await conn.query(query);
+    const result = await this.psql.query(query);
     return result.rows[0].exists;
   }
 
@@ -32,10 +31,9 @@ export default class RecipeRepo implements RecipeRepoInterface {
 
   /** Creates recipe in DB*/
   public async create(recipe: Recipe): Promise<Recipe> {
-    const conn = this.psql;
     const recipeEnt = Mapper.toDB(recipe);
     const query = `INSERT INTO recipes (name, steps) VALUES ('${recipeEnt.name}', '${recipeEnt.steps}')`;
-    const result = await conn.query(query);
+    const result = await this.psql.query(query);
     return {
       recipeId: JSON.parse(JSON.stringify(result)).insertId,
       name: recipe.name,
@@ -44,26 +42,23 @@ export default class RecipeRepo implements RecipeRepoInterface {
   }
 
   public async update(recipe: Recipe): Promise<Recipe> {
-    const conn = this.psql;
     const recipeEnt = Mapper.toDB(recipe);
     const query = `UPDATE recipes SET name='${recipeEnt.name}', steps='${recipeEnt.steps}' WHERE recipe_id='${recipeEnt.recipe_id}'`;
-    conn.query(query);
+    this.psql.query(query);
     return recipe;
   }
 
   /** Get user by userID */
   public async get(recipe: Recipe): Promise<Recipe> {
-    const conn = this.psql;
     const recipeEnt = Mapper.toDB(recipe);
     const query = `SELECT * FROM recipes WHERE recipe_id=${recipeEnt.recipe_id}`;
-    const result = await conn.query(query);
+    const result = await this.psql.query(query);
     return Mapper.fromDB(result.rows[0] as RecipeEntity);
   }
 
   async getRecipesTable() {
     const query = 'SELECT * FROM recipes';
-    const conn = this.psql;
-    const result = await conn.query(query);
+    const result = await this.psql.query(query);
     console.log(result.rows);
   }
 }
