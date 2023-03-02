@@ -1,2 +1,9 @@
 docker run -d --name eatr-container -p 5432:5432 eatr-db
 docker build -t eatr-db ./ 
+{
+  host: '0.0.0.0',
+  user: 'postgres',
+  password: 'Eatr123!',
+  database: 'eatr',
+  port: 5432
+}
