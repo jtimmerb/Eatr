@@ -17,9 +17,15 @@ export default class RecipeIngredientController {
     this.recipeController = recipeController;
   }
 
-  public createRecipeIngredient = async (newRecipeIngredient: RecipeIngredient): Promise<RecipeIngredient> => {
-    const recipeIngredient = await this.repo.create(newRecipeIngredient);
-    return recipeIngredient;
+  public createRecipeIngredient = async (newRecipeIngredients: RecipeIngredient[]): Promise<RecipeIngredient[]> => {
+    let returnRecipeIngredient: RecipeIngredient[] = [];
+
+    newRecipeIngredients.forEach(async recipeIngredient => {
+      const item = await this.repo.create(recipeIngredient);
+      returnRecipeIngredient.push(item);
+    });
+
+    return returnRecipeIngredient;
   };
 
   public deleteRecipe = async (recipeIngredient: RecipeIngredient): Promise<void> => {

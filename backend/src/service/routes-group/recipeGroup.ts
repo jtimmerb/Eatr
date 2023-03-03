@@ -2,14 +2,18 @@ import {RequestHandler} from 'express';
 
 import RoutesGroup from './routesGroup';
 import RecipeController from '../../biz/recipe-controller/recipe-controller';
+import RecipeIngredientController from '../../biz/recipeingredientcontroller/recipeingredient-controller';
 import {Recipe} from '../../data/recipes/entity';
+import {RecipeIngredient} from '../../data/recipe-ingredient/entity';
 
 export default class RecipeGroup extends RoutesGroup {
   private recipeController: RecipeController;
+  private recipeIngredientController: RecipeIngredientController;
 
-  constructor(recipeController: RecipeController) {
+  constructor(recipeController: RecipeController, recipeIngredientController: RecipeIngredientController) {
     super();
     this.recipeController = recipeController;
+    this.recipeIngredientController = recipeIngredientController;
   }
 
   public init(): void {
@@ -29,6 +33,41 @@ export default class RecipeGroup extends RoutesGroup {
     this.getRouter().put('/:recipeID');
   }
 
+  private createRecipeHandler() {
+    const handler: RequestHandler = async (req, res, next) => {
+      const reqRecipe = req.body.recipe;
+      const reqRecipeIngredient = req.body.recipeIngredients;
+
+      // Get recipe
+      const recipe: Recipe = {...reqRecipe};
+
+      // Get recipe's ingredient
+      const recipeIngredientKeys = Object.keys(reqRecipeIngredient);
+
+      const recipeIngredientArray: RecipeIngredient[] = recipeIngredientKeys.map(key => {
+        // Extract the recipeIngredient properties
+        const {recipeID, ingredientId, amount} = reqRecipeIngredient[key];
+
+        // Create a new RecipeIngredient object
+        const recipeIngredient: RecipeIngredient = {
+          recipeIngredientMembershipId: 0,
+          recipeId: recipeID,
+          ingredientId: ingredientId,
+          ingredientAmount: amount,
+        };
+
+        return recipeIngredient;
+      });
+
+      const db_recipe = await this.recipeController.createRecipe(recipe);
+      const db_recipeIngredient = await this.recipeIngredientController.createRecipeIngredient(recipeIngredientArray);
+      const response = {db_recipe, db_recipeIngredient};
+
+      res.send(response);
+    };
+    return handler;
+  }
+
   private getRandomRecipeHandler() {
     const handler: RequestHandler = async (req, res, next) => {
       res.send('get random recipe handler');
@@ -42,16 +81,6 @@ export default class RecipeGroup extends RoutesGroup {
     const handler: RequestHandler = async (req, res, next) => {
       res.send('get recipe handler');
       return;
-    };
-    return handler;
-  }
-  private createRecipeHandler() {
-    const handler: RequestHandler = async (req, res, next) => {
-      console.log('create recipe');
-      console.log(req.body);
-      const recipe: Recipe = {recipeId: req.body.recipeId, name: req.body.name, steps: req.body.steps};
-      const db_recipe = await this.recipeController.createRecipe(recipe);
-      res.send(db_recipe);
     };
     return handler;
   }
