@@ -1,3 +1,4 @@
+docker start eatr-container
 docker run -d --name eatr-container -p 5432:5432 eatr-db
 docker build -t eatr-db ./ 
 {
