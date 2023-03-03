@@ -32,10 +32,10 @@ export default class RecipeRepo implements RecipeRepoInterface {
   /** Creates recipe in DB*/
   public async create(recipe: Recipe): Promise<Recipe> {
     const recipeEnt = Mapper.toDB(recipe);
-    const query = `INSERT INTO recipes (name, steps) VALUES ('${recipeEnt.name}', '${recipeEnt.steps}')`;
+    const query = `INSERT INTO recipes (name, steps) VALUES ('${recipeEnt.name}', '${recipeEnt.steps}') RETURNING recipe_id`;
     const result = await this.psql.query(query);
     return {
-      recipeId: JSON.parse(JSON.stringify(result)).insertId,
+      recipeId: result.rows[0].recipe_id,
       name: recipe.name,
       steps: recipe.steps,
     };
