@@ -1,4 +1,4 @@
-import {RecipeIngredient} from '../../data/recipe-ingredient/entity';
+import {RecipeIngredient, RecipeIngredientQuery} from '../../data/recipe-ingredient/entity';
 import {Recipe} from '../../data/recipes/entity';
 import {Ingredient} from '../../data/ingredient/entity';
 import IngredientRepo from '../../data/ingredient/repo';
@@ -18,7 +18,7 @@ export default class RecipeIngredientController {
   }
 
   public createRecipeIngredient = async (newRecipeIngredients: RecipeIngredient[]): Promise<RecipeIngredient[]> => {
-    let returnRecipeIngredient: RecipeIngredient[] = [];
+    const returnRecipeIngredient: RecipeIngredient[] = [];
 
     newRecipeIngredients.forEach(async recipeIngredient => {
       const item = await this.repo.create(recipeIngredient);
@@ -28,12 +28,16 @@ export default class RecipeIngredientController {
     return returnRecipeIngredient;
   };
 
-  public deleteRecipe = async (recipeIngredient: RecipeIngredient): Promise<void> => {
-    const res = await this.repo.delete(recipeIngredient);
+  public deleteRecipe = async (recipeIngredients: RecipeIngredient[]): Promise<void> => {
+    recipeIngredients.forEach(async recipeIngredient => {
+      await this.repo.delete(recipeIngredient);
+    });
   };
 
-  public updateRecipe = async (newRecipeIngredient: RecipeIngredient): Promise<void> => {
-    const res = await this.repo.update(newRecipeIngredient);
+  public updateRecipe = async (newRecipeIngredients: RecipeIngredient[]): Promise<void> => {
+    newRecipeIngredients.forEach(async recipeIngredient => {
+      await this.repo.update(recipeIngredient);
+    });
   };
 
   public getRecipeIngredient = async (recipeIngredientMembershipID: number): Promise<RecipeIngredient> => {
@@ -47,9 +51,9 @@ export default class RecipeIngredientController {
     return recipeReceivedIngredient;
   };
 
-  public getFiveRandomRecipes = async (ingredientID: number): Promise<Recipe[]> => {
+  public getFiveRandomRecipes = async (ingredientFilter: number[]): Promise<RecipeIngredientQuery[]> => {
     const ingredient: Ingredient = {
-      ingredientId: ingredientID,
+      ingredientId: ingredientFilter[0],
       name: '',
       servingSize: '',
       calories: 0,

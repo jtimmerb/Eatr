@@ -7,7 +7,9 @@ export default class RoutesGroup {
     this.router = Router();
   }
 
-  public init(): void {}
+  public init(): void {
+    console.log('Init' + this.getRouter());
+  }
 
   public getRouter(): Router {
     return this.router;
