@@ -48,7 +48,6 @@ export default class RecipeRepo implements RecipeRepoInterface {
     return recipe;
   }
 
-  /** Get user by userID */
   public async get(recipe: Recipe): Promise<Recipe> {
     const recipeEnt = Mapper.toDB(recipe);
     const query = `SELECT * FROM recipes WHERE recipe_id=${recipeEnt.recipe_id}`;
