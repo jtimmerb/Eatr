@@ -3,6 +3,7 @@ import {RecipeIngredientMapper as Mapper} from './mapper';
 import {Repo} from '..';
 import {Ingredient} from '../ingredient/entity';
 import db_conn from '../db_conn';
+import {Recipe} from '../recipes/entity';
 
 interface IngredientAmount {
   ingredientId: number;
@@ -63,6 +64,17 @@ export default class RecipeIngredientRepo implements RecipeIngredientRepoInterfa
 
   public async getByIngredientID(ingredient: Ingredient): Promise<RecipeIngredient[]> {
     const query = `SELECT * FROM recipe_ingredients WHERE ingredient_id=${ingredient.ingredientId} LIMIT 20`;
+    const result = await this.psql.query(query);
+    const entityList = [];
+    for (let i = 0; i < result.rowCount; i++) {
+      const ent = Mapper.fromDB(result.rows[i] as RecipeIngredientEntity);
+      entityList.push(ent);
+    }
+    return entityList;
+  }
+
+  public async getByRecipeID(recipe: Recipe): Promise<RecipeIngredient[]> {
+    const query = `SELECT * FROM recipe_ingredients WHERE recipe_id=${recipe.recipeId}`;
     const result = await this.psql.query(query);
     const entityList = [];
     for (let i = 0; i < result.rowCount; i++) {
