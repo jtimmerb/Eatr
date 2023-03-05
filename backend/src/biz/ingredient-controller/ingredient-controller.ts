@@ -16,7 +16,7 @@ export default class IngredientController extends RepoController<IngredientRepo>
     const res = await this.getRepo().update(ingredient);
   };
 
-  public getIngredientMacros = async (ingredientID: number): Promise<Ingredient> => {
+  public getIngredient = async (ingredientID: number): Promise<Ingredient> => {
     const ingredient: Ingredient = {
       ingredientId: ingredientID,
       name: '',

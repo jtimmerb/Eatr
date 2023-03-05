@@ -42,7 +42,7 @@ export default class EatrService implements Service {
     this.userController = new UserController(userRepo);
     this.recipeController = new RecipeController(recipeRepo);
     this.ingredientController = new IngredientController(ingredientRepo);
-    this.recipeIngredientController = new RecipeIngredientController(recipeIngredientRepo, this.recipeController);
+    this.recipeIngredientController = new RecipeIngredientController(recipeIngredientRepo, this.recipeController, this.ingredientController);
     this.initRoutes();
   }
 

@@ -47,12 +47,12 @@ export default class RecipeGroup extends RoutesGroup {
 
       const recipeIngredientArray: RecipeIngredient[] = recipeIngredientKeys.map(key => {
         // Extract the recipeIngredient properties
-        const {recipeID, ingredientId, amount} = reqRecipeIngredient[key];
+        const {recipeId, ingredientId, amount} = reqRecipeIngredient[key];
 
         // Create a new RecipeIngredient object
         const recipeIngredient: RecipeIngredient = {
           recipeIngredientMembershipId: 0,
-          recipeId: recipeID,
+          recipeId: recipeId,
           ingredientId: ingredientId,
           ingredientAmount: amount,
         };

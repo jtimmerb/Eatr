@@ -6,15 +6,18 @@ import RecipeRepo from '../../data/recipes/repo';
 import RecipeIngredientRepo from '../../data/recipe-ingredient/repo';
 import RepoController from '../repoController';
 import RecipeController from '../recipe-controller/recipe-controller';
+import IngredientController from '../ingredient-controller/ingredient-controller'
 
 export default class RecipeIngredientController {
   private repo: RecipeIngredientRepo;
 
   private recipeController: RecipeController;
+  private ingredientController: IngredientController;
 
-  constructor(repo: RecipeIngredientRepo, recipeController: RecipeController) {
+  constructor(repo: RecipeIngredientRepo, recipeController: RecipeController, ingredientController: IngredientController) {
     this.repo = repo;
     this.recipeController = recipeController;
+    this.ingredientController = ingredientController;
   }
 
   public createRecipeIngredient = async (newRecipeIngredients: RecipeIngredient[]): Promise<RecipeIngredient[]> => {
@@ -38,17 +41,6 @@ export default class RecipeIngredientController {
     newRecipeIngredients.forEach(async recipeIngredient => {
       await this.repo.update(recipeIngredient);
     });
-  };
-
-  public getRecipeIngredient = async (recipeIngredientMembershipID: number): Promise<RecipeIngredient> => {
-    const recipeIngredient: RecipeIngredient = {
-      recipeIngredientMembershipId: recipeIngredientMembershipID,
-      recipeId: 0,
-      ingredientId: 0,
-      ingredientAmount: '',
-    };
-    const recipeReceivedIngredient = await this.repo.get(recipeIngredient);
-    return recipeReceivedIngredient;
   };
 
   public getFiveRandomRecipes = async (ingredientFilter: number[]): Promise<RecipeIngredientQuery[]> => {
@@ -75,6 +67,20 @@ export default class RecipeIngredientController {
     }
     return randomRecipes;
   };
+
+  public getRecipeIngredient = async (recipeID: number): Promise<String[]> =>{
+    const recipe: Recipe = {
+      recipeId: recipeID,
+      name: '',
+      steps: [],
+    };
+    const recipeIngredients : RecipeIngredient[] = await this.repo.getByRecipeID(recipe);
+    const ingredients : String[] = [] 
+    recipeIngredients.forEach(async recipeIngredient => {
+      ingredients.push((await this.ingredientController.getIngredient(recipeIngredient.ingredientId)).name);
+    });
+    return ingredients
+  }
 }
 
 function randomIntFromInterval(min: number, max: number) {
