@@ -29,10 +29,10 @@ export default class UserRepo implements InterfaceUserRepo {
 
   /** Creates user in DB*/
   public async create(user: User): Promise<User> {
-    const query = `INSERT INTO users (name) VALUES ('${user.name}')`;
+    const query = `INSERT INTO users (name) VALUES ('${user.name}') RETURNING user_id`;
     const result = await this.psql.query(query);
     return {
-      userId: JSON.parse(JSON.stringify(result)).insertId,
+      userId: result.rows[0].user_id,
       name: user.name,
     };
   }

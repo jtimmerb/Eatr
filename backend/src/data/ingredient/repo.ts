@@ -31,10 +31,10 @@ export default class IngredientRepo implements IngredientRepoInterface {
   public async create(ingredient: Ingredient): Promise<Ingredient> {
     const ingredientEnt = Mapper.toDB(ingredient);
     const query = `INSERT INTO ingredients (name, serving_size, calories, proteins, carbohydrates, fats) VALUES ('${ingredientEnt.name}', '${ingredientEnt.serving_size}',
-    '${ingredientEnt.calories}','${ingredientEnt.proteins}','${ingredientEnt.carbohydrates}','${ingredientEnt.fats}',)`;
+    '${ingredientEnt.calories}','${ingredientEnt.proteins}','${ingredientEnt.carbohydrates}','${ingredientEnt.fats}',) RETURNING ingredient_id`;
     const result = await this.psql.query(query);
     return {
-      ingredientId: JSON.parse(JSON.stringify(result)).insertId,
+      ingredientId: result.rows[0].ingredient_id,
       name: ingredient.name,
       servingSize: ingredient.servingSize,
       calories: ingredient.calories,
