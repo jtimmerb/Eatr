@@ -2,6 +2,7 @@ import {RequestHandler} from 'express';
 
 import RoutesGroup from './routesGroup';
 import UserController from '../../biz/user-controller/user-controller';
+
 import {User} from '../../data/users/entity';
 
 export default class UserGroup extends RoutesGroup {
