@@ -2,7 +2,7 @@ import {RequestHandler} from 'express';
 
 import RoutesGroup from './routesGroup';
 import RecipeController from '../../biz/recipe-controller/recipe-controller';
-import RecipeIngredientController from '../../biz/recipeingredientcontroller/recipeingredient-controller';
+import RecipeIngredientController from '../../biz/recipeingredient-controller/recipeingredient-controller';
 import {Recipe} from '../../data/recipes/entity';
 import {RecipeIngredient, RecipeIngredientQuery} from '../../data/recipe-ingredient/entity';
 
@@ -71,16 +71,17 @@ export default class RecipeGroup extends RoutesGroup {
 
   private getRecipeHandler() {
     const handler: RequestHandler = async (req, res, next) => {
-      const reqRecipeID = req.body.recipeId;
+      console.log("here")
+      const reqRecipeId = req.body.recipeId;
 
       const recipe: Recipe = {
-        recipeId: reqRecipeID,
+        recipeId: reqRecipeId,
         name: '',
         steps: [],
       };
-
-      const db_recipe = await this.recipeController.getRecipe(reqRecipeID);
-      const db_recipeIngredient = await this.recipeIngredientController.getRecipeIngredient(reqRecipeID);
+      console.log("here")
+      const db_recipe = await this.recipeController.getRecipe(reqRecipeId);
+      const db_recipeIngredient = await this.recipeIngredientController.getRecipeIngredient(reqRecipeId);
 
       const response = {db_recipe, db_recipeIngredient};
 

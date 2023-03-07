@@ -3,7 +3,7 @@ import {Application} from 'express';
 import IngredientController from '../biz/ingredient-controller/ingredient-controller';
 import UserController from '../biz/user-controller/user-controller';
 import RecipeController from '../biz/recipe-controller/recipe-controller';
-import RecipeIngredientController from '../biz/recipeingredientcontroller/recipeingredient-controller';
+import RecipeIngredientController from '../biz/recipeingredient-controller/recipeingredient-controller';
 
 import IngredientRepo from '../data/ingredient/repo';
 import UserRepo from '../data/users/repo';
