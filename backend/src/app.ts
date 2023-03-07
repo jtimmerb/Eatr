@@ -37,4 +37,16 @@ const service = new EatrService(
   userRecipeRepo,
 );
 
+// for (let i = 0; i < 17; i++) {
+//   ingredientRepo.delete({
+//     ingredientId: i,
+//     name: 'test',
+//     servingSize: '',
+//     calories: 0,
+//     proteins: 0,
+//     carbohydrates: 0,
+//     fats: 0,
+//   });
+// }
+
 service.listen(PORT);

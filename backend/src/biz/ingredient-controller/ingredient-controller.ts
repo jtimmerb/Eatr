@@ -4,8 +4,8 @@ import RepoController from '../repoController';
 
 export default class IngredientController extends RepoController<IngredientRepo> {
   public createIngredient = async (newIngredient: Ingredient): Promise<Ingredient> => {
-    const user = await this.getRepo().create(newIngredient);
-    return newIngredient;
+    const retIngredient = await this.getRepo().create(newIngredient);
+    return retIngredient;
   };
 
   public deleteIngredient = async (ingredient: Ingredient): Promise<void> => {
