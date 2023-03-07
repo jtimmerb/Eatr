@@ -9,6 +9,10 @@ export default class PgErrorHandler {
       console.log('SQL Incomplete');
     } else if (err.code === '08000') {
       console.log('Connection Exception');
+    } else if (err.code === '42601') {
+      console.log('Query Syntax Error');
+    } else if (err.code === '42703') {
+      console.log('Column Non-existent');
     }
   }
 }
