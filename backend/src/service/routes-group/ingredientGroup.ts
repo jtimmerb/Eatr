@@ -5,7 +5,7 @@ import IngredientController from '../../biz/ingredient-controller/ingredient-con
 
 import {Ingredient} from '../../data/ingredient/entity';
 
-export default class UserGroup extends RoutesGroup {
+export default class IngredientGroup extends RoutesGroup {
   private ingredientController: IngredientController;
 
   constructor(ingredientController: IngredientController) {
@@ -25,6 +25,7 @@ export default class UserGroup extends RoutesGroup {
 
   private createIngredientHandler() {
     const handler: RequestHandler = async (req, res, next) => {
+      console.log(req.body.ingredient);
       const ingredient: Ingredient = {...req.body.ingredient};
 
       const db_ingredient = await this.ingredientController.createIngredient(ingredient);

@@ -14,6 +14,7 @@ import UserRecipeRepo from '../data/user-recipe/repo';
 
 import RecipeGroup from './routes-group/recipeGroup';
 import UserGroup from './routes-group/userGroup';
+import IngredientGroup from './routes-group/ingredientGroup';
 
 import {API_VERSION} from '../utility/config/config';
 
@@ -42,7 +43,11 @@ export default class EatrService implements Service {
     this.userController = new UserController(userRepo);
     this.recipeController = new RecipeController(recipeRepo);
     this.ingredientController = new IngredientController(ingredientRepo);
-    this.recipeIngredientController = new RecipeIngredientController(recipeIngredientRepo, this.recipeController, this.ingredientController);
+    this.recipeIngredientController = new RecipeIngredientController(
+      recipeIngredientRepo,
+      this.recipeController,
+      this.ingredientController,
+    );
     this.initRoutes();
   }
 
@@ -56,5 +61,8 @@ export default class EatrService implements Service {
 
     const userGroup = new UserGroup(this.userController);
     userGroup.mount(API_VERSION + '/users', this.app);
+
+    const ingredientGroup = new IngredientGroup(this.ingredientController);
+    ingredientGroup.mount(API_VERSION + '/ingredients', this.app);
   }
 }
