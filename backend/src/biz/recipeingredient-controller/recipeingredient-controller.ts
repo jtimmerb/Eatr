@@ -56,15 +56,14 @@ export default class RecipeIngredientController {
     const receivedRecipeIngredient = await this.repo.getByIngredientID(ingredient);
     const randomNums = new Array(5);
     const randomRecipes = new Array(5);
-    let i = 0;
-    while (i <= 5) {
+  
+    receivedRecipeIngredient.forEach(async recipeIngredient =>{
       const randomInt = randomIntFromInterval(0, randomRecipes.length);
       if (randomNums.includes(randomInt) == false) {
         randomNums.push(randomInt);
-        randomRecipes.push(await this.recipeController.getRecipe(receivedRecipeIngredient[randomInt].recipeId));
-        i += 1;
+        randomRecipes.push(await this.recipeController.getRecipe(recipeIngredient.recipeId));
       }
-    }
+    });
     return randomRecipes;
   };
 
