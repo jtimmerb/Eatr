@@ -57,13 +57,12 @@ export default class RecipeIngredientController {
       fats: 0,
     };
     const receivedRecipeIngredient = await this.repo.getByIngredientID(ingredient);
-    console.log(receivedRecipeIngredient);
     const randomNums: Number[] = [];
     const randomRecipes: Recipe[] = [];
 
     for (let i = 0; i < receivedRecipeIngredient.length; i++) {
-      const randomInt = randomIntFromInterval(0, randomRecipes.length);
-      if (randomNums.includes(randomInt) == false) {
+      const randomInt = randomIntFromInterval(0, receivedRecipeIngredient.length - 1);
+      if (randomNums.includes(randomInt) == false && randomRecipes.length < 5) {
         randomNums.push(randomInt);
         randomRecipes.push(await this.recipeController.getRecipe(receivedRecipeIngredient[randomInt].recipeId));
       }

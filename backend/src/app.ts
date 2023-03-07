@@ -49,4 +49,12 @@ const service = new EatrService(
 //   });
 // }
 
+// for (let i = 0; i <= 22; i++) {
+//   recipeRepo.delete({recipeId: i, name: '', steps: ['']});
+// }
+
+// for (let i = 0; i < 45; i++) {
+//   recipeIngredientRepo.delete({recipeIngredientMembershipId: i, recipeId: 0, ingredientId: 0, ingredientAmount: ''});
+// }
+
 service.listen(PORT);
