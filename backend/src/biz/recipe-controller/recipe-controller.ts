@@ -4,7 +4,6 @@ import RepoController from '../repoController';
 
 export default class RecipeController extends RepoController<RecipeRepo> {
   public createRecipe = async (newRecipe: Recipe): Promise<Recipe> => {
-    console.log(this.getRepo());
     const recipe = await this.getRepo().create(newRecipe);
     return recipe;
   };
@@ -26,4 +25,6 @@ export default class RecipeController extends RepoController<RecipeRepo> {
     const recipeReceived = await this.getRepo().get(recipe);
     return recipeReceived;
   };
+
+  
 }
