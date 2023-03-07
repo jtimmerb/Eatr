@@ -42,25 +42,25 @@ export default class RecipeGroup extends RoutesGroup {
       // Get recipe
       const recipe: Recipe = {...reqRecipe};
 
+      const db_recipe = await this.recipeController.createRecipe(recipe);
+
       // Get recipe's ingredient
       const recipeIngredientKeys = Object.keys(reqRecipeIngredient);
 
       const recipeIngredientArray: RecipeIngredient[] = recipeIngredientKeys.map(key => {
         // Extract the recipeIngredient properties
-        const {recipeId, ingredientId, amount} = reqRecipeIngredient[key];
+        const {recipeId, ingredientId, ingredientAmount} = reqRecipeIngredient[key];
 
         // Create a new RecipeIngredient object
         const recipeIngredient: RecipeIngredient = {
           recipeIngredientMembershipId: 0,
-          recipeId: recipeId,
+          recipeId: db_recipe.recipeId,
           ingredientId: ingredientId,
-          ingredientAmount: amount,
+          ingredientAmount: ingredientAmount,
         };
 
         return recipeIngredient;
       });
-
-      const db_recipe = await this.recipeController.createRecipe(recipe);
       const db_recipeIngredient = await this.recipeIngredientController.createRecipeIngredient(recipeIngredientArray);
       const response = {db_recipe, db_recipeIngredient};
 
@@ -71,17 +71,10 @@ export default class RecipeGroup extends RoutesGroup {
 
   private getRecipeHandler() {
     const handler: RequestHandler = async (req, res, next) => {
-      console.log("here")
       const reqRecipeId = req.body.recipeId;
 
-      const recipe: Recipe = {
-        recipeId: reqRecipeId,
-        name: '',
-        steps: [],
-      };
-      console.log("here")
       const db_recipe = await this.recipeController.getRecipe(reqRecipeId);
-      const db_recipeIngredient = await this.recipeIngredientController.getRecipeIngredient(reqRecipeId);
+      const db_recipeIngredient = await this.recipeIngredientController.getRecipeIngredient(db_recipe.recipeId);
 
       const response = {db_recipe, db_recipeIngredient};
 
@@ -94,11 +87,9 @@ export default class RecipeGroup extends RoutesGroup {
     const handler: RequestHandler = async (req, res, next) => {
       const filterIngredients = req.body.filterIngredients;
 
-      const recipeAndIngredients: RecipeIngredientQuery[] = await this.recipeIngredientController.getFiveRandomRecipes(
-        filterIngredients,
-      );
+      const recipes: Recipe[] = await this.recipeIngredientController.getFiveRandomRecipes(filterIngredients);
 
-      res.send(recipeAndIngredients);
+      res.send(recipes);
     };
 
     return handler;
@@ -126,14 +117,15 @@ export default class RecipeGroup extends RoutesGroup {
 
       const recipeIngredientArray: RecipeIngredient[] = recipeIngredientKeys.map(key => {
         // Extract the recipeIngredient properties
-        const {recipeID, ingredientId, amount} = newRecipeIngredients[key];
+        console.log(newRecipeIngredients[key]);
+        const {recipeId, ingredientId, ingredientAmount} = newRecipeIngredients[key];
 
         // Create a new RecipeIngredient object
         const recipeIngredient: RecipeIngredient = {
           recipeIngredientMembershipId: 0,
-          recipeId: recipeID,
+          recipeId: recipeId,
           ingredientId: ingredientId,
-          ingredientAmount: amount,
+          ingredientAmount: ingredientAmount,
         };
 
         return recipeIngredient;

@@ -52,7 +52,12 @@ export default class RecipeRepo implements RecipeRepoInterface {
     const recipeEnt = Mapper.toDB(recipe);
     const query = `SELECT * FROM recipes WHERE recipe_id=${recipeEnt.recipe_id}`;
     const result = await this.psql.query(query);
-    return Mapper.fromDB(result.rows[0] as RecipeEntity);
+    const db_recipe: RecipeEntity = {
+      recipe_id: result.rows[0].recipe_id,
+      name: result.rows[0].name,
+      steps: JSON.stringify(result.rows[0].steps),
+    };
+    return Mapper.fromDB(db_recipe as RecipeEntity);
   }
 
   async getRecipesTable() {
