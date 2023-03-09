@@ -46,11 +46,23 @@ export default class UserPantryRepo implements UserRecipeRepoInterface {
     return userPantry;
   }
 
-  /** Get user by userID */
+  /** Get user by upID */
   public async get(userPantry: UserPantry): Promise<UserPantry> {
     const userPantryEnt = Mapper.toDB(userPantry);
     const query = `SELECT * FROM user_pantries WHERE up_membershipId=${userPantryEnt.up_membership_id}`;
     const result = this.psql.query(query);
     return Mapper.fromDB(result.rows[0] as UserPantryEntity);
+  }
+
+  public async getByUserId(userPantry: UserPantry): Promise<UserPantry[]> {
+    const userPantryEnt = Mapper.toDB(userPantry);
+    const query = `SELECT * FROM user_pantries WHERE user_id=${userPantryEnt.user_id}`;
+    const result = await this.psql.query(query);
+    const entityList = [];
+    for (let i = 0; i < result.rowCount; i++) {
+      const ent = Mapper.fromDB(result.rows[i] as UserPantryEntity);
+      entityList.push(ent);
+    }
+    return entityList;
   }
 }
