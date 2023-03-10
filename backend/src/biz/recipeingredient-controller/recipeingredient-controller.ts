@@ -61,7 +61,7 @@ export default class RecipeIngredientController {
     const randomRecipes: Recipe[] = [];
 
     for (let i = 0; i < receivedRecipeIngredient.length; i++) {
-      const randomInt = randomIntFromInterval(0, receivedRecipeIngredient.length - 1);
+      const randomInt = Math.floor(Math.random() * (receivedRecipeIngredient.length - 1))
       if (randomNums.includes(randomInt) == false && randomRecipes.length < 5) {
         randomNums.push(randomInt);
         randomRecipes.push(await this.recipeController.getRecipe(receivedRecipeIngredient[randomInt].recipeId));
