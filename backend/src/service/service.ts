@@ -4,6 +4,8 @@ import IngredientController from '../biz/ingredient-controller/ingredient-contro
 import UserController from '../biz/user-controller/user-controller';
 import RecipeController from '../biz/recipe-controller/recipe-controller';
 import RecipeIngredientController from '../biz/recipeingredient-controller/recipeingredient-controller';
+import UserPantryController from '../biz/userpantry-controller/userpantry-controller';
+import UserRecipeController from '../biz/userrecipe-controller/userrecipe-controller';
 
 import IngredientRepo from '../data/ingredient/repo';
 import UserRepo from '../data/users/repo';
@@ -29,6 +31,8 @@ export default class EatrService implements Service {
   public recipeController: RecipeController;
   public ingredientController: IngredientController;
   public recipeIngredientController: RecipeIngredientController;
+  public userPantryController: UserPantryController;
+  public userRecipeController: UserRecipeController;
 
   constructor(
     app: Application,
@@ -48,6 +52,12 @@ export default class EatrService implements Service {
       this.recipeController,
       this.ingredientController,
     );
+    this.userPantryController = new UserPantryController(
+      userPantryRepo,
+      this.ingredientController,
+      this.userController,
+    );
+    this.userRecipeController = new UserRecipeController(userRecipeRepo, this.recipeController, this.userController);
     this.initRoutes();
   }
 
@@ -59,7 +69,7 @@ export default class EatrService implements Service {
     const recipeGroup = new RecipeGroup(this.recipeController, this.recipeIngredientController);
     recipeGroup.mount(API_VERSION + '/recipes', this.app);
 
-    const userGroup = new UserGroup(this.userController);
+    const userGroup = new UserGroup(this.userController, this.userPantryController, this.userRecipeController);
     userGroup.mount(API_VERSION + '/users', this.app);
 
     const ingredientGroup = new IngredientGroup(this.ingredientController);
