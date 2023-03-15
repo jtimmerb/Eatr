@@ -6,6 +6,7 @@ import UserPantryController from '../../biz/userpantry-controller/userpantry-con
 import UserRecipeController from '../../biz/userrecipe-controller/userrecipe-controller';
 
 import {User} from '../../data/users/entity';
+import {Recipe} from '../../data/recipes/entity';
 
 export default class UserGroup extends RoutesGroup {
   private userController: UserController;
@@ -28,10 +29,10 @@ export default class UserGroup extends RoutesGroup {
     this.getRouter().post('/', this.createUserHandler());
 
     // get user by id
-    this.getRouter().get('/:userId');
+    this.getRouter().get('/:userId', this.getUserHandler());
 
     // delete user by id
-    this.getRouter().delete('/:userId');
+    this.getRouter().delete('/:userId', this.deleteUserHandler());
 
     // add recipe to user's recipe list
     this.getRouter().post('/recipes');
@@ -53,13 +54,10 @@ export default class UserGroup extends RoutesGroup {
 
   private getUserHandler() {
     const handler: RequestHandler = async (req, res, next) => {
-      const userId = req.query.userId;
-      if (typeof userId !== 'number') {
-        throw Error('query parameter: userId wrong type');
-      }
+      const userId = parseInt(req.params.userId);
 
-      //const user = await this.userController.getUser(userId);
-      //res.send(user);
+      const user = await this.userController.getUser(userId);
+      res.send(user);
     };
     return handler;
   }
@@ -77,7 +75,12 @@ export default class UserGroup extends RoutesGroup {
   }
 
   private addRecipeToUserHandler() {
-    const handler: RequestHandler = async (req, res, next) => {};
+    const handler: RequestHandler = async (req, res, next) => {
+      const user: User = req.body.user;
+      const recipe: Recipe = req.body.recipe;
+
+      //await this.userRecipeController.createUserRecipe();
+    };
     return handler;
   }
 

@@ -18,6 +18,8 @@ import RecipeGroup from './routes-group/recipeGroup';
 import UserGroup from './routes-group/userGroup';
 import IngredientGroup from './routes-group/ingredientGroup';
 
+import ErrorHandler from '../utility/error/errorHandler';
+
 import {API_VERSION} from '../utility/config/config';
 
 interface Service {
@@ -74,5 +76,7 @@ export default class EatrService implements Service {
 
     const ingredientGroup = new IngredientGroup(this.ingredientController);
     ingredientGroup.mount(API_VERSION + '/ingredients', this.app);
+
+    this.app.use(ErrorHandler.errorHandler);
   }
 }

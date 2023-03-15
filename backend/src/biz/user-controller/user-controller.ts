@@ -8,8 +8,20 @@ export default class UserController extends RepoController<UserRepo> {
     return user;
   };
 
-  public deleteUser = async (user: User): Promise<void> => {
-    const res = await this.getRepo().delete(user);
+  public deleteUser = async (userId: number): Promise<void> => {
+    const deleteUser: User = {
+      userId: userId,
+      name: '',
+    };
+    await this.getRepo().delete(deleteUser);
   };
 
+  public getUser = async (userId: number): Promise<User> => {
+    const queryUser: User = {
+      userId: userId,
+      name: '',
+    };
+    const user = await this.getRepo().get(queryUser);
+    return user;
+  };
 }
