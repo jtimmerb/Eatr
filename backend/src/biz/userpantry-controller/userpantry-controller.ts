@@ -25,15 +25,15 @@ export default class UserPantryController {
     this.userController = userController;
   }
 
-  public createUserPantry = async (newUserPantry: UserPantry[]): Promise<UserPantry[]> => {
-    const returnUserPantry: UserPantry[] = [];
-
-    newUserPantry.forEach(async newUserPantry => {
-      const item = await this.repo.create(newUserPantry);
-      returnUserPantry.push(item);
-    });
-
-    return returnUserPantry;
+  public createUserPantry = async (userID: number, ingredientID: number, ingredientAmount: string): Promise<UserPantry> => {
+    const userPantry : UserPantry = {
+      upMembershipId: 0,
+      userId: userID,
+      ingredientId: ingredientID,
+      ingredientAmount: ""
+    }
+    const newUserPantry = await this.repo.create(userPantry)
+    return newUserPantry;
   }
 
   public deleteUserPantry = async (userID: number, ingredientID: number): Promise<void> => {
@@ -58,14 +58,20 @@ export default class UserPantryController {
     return receivedIngredient;
   }
 
-  public updateIngredientAmount = async(userPantry, newAmount: string): Promise<void> =>{
-    constItem = 
-
+  public updateIngredientAmount = async(upMembershipID: number, newAmount: string): Promise<void> =>{
     const userPantry: UserPantry = {
         upMembershipId: upMembershipID,
         userId: 0,
         ingredientId: 0,
         ingredientAmount: ""
       };
+    const receivedUserPantry: UserPantry = await this.repo.get(userPantry)
+    const updatedUserPantry: UserPantry = {
+      upMembershipId: receivedUserPantry.upMembershipId,
+      userId: receivedUserPantry.userId,
+      ingredientId: receivedUserPantry.ingredientId,
+      ingredientAmount: newAmount
+    }; 
+    await this.repo.update(updatedUserPantry)
   } 
 }

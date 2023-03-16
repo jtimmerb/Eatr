@@ -24,15 +24,14 @@ export default class UserRecipeController {
     this.userController = userController;
   }
 
-  public createUserRecipe = async (newUserRecipe: UserRecipe[]): Promise<UserRecipe[]> => {
-    const returnUserRecipe: UserRecipe[] = [];
-
-    newUserRecipe.forEach(async newUserRecipe => {
-      const item = await this.repo.create(newUserRecipe);
-      returnUserRecipe.push(item);
-    });
-
-    return returnUserRecipe;
+  public createUserRecipe = async (userID: number, recipeID: number): Promise<UserRecipe> => {
+    const userRecipe: UserRecipe = {
+      userRecipeMembershipId: 0,
+      userId: userID,
+      recipeId: recipeID
+    }
+    const newUserRecipe: UserRecipe = await this.repo.create(userRecipe)
+    return newUserRecipe;
   }
 
   public deleteUserRecipe = async (userID: number, recipeID : number): Promise<void> => {
@@ -50,9 +49,9 @@ export default class UserRecipeController {
         userId: userID,
         recipeId: 0
       };
-    const recievedUserPantry: UserRecipe[] = await this.repo.getByUserId(userRecipe);
-    console.log(recievedUserPantry);
-    return recievedUserPantry.length;
+    const recievedUserRecipe: UserRecipe[] = await this.repo.getByUserId(userRecipe);
+    console.log(recievedUserRecipe);
+    return recievedUserRecipe.length;
   }
 
   public getRecipeFromId = async (userRecipeMembershipID : number): Promise <Recipe> =>{
@@ -61,8 +60,8 @@ export default class UserRecipeController {
       userId: 0,
       recipeId: 0
     }
-    const receivedUserRecipe = this.repo.get(userRecipe);
-    const receivedRecipe = this.recipeController.getRecipe((await receivedUserRecipe).recipeId)
+    const receivedUserRecipe = await this.repo.get(userRecipe);
+    const receivedRecipe: Recipe = await this.recipeController.getRecipe(receivedUserRecipe.recipeId)
     return receivedRecipe
   }
 }
