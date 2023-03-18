@@ -24,16 +24,16 @@ export default class RecipeGroup extends RoutesGroup {
     this.getRouter().post('/', this.createRecipeHandler());
 
     // get recipe by ID endpoint
-    this.getRouter().get('/:recipeID', this.getRecipeHandler());
+    this.getRouter().get('/:recipeId', this.getRecipeHandler());
 
     // get random recipe endpoint
     this.getRouter().get('/', this.getRandomRecipesHandler());
 
     // delete recipe endpoint
-    this.getRouter().delete('/:recipeID', this.deleteRecipeHandler());
+    this.getRouter().delete('/:recipeId', this.deleteRecipeHandler());
 
     // update recipe endpoint
-    this.getRouter().put('/:recipeID', this.updateRecipeHandler());
+    this.getRouter().put('/:recipeId', this.updateRecipeHandler());
   }
 
   // create recipe handler
@@ -45,13 +45,13 @@ export default class RecipeGroup extends RoutesGroup {
       const reqRecipeIngredients = req.body.recipeIngredients;
 
       // Get recipe
-      const recipe: Recipe = {...reqRecipe};
+      const recipe: Recipe = {recipeId: 0, ...reqRecipe};
 
       const db_recipe = await this.recipeController.createRecipe(recipe);
 
       const recipeIngredientArray: RecipeIngredient[] = reqRecipeIngredients.map(
         (recipeIngredient: RecipeIngredient) => {
-          const {recipeId, ingredientId, ingredientAmount} = recipeIngredient;
+          const {recipeIngredientMembershipId, recipeId, ingredientId, ingredientAmount} = recipeIngredient;
 
           const newRecipeIngredient: RecipeIngredient = {
             recipeIngredientMembershipId: 0,
@@ -74,12 +74,12 @@ export default class RecipeGroup extends RoutesGroup {
 
   private getRecipeHandler() {
     const handler: RequestHandler = async (req, res, next) => {
-      const reqRecipeId = req.body.recipeId;
+      const reqRecipeId = parseInt(req.params.recipeId);
 
       const db_recipe = await this.recipeController.getRecipe(reqRecipeId);
-      const db_recipeIngredient = await this.recipeIngredientController.getRecipeIngredient(db_recipe.recipeId);
+      const db_recipeIngredients = await this.recipeIngredientController.getRecipeIngredient(db_recipe.recipeId);
 
-      const response = {db_recipe, db_recipeIngredient};
+      const response = {db_recipe, db_recipeIngredients};
 
       res.send(response);
     };
@@ -100,45 +100,40 @@ export default class RecipeGroup extends RoutesGroup {
 
   private deleteRecipeHandler() {
     const handler: RequestHandler = async (req, res, next) => {
-      const recipeId = req.body.recipeId;
+      const recipeId = parseInt(req.params.recipeId);
       await this.recipeController.deleteRecipe(recipeId);
       await this.recipeIngredientController.deleteRecipe(recipeId);
     };
-    return handler;
+    return ErrorHandler.errorWrapper(handler);
   }
 
   private updateRecipeHandler() {
     const handler: RequestHandler = async (req, res, next) => {
+      this.validateSchema(updateRecipeSchema as JSONSchemaType<any>, req.body);
+
+      const currnetRecipeId = parseInt(req.params.recipeId);
       const newRecipe = req.body.recipe;
       const newRecipeIngredients = req.body.recipeIngredients;
 
-      // create new Recipe object
-      const recipe: Recipe = {...newRecipe};
-
-      // create new recipeIngredient array
-      const recipeIngredientKeys = Object.keys(newRecipeIngredients);
-
-      const recipeIngredientArray: RecipeIngredient[] = recipeIngredientKeys.map(key => {
-        // Extract the recipeIngredient properties
-        console.log(newRecipeIngredients[key]);
-        const {recipeId, ingredientId, ingredientAmount} = newRecipeIngredients[key];
-
-        // Create a new RecipeIngredient object
-        const recipeIngredient: RecipeIngredient = {
-          recipeIngredientMembershipId: 0,
-          recipeId: recipeId,
-          ingredientId: ingredientId,
-          ingredientAmount: ingredientAmount,
-        };
-
-        return recipeIngredient;
-      });
-
+      const recipe: Recipe = {recipeId: currnetRecipeId, ...newRecipe};
       await this.recipeController.updateRecipe(recipe);
-      await this.recipeIngredientController.updateRecipe(recipeIngredientArray);
 
-      const response = {newRecipe, newRecipeIngredients};
-      res.send(response);
+      const recipeIngredientArray: RecipeIngredient[] = newRecipeIngredients.map(
+        (recipeIngredient: RecipeIngredient) => {
+          const {recipeIngredientMembershipId, recipeId, ingredientId, ingredientAmount} = recipeIngredient;
+
+          const newRecipeIngredient: RecipeIngredient = {
+            recipeIngredientMembershipId: recipeIngredientMembershipId,
+            recipeId: currnetRecipeId,
+            ingredientId: ingredientId,
+            ingredientAmount: ingredientAmount,
+          };
+
+          return newRecipeIngredient;
+        },
+      );
+
+      await this.recipeIngredientController.updateRecipe(recipeIngredientArray);
     };
     return ErrorHandler.errorWrapper(handler);
   }

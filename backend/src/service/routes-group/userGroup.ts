@@ -1,12 +1,16 @@
 import {RequestHandler} from 'express';
+import {JSONSchemaType} from 'ajv';
 
 import RoutesGroup from './routesGroup';
 import UserController from '../../biz/user-controller/user-controller';
 import UserPantryController from '../../biz/userpantry-controller/userpantry-controller';
 import UserRecipeController from '../../biz/userrecipe-controller/userrecipe-controller';
+import ErrorHandler from '../../utility/error/errorHandler';
+import {createUserSchema, createUserIngredientSchema, createUserRecipeSchema} from '../schema/user-schema';
 
 import {User} from '../../data/users/entity';
 import {Recipe} from '../../data/recipes/entity';
+import {Ingredient} from '../../data/ingredient/entity';
 
 export default class UserGroup extends RoutesGroup {
   private userController: UserController;
@@ -35,57 +39,117 @@ export default class UserGroup extends RoutesGroup {
     this.getRouter().delete('/:userId', this.deleteUserHandler());
 
     // add recipe to user's recipe list
-    this.getRouter().post('/recipes');
+    this.getRouter().post('/recipes/:userId', this.addUserRecipeHandler());
+
+    // get list of user's recipes
+    this.getRouter().get('/recipes/:userID', this.getUserRecipesHandler());
+
+    // remove a recipe from user's liked recipes
+    this.getRouter().delete('/recipes/:userId/:recipeId', this.deleteUserRecipeHandler());
 
     // add ingredient to user's pantry
-    this.getRouter().post('/ingredient');
+    this.getRouter().post('/ingredients/:userId', this.addUserPantryHandler());
+
+    // get list user's pantry
+    this.getRouter().get('/ingredients/:userid');
+
+    // remove item from user's pantry
+    this.getRouter().delete('/ingredients/:userId/:ingredientId', this.deleteUserPantryHandler());
   }
 
   private createUserHandler() {
     const handler: RequestHandler = async (req, res, next) => {
-      const newUser: User = {
-        ...req.body,
-      };
-      const user = await this.userController.createUser(newUser);
+      this.validateSchema(createUserSchema as JSONSchemaType<any>, req.body);
+      const user = await this.userController.createUser(req.body.name);
       res.send(user);
     };
-    return handler;
+    return ErrorHandler.errorWrapper(handler);
   }
 
   private getUserHandler() {
     const handler: RequestHandler = async (req, res, next) => {
       const userId = parseInt(req.params.userId);
-
       const user = await this.userController.getUser(userId);
       res.send(user);
     };
-    return handler;
+    return ErrorHandler.errorWrapper(handler);
   }
 
   private deleteUserHandler() {
     const handler: RequestHandler = async (req, res, next) => {
-      const userId = req.query.userId;
-      if (typeof userId !== 'number') {
-        throw Error('query parameter: userId wrong type');
-      }
-
+      const userId = parseInt(req.params.userId);
       await this.userController.deleteUser(userId);
     };
-    return handler;
+    return ErrorHandler.errorWrapper(handler);
   }
 
-  private addRecipeToUserHandler() {
+  private addUserRecipeHandler() {
     const handler: RequestHandler = async (req, res, next) => {
-      const user: User = req.body.user;
-      const recipe: Recipe = req.body.recipe;
+      this.validateSchema(createUserRecipeSchema as JSONSchemaType<any>, req.body);
+      const userId = parseInt(req.params.userId);
 
-      //await this.userRecipeController.createUserRecipe();
+      const userRecipe = await this.userRecipeController.createUserRecipe(userId, req.body.recipeId);
+
+      res.send(userRecipe);
     };
-    return handler;
+    return ErrorHandler.errorWrapper(handler);
   }
 
-  private addIngredientToUserHandler() {
-    const handler: RequestHandler = async (req, res, next) => {};
-    return handler;
+  /**
+   * NOT DONE
+   * @returns
+   */
+  private getUserRecipesHandler() {
+    const handler: RequestHandler = async (req, res, next) => {
+      const userId = parseInt(req.params.userId);
+
+      //const recipes: Recipe[] = await this.userRecipeController;
+      //res.send(recipes)
+    };
+    return ErrorHandler.errorWrapper(handler);
+  }
+
+  private deleteUserRecipeHandler() {
+    const handler: RequestHandler = async (req, res, next) => {
+      const userId = parseInt(req.params.userId);
+      const recipeId = parseInt(req.params.recipeId);
+
+      await this.userRecipeController.deleteUserRecipe(userId, recipeId);
+    };
+    return ErrorHandler.errorWrapper(handler);
+  }
+
+  private addUserPantryHandler() {
+    const handler: RequestHandler = async (req, res, next) => {
+      this.validateSchema(createUserIngredientSchema as JSONSchemaType<any>, req.body);
+      const userId = parseInt(req.params.userId);
+      const {ingredientId, ingredientAmout} = req.body;
+
+      const userPantry = await this.userPantryController.createUserPantry(userId, ingredientId, ingredientAmout);
+
+      res.send(userPantry);
+    };
+    return ErrorHandler.errorWrapper(handler);
+  }
+
+  /**
+   * NOT DONE
+   * @returns
+   */
+  private getUserPantryHandler() {
+    const handler: RequestHandler = async (req, res, next) => {
+      const userId = parseInt(req.params.userId);
+    };
+    return ErrorHandler.errorWrapper(handler);
+  }
+
+  private deleteUserPantryHandler() {
+    const handler: RequestHandler = async (req, res, next) => {
+      const userId = parseInt(req.params.userId);
+      const ingredientId = parseInt(req.params.ingredientId);
+
+      await this.userPantryController.deleteUserPantry(userId, ingredientId);
+    };
+    return ErrorHandler.errorWrapper(handler);
   }
 }
