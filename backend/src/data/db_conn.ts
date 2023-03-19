@@ -24,7 +24,7 @@ export default class db_conn {
           resolve(res);
         })
         .catch((err: PG.DatabaseError) => {
-          this.errorHandler.handleError(err);
+          this.errorHandler.handleError(err, sql);
         });
     });
   }
