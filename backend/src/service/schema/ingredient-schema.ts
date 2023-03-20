@@ -22,7 +22,7 @@ export const createIngredientSchema: JSONSchemaType<CreateIngredient> = {
   required: ['name', 'servingSize', 'calories', 'proteins', 'carbohydrates', 'fats'],
 };
 
-interface UpdateIngredient extends CreateIngredient {}
+type UpdateIngredient = CreateIngredient;
 
 export const updateIngredientSchema: JSONSchemaType<UpdateIngredient> = {
   type: 'object',
