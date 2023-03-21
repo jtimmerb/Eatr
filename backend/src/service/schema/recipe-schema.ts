@@ -12,7 +12,7 @@ export const createRecipeSchema: JSONSchemaType<CreateRecipe> = {
   properties: {
     recipe: {
       type: 'object',
-      properties: {name: {type: 'string'}, steps: {type: 'array', items: {type: 'string'}}},
+      properties: {name: {type: 'string'}, steps: {type: 'array', minItems: 1, items: {type: 'string'}}},
       required: ['name', 'steps'],
     },
     recipeIngredients: {
@@ -26,7 +26,7 @@ export const createRecipeSchema: JSONSchemaType<CreateRecipe> = {
           ingredientId: {type: 'number'},
           ingredientAmount: {type: 'string'},
         },
-        required: ['recipeId', 'ingredientId', 'ingredientAmount'],
+        required: ['ingredientId', 'ingredientAmount'],
       },
     },
   },
@@ -40,7 +40,7 @@ export const updateRecipeSchema: JSONSchemaType<UpdateRecipe> = {
   properties: {
     recipe: {
       type: 'object',
-      properties: {name: {type: 'string'}, steps: {type: 'array', items: {type: 'string'}}},
+      properties: {name: {type: 'string'}, steps: {type: 'array', minItems: 1, items: {type: 'string'}}},
       required: ['name', 'steps'],
     },
     recipeIngredients: {
