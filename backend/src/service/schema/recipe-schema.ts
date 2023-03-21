@@ -33,7 +33,7 @@ export const createRecipeSchema: JSONSchemaType<CreateRecipe> = {
   required: ['recipe', 'recipeIngredients'],
 };
 
-interface UpdateRecipe extends CreateRecipe {}
+type UpdateRecipe = CreateRecipe;
 
 export const updateRecipeSchema: JSONSchemaType<UpdateRecipe> = {
   type: 'object',
