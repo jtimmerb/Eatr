@@ -8,12 +8,21 @@ export default class IngredientController extends RepoController<IngredientRepo>
     return retIngredient;
   };
 
-  public deleteIngredient = async (ingredient: Ingredient): Promise<void> => {
-    const res = await this.getRepo().delete(ingredient);
+  public deleteIngredient = async (ingredientID: number): Promise<void> => {
+    const ingredient: Ingredient = {
+      ingredientId: ingredientID,
+      name: '',
+      servingSize: '',
+      calories: 0,
+      proteins: 0,
+      carbohydrates: 0,
+      fats: 0,
+    };
+    await this.getRepo().delete(ingredient);
   };
 
   public updateIngredientMacros = async (ingredient: Ingredient): Promise<void> => {
-    const res = await this.getRepo().update(ingredient);
+    await this.getRepo().update(ingredient);
   };
 
   public getIngredient = async (ingredientID: number): Promise<Ingredient> => {

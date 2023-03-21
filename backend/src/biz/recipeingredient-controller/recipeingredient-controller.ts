@@ -1,10 +1,7 @@
 import {RecipeIngredient, RecipeIngredientQuery} from '../../data/recipe-ingredient/entity';
 import {Recipe} from '../../data/recipes/entity';
 import {Ingredient} from '../../data/ingredient/entity';
-import IngredientRepo from '../../data/ingredient/repo';
-import RecipeRepo from '../../data/recipes/repo';
 import RecipeIngredientRepo from '../../data/recipe-ingredient/repo';
-import RepoController from '../repoController';
 import RecipeController from '../recipe-controller/recipe-controller';
 import IngredientController from '../ingredient-controller/ingredient-controller';
 
@@ -34,10 +31,14 @@ export default class RecipeIngredientController {
     return returnRecipeIngredient;
   };
 
-  public deleteRecipe = async (recipeIngredients: RecipeIngredient[]): Promise<void> => {
-    recipeIngredients.forEach(async recipeIngredient => {
-      await this.repo.delete(recipeIngredient);
-    });
+  public deleteRecipe = async (recipeID: number): Promise<void> => {
+    const recipeIngredient: RecipeIngredient = {
+      recipeIngredientMembershipId: 0,
+      recipeId: recipeID,
+      ingredientId: 0,
+      ingredientAmount: ''
+    }
+    await this.repo.deleteByRecipeId(recipeIngredient)
   };
 
   public updateRecipe = async (newRecipeIngredients: RecipeIngredient[]): Promise<void> => {
@@ -77,11 +78,6 @@ export default class RecipeIngredientController {
       steps: [],
     };
     const recipeIngredients: RecipeIngredient[] = await this.repo.getByRecipeID(recipe);
-    console.log(recipeIngredients);
     return recipeIngredients;
   };
-}
-
-function randomIntFromInterval(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
 }
