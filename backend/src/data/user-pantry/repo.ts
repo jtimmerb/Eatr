@@ -24,6 +24,24 @@ export default class UserPantryRepo implements UserRecipeRepoInterface {
     await this.psql.query(query);
   }
 
+  public async deleteByUserAndIngr(userPantry: UserPantry): Promise<void> {
+    const userPantryEnt = Mapper.toDB(userPantry);
+    const query = `DELETE FROM user_pantries WHERE user_id=${userPantryEnt.user_id} AND ingredient_id=${userPantryEnt.ingredient_id}`;
+    await this.psql.query(query);
+  }
+
+  public async deleteByIngr(userPantry: UserPantry): Promise<void> {
+    const userPantryEnt = Mapper.toDB(userPantry);
+    const query = `DELETE FROM user_pantries WHERE ingredient_id=${userPantryEnt.ingredient_id}`;
+    await this.psql.query(query);
+  }
+
+  public async deleteByUser(userPantry: UserPantry): Promise<void> {
+    const userPantryEnt = Mapper.toDB(userPantry);
+    const query = `DELETE FROM user_pantries WHERE user_id=${userPantryEnt.user_id}`;
+    await this.psql.query(query);
+  }
+
   /** Creates recipe in DB*/
   public async create(userPantry: UserPantry): Promise<UserPantry> {
     const userPantryEnt = Mapper.toDB(userPantry);
