@@ -25,6 +25,4 @@ export default class RecipeController extends RepoController<RecipeRepo> {
     const recipeReceived = await this.getRepo().get(recipe);
     return recipeReceived;
   };
-
-  
 }
