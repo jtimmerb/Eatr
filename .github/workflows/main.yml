@@ -76,4 +76,6 @@ jobs:
           npm test
 
       - name: Clean Env
-        run: docker image rm eatr-db
+        run: |
+          docker stop eatr-container
+          docker image rm eatr-db
