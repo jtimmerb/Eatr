@@ -8,12 +8,17 @@ export default class RecipeController extends RepoController<RecipeRepo> {
     return recipe;
   };
 
-  public deleteRecipe = async (recipe: Recipe): Promise<void> => {
-    const res = await this.getRepo().delete(recipe);
+  public deleteRecipe = async (recipeID: number): Promise<void> => {
+    const recipe: Recipe = {
+      recipeId: recipeID,
+      name: '',
+      steps: [],
+    };
+    await this.getRepo().delete(recipe);
   };
 
   public updateRecipe = async (newRecipe: Recipe): Promise<void> => {
-    const res = await this.getRepo().update(newRecipe);
+    await this.getRepo().update(newRecipe);
   };
 
   public getRecipe = async (recipeID: number): Promise<Recipe> => {
@@ -25,4 +30,6 @@ export default class RecipeController extends RepoController<RecipeRepo> {
     const recipeReceived = await this.getRepo().get(recipe);
     return recipeReceived;
   };
+
+  
 }

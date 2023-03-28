@@ -111,11 +111,11 @@ export default class RecipeGroup extends RoutesGroup {
     const handler: RequestHandler = async (req, res, next) => {
       this.validateSchema(updateRecipeSchema as JSONSchemaType<any>, req.body);
 
-      const currnetRecipeId = parseInt(req.params.recipeId);
+      const currentRecipeId = parseInt(req.params.recipeId);
       const newRecipe = req.body.recipe;
       const newRecipeIngredients = req.body.recipeIngredients;
 
-      const recipe: Recipe = {recipeId: currnetRecipeId, ...newRecipe};
+      const recipe: Recipe = {recipeId: currentRecipeId, ...newRecipe};
       await this.recipeController.updateRecipe(recipe);
 
       const recipeIngredientArray: RecipeIngredient[] = newRecipeIngredients.map(
@@ -124,7 +124,7 @@ export default class RecipeGroup extends RoutesGroup {
 
           const newRecipeIngredient: RecipeIngredient = {
             recipeIngredientMembershipId: recipeIngredientMembershipId,
-            recipeId: currnetRecipeId,
+            recipeId: currentRecipeId,
             ingredientId: ingredientId,
             ingredientAmount: ingredientAmount,
           };

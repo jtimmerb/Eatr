@@ -46,7 +46,7 @@ export default class UserRecipeRepo implements UserRecipeRepoInterface {
     const userRecipeEnt = Mapper.toDB(userRecipe);
     const query = `INSERT INTO user_recipes (user_id, recipe_id) VALUES ('${userRecipeEnt.user_id}',
     '${userRecipeEnt.recipe_id}') RETURNING user_recipe_membership_id`;
-    const result = this.psql.query(query);
+    const result = await this.psql.query(query);
     return {
       userRecipeMembershipId: result.rows[0].user_recipe_membership_id,
       recipeId: userRecipe.recipeId,

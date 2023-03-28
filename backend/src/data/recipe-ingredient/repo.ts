@@ -32,6 +32,18 @@ export default class RecipeIngredientRepo implements RecipeIngredientRepoInterfa
     await this.psql.query(query);
   }
 
+  public async deleteByRecipeId(recipeIngredient: RecipeIngredient): Promise<void> {
+    const recipeIngredientEnt = Mapper.toDB(recipeIngredient);
+    const query = `DELETE FROM recipe_ingredients WHERE recipe_id=${recipeIngredientEnt.recipe_id}`;
+    await this.psql.query(query);
+  }
+
+  public async deleteByIngrId(recipeIngredient: RecipeIngredient): Promise<void> {
+    const recipeIngredientEnt = Mapper.toDB(recipeIngredient);
+    const query = `DELETE FROM recipe_ingredients WHERE ingredient_id=${recipeIngredientEnt.ingredient_id}`;
+    await this.psql.query(query);
+  }
+
   /** Creates RecipeIngredient in DB*/
   public async create(recipeIngredient: RecipeIngredient): Promise<RecipeIngredient> {
     const recipeIngredientEnt = Mapper.toDB(recipeIngredient);
