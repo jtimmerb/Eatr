@@ -75,8 +75,3 @@ jobs:
           cd backend
           npm test
 
-      - name: Clean Env
-        run: |
-          docker stop eatr-container
-          docker rm eatr-container
-          docker image rm eatr-db
