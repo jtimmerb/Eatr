@@ -41,12 +41,6 @@ describe('Test the database routes', () => {
             ingredientId: 23,
             ingredientAmount: '',
           },
-          {
-            recipeIngredientMembershipId: 0,
-            recipeId: 0,
-            ingredientId: 20,
-            ingredientAmount: '',
-          },
         ],
       });
     expect(response.body).toHaveProperty('db_recipe');
@@ -56,5 +50,6 @@ describe('Test the database routes', () => {
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('db_recipeIngredients');
     expect(response.body.db_recipeIngredients[0].ingredientAmount).toBe('300 grams');
+    request(app).delete(API_VERSION + `/recipes/${recipeId}`);
   });
 });
