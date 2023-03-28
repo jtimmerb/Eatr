@@ -78,4 +78,5 @@ jobs:
       - name: Clean Env
         run: |
           docker stop eatr-container
+          docker rm eatr-container
           docker image rm eatr-db
