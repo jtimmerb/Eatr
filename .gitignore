@@ -112,3 +112,5 @@ dist
 
 #Config Files
 *.config.json
+
+**/.DS_Store
