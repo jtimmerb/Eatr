@@ -72,6 +72,7 @@ jobs:
           PG_DATABASE: eatr
           PG_PORT: 5432
         run: |
+          cd backend
           npm test
 
       - name: Clean Env
