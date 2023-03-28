@@ -103,6 +103,7 @@ export default class RecipeGroup extends RoutesGroup {
       const recipeId = parseInt(req.params.recipeId);
       await this.recipeController.deleteRecipe(recipeId);
       await this.recipeIngredientController.deleteRecipe(recipeId);
+      res.sendStatus(200);
     };
     return ErrorHandler.errorWrapper(handler);
   }
@@ -134,6 +135,7 @@ export default class RecipeGroup extends RoutesGroup {
       );
 
       await this.recipeIngredientController.updateRecipe(recipeIngredientArray);
+      res.sendStatus(200);
     };
     return ErrorHandler.errorWrapper(handler);
   }

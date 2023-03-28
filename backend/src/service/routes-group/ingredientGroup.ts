@@ -50,6 +50,7 @@ export default class IngredientGroup extends RoutesGroup {
       const ingredientId = parseInt(req.params.ingredientId);
       const ingredient: Ingredient = {ingredientId: ingredientId, ...req.body.ingredient};
       await this.ingredientController.updateIngredientMacros(ingredient);
+      res.sendStatus(200);
     };
     return ErrorHandler.errorWrapper(handler);
   }
@@ -58,6 +59,7 @@ export default class IngredientGroup extends RoutesGroup {
     const handler: RequestHandler = async (req, res, next) => {
       const ingredientId = parseInt(req.params.ingredientId);
       await this.ingredientController.deleteIngredient(ingredientId);
+      res.sendStatus(200);
     };
     return ErrorHandler.errorWrapper(handler);
   }

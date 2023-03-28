@@ -46,7 +46,7 @@ export default class UserPantryRepo implements UserRecipeRepoInterface {
   public async create(userPantry: UserPantry): Promise<UserPantry> {
     const userPantryEnt = Mapper.toDB(userPantry);
     const query = `INSERT INTO user_pantries (user_id, ingredient_id, ingredient_amount) VALUES ('${userPantryEnt.user_id}',
-    '${userPantryEnt.ingredient_id}, '${userPantryEnt.ingredient_amount}') RETURNING up_membership_id`;
+    '${userPantryEnt.ingredient_id}', '${userPantryEnt.ingredient_amount}') RETURNING up_membership_id`;
     const result = await this.psql.query(query);
     return {
       upMembershipId: result.rows[0].up_membership_id,

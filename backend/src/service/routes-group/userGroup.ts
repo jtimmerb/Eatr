@@ -79,6 +79,7 @@ export default class UserGroup extends RoutesGroup {
     const handler: RequestHandler = async (req, res, next) => {
       const userId = parseInt(req.params.userId);
       await this.userController.deleteUser(userId);
+      res.sendStatus(200);
     };
     return ErrorHandler.errorWrapper(handler);
   }
@@ -86,10 +87,11 @@ export default class UserGroup extends RoutesGroup {
   private addUserRecipeHandler() {
     const handler: RequestHandler = async (req, res, next) => {
       this.validateSchema(createUserRecipeSchema as JSONSchemaType<any>, req.body);
+      console.log(req.params);
       const userId = parseInt(req.params.userId);
-
+      console.log(userId, typeof userId);
       const userRecipe = await this.userRecipeController.createUserRecipe(userId, req.body.recipeId);
-
+      console.log(userRecipe);
       res.send(userRecipe);
     };
     return ErrorHandler.errorWrapper(handler);
@@ -115,6 +117,7 @@ export default class UserGroup extends RoutesGroup {
       const recipeId = parseInt(req.params.recipeId);
 
       await this.userRecipeController.deleteUserRecipe(userId, recipeId);
+      res.sendStatus(200);
     };
     return ErrorHandler.errorWrapper(handler);
   }
@@ -123,9 +126,9 @@ export default class UserGroup extends RoutesGroup {
     const handler: RequestHandler = async (req, res, next) => {
       this.validateSchema(createUserIngredientSchema as JSONSchemaType<any>, req.body);
       const userId = parseInt(req.params.userId);
-      const {ingredientId, ingredientAmout} = req.body;
+      const {ingredientId, ingredientAmount} = req.body;
 
-      const userPantry = await this.userPantryController.createUserPantry(userId, ingredientId, ingredientAmout);
+      const userPantry = await this.userPantryController.createUserPantry(userId, ingredientId, ingredientAmount);
 
       res.send(userPantry);
     };
@@ -149,6 +152,7 @@ export default class UserGroup extends RoutesGroup {
       const ingredientId = parseInt(req.params.ingredientId);
 
       await this.userPantryController.deleteUserPantry(userId, ingredientId);
+      res.sendStatus(200);
     };
     return ErrorHandler.errorWrapper(handler);
   }
