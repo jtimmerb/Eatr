@@ -49,6 +49,7 @@ describe('Test the database routes', () => {
     response = await request(app).get(API_VERSION + `/recipes/${recipeId}`);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('db_recipeIngredients');
+    expect(response.body.db_recipe.steps[1]).toBe('Step2');
     expect(response.body.db_recipeIngredients[0].ingredientAmount).toBe('300 grams');
     request(app).delete(API_VERSION + `/recipes/${recipeId}`);
   });
