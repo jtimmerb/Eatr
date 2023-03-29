@@ -32,26 +32,30 @@ export class EatrServiceStack extends Stack {
     };
 
     // Test Function
-    new NodejsFunction(this, 'TestFunction', {
+    const testFn = new NodejsFunction(this, 'TestFunction', {
       ...commonLambda,
       entry: path.join(__dirname, '/../src/service/lambda/lambda-test.ts'), // accepts .js, .jsx, .ts, .tsx and .mjs files
       handler: 'lambdaHandler', // defaults to 'handler'
     });
 
-    // /** API Gateway */
+    /** API Gateway */
 
-    // const api = new apigateway.RestApi(this, envSpecificName('eatr-api'), {
-    //   description: 'Primary API gateway for eatr application',
-    //   deployOptions: {
-    //     stageName: 'api',
-    //     tracingEnabled: true,
-    //     dataTraceEnabled: true,
-    //   },
-    //   binaryMediaTypes: ['*/*'],
-    // });
+    const api = new apigateway.RestApi(this, envSpecificName('eatr-api'), {
+      description: 'Primary API gateway for eatr application',
+      deployOptions: {
+        stageName: 'api',
+        tracingEnabled: true,
+        dataTraceEnabled: true,
+      },
+      binaryMediaTypes: ['*/*'],
+    });
 
-    // /** Integrate Lambda Fns with API Gateway */
+    /** Integrate Lambda Fns with API Gateway */
 
-    // const v1 = api.root.addResource('v1');
+    const v1 = api.root.addResource('v1');
+
+    const test = v1.addResource('test');
+
+    test.addMethod(METHOD_POST, new apigateway.LambdaIntegration(testFn));
   }
 }

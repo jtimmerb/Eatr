@@ -114,3 +114,4 @@ dist
 *.config.json
 
 **/.DS_Store
+**/cdk.out
