@@ -72,6 +72,10 @@ typings/
 .env
 .env.test
 
+# config variable file
+*config.json
+db.config.ts
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 
@@ -102,3 +106,12 @@ dist
 
 # TernJS port file
 .tern-port
+
+# RSA Key
+*.pem
+
+#Config Files
+*.config.json
+
+**/.DS_Store
+**/cdk.out

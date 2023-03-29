@@ -1,0 +1,60 @@
+import express from 'express';
+import bodyparser from 'body-parser';
+
+import db_conn from './data/db_conn';
+import EatrService from './service/service';
+import {Postgres, PORT} from './utility/config/config';
+
+import RecipeRepo from './data/recipes/repo';
+import IngredientRepo from './data/ingredient/repo';
+import UserRepo from './data/users/repo';
+import RecipeIngredientRepo from './data/recipe-ingredient/repo';
+import UserPantryRepo from './data/user-pantry/repo';
+import UserRecipeRepo from './data/user-recipe/repo';
+
+const app = express();
+const database = new db_conn(Postgres.host, Postgres.user, Postgres.password, Postgres.database, Postgres.port);
+//console.log(database);
+
+app.use(express.json());
+app.use(express.urlencoded());
+//app.use(bodyparser.json());
+
+const userRepo = new UserRepo(database);
+const recipeRepo = new RecipeRepo(database);
+const ingredientRepo = new IngredientRepo(database);
+const recipeIngredientRepo = new RecipeIngredientRepo(database);
+const userPantryRepo = new UserPantryRepo(database);
+const userRecipeRepo = new UserRecipeRepo(database);
+
+const service = new EatrService(
+  app,
+  userRepo,
+  recipeRepo,
+  ingredientRepo,
+  recipeIngredientRepo,
+  userPantryRepo,
+  userRecipeRepo,
+);
+
+// for (let i = 0; i < 17; i++) {
+//   ingredientRepo.delete({
+//     ingredientId: i,
+//     name: 'test',
+//     servingSize: '',
+//     calories: 0,
+//     proteins: 0,
+//     carbohydrates: 0,
+//     fats: 0,
+//   });
+// }
+
+// for (let i = 0; i <= 22; i++) {
+//   recipeRepo.delete({recipeId: i, name: '', steps: ['']});
+// }
+
+// for (let i = 0; i < 45; i++) {
+//   recipeIngredientRepo.delete({recipeIngredientMembershipId: i, recipeId: 0, ingredientId: 0, ingredientAmount: ''});
+// }
+
+service.listen(PORT);
