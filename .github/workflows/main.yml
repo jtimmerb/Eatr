@@ -24,7 +24,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Build Project
-    steps: 
+    steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -37,12 +37,12 @@ jobs:
         run: cd backend/ && npm install
 
       - name: Build
-        run: cd backend/ && npm run build 
+        run: cd backend/ && npm run build
 
-  test: 
+  test:
     runs-on: ubuntu-latest
     name: Test Project
-    steps: 
+    steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -53,12 +53,12 @@ jobs:
 
       - name: Install NPM packages
         run: cd backend/ && npm install
-        
+
       - name: Build Docker image
         run: |
           docker build -t eatr-db ./
         working-directory: ./backend
-        
+
       - name: Run and Start Docker container
         run: |
           docker run -d --name eatr-container -p 5432:5432 eatr-db
@@ -74,4 +74,3 @@ jobs:
         run: |
           cd backend
           npm test
-
