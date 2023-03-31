@@ -1,5 +1,4 @@
 import express from 'express';
-import bodyparser from 'body-parser';
 
 import db_conn from './data/db_conn';
 import EatrService from './service/service';
@@ -37,25 +36,4 @@ const service = new EatrService(
   userRecipeRepo,
 );
 
-// for (let i = 0; i < 17; i++) {
-//   ingredientRepo.delete({
-//     ingredientId: i,
-//     name: 'test',
-//     servingSize: '',
-//     calories: 0,
-//     proteins: 0,
-//     carbohydrates: 0,
-//     fats: 0,
-//   });
-// }
-
-// for (let i = 0; i <= 22; i++) {
-//   recipeRepo.delete({recipeId: i, name: '', steps: ['']});
-// }
-
-// for (let i = 0; i < 45; i++) {
-//   recipeIngredientRepo.delete({recipeIngredientMembershipId: i, recipeId: 0, ingredientId: 0, ingredientAmount: ''});
-// }
-service.listen(PORT);
-
-export default app;
+export const handler = service.getHandler()
