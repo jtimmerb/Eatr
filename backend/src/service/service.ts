@@ -1,4 +1,6 @@
 import {Application} from 'express';
+import serverlessExpress from '@vendia/serverless-express';
+import {Handler} from 'aws-lambda';
 
 import IngredientController from '../biz/ingredient-controller/ingredient-controller';
 import UserController from '../biz/user-controller/user-controller';
@@ -61,6 +63,10 @@ export default class EatrService implements Service {
     );
     this.userRecipeController = new UserRecipeController(userRecipeRepo, this.recipeController, this.userController);
     this.initRoutes();
+  }
+
+  public getHandler(): Handler<any, any> {
+    return serverlessExpress({app: this.app});
   }
 
   public listen(port: number): void {
