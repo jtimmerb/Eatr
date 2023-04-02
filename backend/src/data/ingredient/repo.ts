@@ -45,11 +45,8 @@ export default class IngredientRepo implements IngredientRepoInterface {
   }
 
   public async update(ingredient: Ingredient): Promise<Ingredient> {
-    console.log(ingredient)
     const ingredientEnt = Mapper.toDB(ingredient);
-    const query = `UPDATE ingredients SET (name, serving_size, calories, proteins, carbohydrates, fats) VALUES ('${ingredientEnt.name}', '${ingredientEnt.serving_size}',
-    '${ingredientEnt.calories}','${ingredientEnt.proteins}','${ingredientEnt.carbohydrates}','${ingredientEnt.fats}') WHERE ingredient_id='${ingredientEnt.ingredient_id}'`;
-    //const query = `UPDATE ingredients SET name='${ingredientEnt.name}', serving_size='${ingredientEnt.serving_size}', calories='${ingredientEnt.calories}', proteins='${ingredientEnt.proteins}', carbohydrates='${ingredientEnt.carbohydrates}', fats='${ingredientEnt.fats}' WHERE ingredient_id='${ingredientEnt.ingredient_id}'`;
+    const query = `UPDATE ingredients SET name='${ingredientEnt.name}', serving_size='${ingredientEnt.serving_size}', calories='${ingredientEnt.calories}', proteins='${ingredientEnt.proteins}', carbohydrates='${ingredientEnt.carbohydrates}', fats='${ingredientEnt.fats}' WHERE ingredient_id='${ingredientEnt.ingredient_id}'`;
     this.psql.query(query);
     return ingredient;
   }
