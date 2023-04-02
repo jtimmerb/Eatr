@@ -11,6 +11,8 @@ import {createUserSchema, createUserIngredientSchema, createUserRecipeSchema, up
 import {User} from '../../data/users/entity';
 import {Recipe} from '../../data/recipes/entity';
 import {Ingredient} from '../../data/ingredient/entity';
+import { UserPantry, UserPantryIngredients } from '../../data/user-pantry/entity';
+import { UserRecipe } from '../../data/user-recipe/entity';
 
 export default class UserGroup extends RoutesGroup {
   private userController: UserController;
@@ -51,10 +53,10 @@ export default class UserGroup extends RoutesGroup {
     this.getRouter().post('/ingredients/:userId', this.addUserPantryHandler());
 
     // get list user's pantry
-    this.getRouter().get('/ingredients/:userid',this.getUserPantryHandler());
+    this.getRouter().get('/ingredients/:userId',this.getUserPantryHandler());
 
     //update user's pantry
-    this.getRouter().put('/ingredients/:userid',this.updateUserPantryHandler());
+    this.getRouter().put('/ingredients/:userId',this.updateUserPantryHandler());
 
     // remove item from user's pantry
     this.getRouter().delete('/ingredients/:userId/:ingredientId', this.deleteUserPantryHandler());
@@ -100,7 +102,7 @@ export default class UserGroup extends RoutesGroup {
   private getUserRecipesHandler() {
     const handler: RequestHandler = async (req, res, next) => {
       const userId = parseInt(req.params.userId);
-      const recipes: Recipe[] = await this.userRecipeController.getUsersLikedRecipes(userId);
+      const recipes: UserRecipe[] = await this.userRecipeController.getUsersLikedRecipes(userId);
       res.send(recipes)
     };
     return ErrorHandler.errorWrapper(handler);
@@ -131,7 +133,7 @@ export default class UserGroup extends RoutesGroup {
   private getUserPantryHandler() {
     const handler: RequestHandler = async (req, res, next) => {
       const userId = parseInt(req.params.userId);
-      const pantry: Ingredient[] = await this.userPantryController.getUsersPantry(userId)
+      const pantry: UserPantryIngredients[] = await this.userPantryController.getUsersPantry(userId)
       res.send(pantry)
     };
     return ErrorHandler.errorWrapper(handler);

@@ -67,7 +67,7 @@ export default class UserRecipeController {
     return receivedRecipe;
   };
 
-  public getUsersLikedRecipes = async (userID: number): Promise<Recipe[]> => {
+  public getUsersLikedRecipes = async (userID: number): Promise<UserRecipe[]> => {
     const userRecipe: UserRecipe = {
       userRecipeMembershipId: 0,
       userId: userID,
@@ -79,7 +79,7 @@ export default class UserRecipeController {
       for (let i = 0; i < receivedUserRecipe.length; i++) {
         receivedRecipe.push(await this.recipeController.getRecipe(receivedUserRecipe[i].recipeId));
       }
-      return receivedRecipe;
+      return receivedUserRecipe;
     } else {
       throw new Error();
     }
