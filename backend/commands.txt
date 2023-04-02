@@ -9,3 +9,5 @@ docker start eatr-container
   database: 'eatr',
   port: 5432
 }
+
+sudo chmod 666 /var/run/docker.sock
