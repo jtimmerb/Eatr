@@ -6,7 +6,7 @@ import UserController from '../../biz/user-controller/user-controller';
 import UserPantryController from '../../biz/userpantry-controller/userpantry-controller';
 import UserRecipeController from '../../biz/userrecipe-controller/userrecipe-controller';
 import ErrorHandler from '../../utility/error/errorHandler';
-import {createUserSchema, createUserIngredientSchema, createUserRecipeSchema} from '../schema/user-schema';
+import {createUserSchema, createUserIngredientSchema, createUserRecipeSchema, updateUserIngredientSchema} from '../schema/user-schema';
 
 import {User} from '../../data/users/entity';
 import {Recipe} from '../../data/recipes/entity';
@@ -51,7 +51,10 @@ export default class UserGroup extends RoutesGroup {
     this.getRouter().post('/ingredients/:userId', this.addUserPantryHandler());
 
     // get list user's pantry
-    this.getRouter().get('/ingredients/:userid');
+    this.getRouter().get('/ingredients/:userid',this.getUserPantryHandler());
+
+    //update user's pantry
+    this.getRouter().put('/ingredients/:userid',this.updateUserPantryHandler());
 
     // remove item from user's pantry
     this.getRouter().delete('/ingredients/:userId/:ingredientId', this.deleteUserPantryHandler());
@@ -87,26 +90,18 @@ export default class UserGroup extends RoutesGroup {
   private addUserRecipeHandler() {
     const handler: RequestHandler = async (req, res, next) => {
       this.validateSchema(createUserRecipeSchema as JSONSchemaType<any>, req.body);
-      console.log(req.params);
       const userId = parseInt(req.params.userId);
-      console.log(userId, typeof userId);
       const userRecipe = await this.userRecipeController.createUserRecipe(userId, req.body.recipeId);
-      console.log(userRecipe);
       res.send(userRecipe);
     };
     return ErrorHandler.errorWrapper(handler);
   }
 
-  /**
-   * NOT DONE
-   * @returns
-   */
   private getUserRecipesHandler() {
     const handler: RequestHandler = async (req, res, next) => {
       const userId = parseInt(req.params.userId);
-
-      //const recipes: Recipe[] = await this.userRecipeController;
-      //res.send(recipes)
+      const recipes: Recipe[] = await this.userRecipeController.getUsersLikedRecipes(userId);
+      res.send(recipes)
     };
     return ErrorHandler.errorWrapper(handler);
   }
@@ -115,7 +110,6 @@ export default class UserGroup extends RoutesGroup {
     const handler: RequestHandler = async (req, res, next) => {
       const userId = parseInt(req.params.userId);
       const recipeId = parseInt(req.params.recipeId);
-
       await this.userRecipeController.deleteUserRecipe(userId, recipeId);
       res.sendStatus(200);
     };
@@ -127,7 +121,6 @@ export default class UserGroup extends RoutesGroup {
       this.validateSchema(createUserIngredientSchema as JSONSchemaType<any>, req.body);
       const userId = parseInt(req.params.userId);
       const {ingredientId, ingredientAmount} = req.body;
-
       const userPantry = await this.userPantryController.createUserPantry(userId, ingredientId, ingredientAmount);
 
       res.send(userPantry);
@@ -135,13 +128,23 @@ export default class UserGroup extends RoutesGroup {
     return ErrorHandler.errorWrapper(handler);
   }
 
-  /**
-   * NOT DONE
-   * @returns
-   */
   private getUserPantryHandler() {
     const handler: RequestHandler = async (req, res, next) => {
       const userId = parseInt(req.params.userId);
+      const pantry: Ingredient[] = await this.userPantryController.getUsersPantry(userId)
+      res.send(pantry)
+    };
+    return ErrorHandler.errorWrapper(handler);
+  }
+
+  private updateUserPantryHandler() {
+    const handler: RequestHandler = async (req, res, next) => {
+      this.validateSchema(updateUserIngredientSchema as JSONSchemaType<any>, req.body);
+      const userId = parseInt(req.params.userId);
+      const {ingredientId, ingredientAmount} = req.body;
+      await this.userPantryController.deleteUserPantry(userId,ingredientId);
+      const userPantry = await this.userPantryController.createUserPantry(userId, ingredientId, ingredientAmount);
+      res.send(userPantry);
     };
     return ErrorHandler.errorWrapper(handler);
   }

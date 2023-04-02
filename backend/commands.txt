@@ -4,7 +4,7 @@ docker start eatr-container
 
 { 
   host: '0.0.0.0',
-  user: 'postgres',
+  username: 'postgres',
   password: 'Eatr123!',
   database: 'eatr',
   port: 5432
