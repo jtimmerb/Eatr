@@ -2,7 +2,7 @@ import {RecipeIngredient, RecipeIngredientQuery} from '../../data/recipe-ingredi
 import {User} from '../../data/users/entity';
 import {Recipe} from '../../data/recipes/entity';
 import {Ingredient} from '../../data/ingredient/entity';
-import {UserRecipe} from '../../data/user-recipe/entity';
+import {UserRecipe, UserRecipeWithSteps} from '../../data/user-recipe/entity';
 import IngredientRepo from '../../data/ingredient/repo';
 import RecipeRepo from '../../data/recipes/repo';
 import UserRecipeRepo from '../../data/user-recipe/repo';
@@ -67,7 +67,7 @@ export default class UserRecipeController {
     return receivedRecipe;
   };
 
-  public getUsersLikedRecipes = async (userID: number): Promise<UserRecipe[]> => {
+  public getUsersLikedRecipes = async (userID: number): Promise<UserRecipeWithSteps[]> => {
     const userRecipe: UserRecipe = {
       userRecipeMembershipId: 0,
       userId: userID,
@@ -75,11 +75,15 @@ export default class UserRecipeController {
     };
     if (await this.userController.existUser(userID)) {
       const receivedUserRecipe: UserRecipe[] = await this.repo.getByUserId(userRecipe);
-      const receivedRecipe: Recipe[] = [];
+      const receivedUserRecipeWithSteps: UserRecipeWithSteps[] = [];
       for (let i = 0; i < receivedUserRecipe.length; i++) {
-        receivedRecipe.push(await this.recipeController.getRecipe(receivedUserRecipe[i].recipeId));
+        const userRecipeWithSteps: UserRecipeWithSteps = {
+          userRecipe : receivedUserRecipe[i],
+          recipe: await this.recipeController.getRecipe(receivedUserRecipe[i].recipeId)
+        }
+        receivedUserRecipeWithSteps.push(userRecipeWithSteps);
       }
-      return receivedUserRecipe;
+      return receivedUserRecipeWithSteps;
     } else {
       throw new Error();
     }

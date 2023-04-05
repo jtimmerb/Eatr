@@ -12,7 +12,7 @@ import {User} from '../../data/users/entity';
 import {Recipe} from '../../data/recipes/entity';
 import {Ingredient} from '../../data/ingredient/entity';
 import { UserPantry, UserPantryIngredients } from '../../data/user-pantry/entity';
-import { UserRecipe } from '../../data/user-recipe/entity';
+import { UserRecipe, UserRecipeWithSteps } from '../../data/user-recipe/entity';
 
 export default class UserGroup extends RoutesGroup {
   private userController: UserController;
@@ -44,7 +44,7 @@ export default class UserGroup extends RoutesGroup {
     this.getRouter().post('/recipes/:userId', this.addUserRecipeHandler());
 
     // get list of user's recipes
-    this.getRouter().get('/recipes/:userID', this.getUserRecipesHandler());
+    this.getRouter().get('/recipes/:userId', this.getUserRecipesHandler());
 
     // remove a recipe from user's liked recipes
     this.getRouter().delete('/recipes/:userId/:recipeId', this.deleteUserRecipeHandler());
@@ -102,8 +102,8 @@ export default class UserGroup extends RoutesGroup {
   private getUserRecipesHandler() {
     const handler: RequestHandler = async (req, res, next) => {
       const userId = parseInt(req.params.userId);
-      const recipes: UserRecipe[] = await this.userRecipeController.getUsersLikedRecipes(userId);
-      res.send(recipes)
+      const userRecipes: UserRecipeWithSteps[] = await this.userRecipeController.getUsersLikedRecipes(userId);
+      res.send(userRecipes)
     };
     return ErrorHandler.errorWrapper(handler);
   }
