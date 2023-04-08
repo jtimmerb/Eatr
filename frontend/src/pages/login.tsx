@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import "../index.css";
 
 function App(): JSX.Element {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   const handleLogin = () => {
-    setIsLoggedIn(true);
+    console.log("login");
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
+  const handleSignUp = () => {
+    console.log("signup");
   };
 
   return (
@@ -18,7 +16,7 @@ function App(): JSX.Element {
         Eatr
       </div>
       <header className="App-header flex flex-col justify-center items-center pt-52">
-        <LoginForm onLogin={handleLogin} onSignUp={handleLogout} />
+        <LoginForm onLogin={handleLogin} onSignUp={handleSignUp} />
       </header>
     </div>
   );
@@ -44,7 +42,7 @@ function LoginForm(props: LoginFormProps): JSX.Element {
     <form className="flex flex-col items-center">
       <div className="py-2">
         <button
-          className="box-border relative w-56 h-10 bg-red-400 hover:bg-red-500 text-white text-center rounded-full"
+          className="box-border relative w-56 h-10 bg-red-400 text-white text-center rounded-full shadow"
           type="button"
           onClick={handleLogin}
         >
@@ -53,7 +51,7 @@ function LoginForm(props: LoginFormProps): JSX.Element {
       </div>
       <div>
         <button
-          className="bg-transparent border-2 text-center relative w-56 h-10 border-red-400 text-red-400 rounded-full"
+          className="bg-transparent border-2 text-center relative w-56 h-10 border-red-400 text-red-400 rounded-full shadow"
           type="button"
           onClick={handleSignUp}
         >
