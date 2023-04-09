@@ -1,15 +1,16 @@
+import pg from 'pg';
+
 import {Ingredient, IngredientEntity} from './entity';
 import {IngredientMapper as Mapper} from './mapper';
 import {Repo} from '..';
-import PG from 'pg';
-import db_conn from '../db_conn';
+
 
 type IngredientRepoInterface = Repo<Ingredient>;
 
 export default class IngredientRepo implements IngredientRepoInterface {
-  private psql: db_conn;
+  private psql: pg.Client;
 
-  constructor(psql: db_conn) {
+  constructor(psql: pg.Client) {
     this.psql = psql;
   }
 
@@ -48,7 +49,7 @@ export default class IngredientRepo implements IngredientRepoInterface {
     const ingredientEnt = Mapper.toDB(ingredient);
     const query = `UPDATE ingredients SET (name, serving_size, calories, proteins, carbohydrates, fats) VALUES ('${ingredientEnt.name}', '${ingredientEnt.serving_size}',
     '${ingredientEnt.calories}','${ingredientEnt.proteins}','${ingredientEnt.carbohydrates}','${ingredientEnt.fats}',) WHERE ingredient_id='${ingredientEnt.ingredient_id}'`;
-    this.psql.query(query);
+    await this.psql.query(query);
     return ingredient;
   }
 

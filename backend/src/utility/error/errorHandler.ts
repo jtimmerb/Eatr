@@ -1,29 +1,20 @@
 import {Request, Response, NextFunction, ErrorRequestHandler, RequestHandler} from 'express';
 
 import HttpError from './httpError';
-import InteralServer from './internalServer';
+import InternalServer from './internalServer';
 
 export default abstract class ErrorHandler {
-  public static errorHandler: ErrorRequestHandler = (error: Error, req: Request, res: Response, next: NextFunction) => {
-    console.log(error);
-    if (error instanceof HttpError) {
-      res.status(error.getCode()).send(error.serialize());
-    } else if (error.name === 'UnauthorizedError') {
-      res.status(401).send(error);
-    } else {
-      const serverError = new InteralServer();
-      res.status(serverError.getCode()).send(serverError.serialize());
-    }
-  };
-
-  public static errorWrapper = (handler: RequestHandler): RequestHandler => {
-    const wrapped: RequestHandler = async (req, res, next) => {
-      try {
-        await handler(req, res, next);
-      } catch (error) {
-        next(error);
+  public static errorHandler: RequestHandler = async (req, res, next) => {
+    try {
+      await next();
+    } catch (err) {
+      console.error(err);
+      if (err instanceof HttpError) {
+        res.status(err.getCode()).send(err.serialize());
+      } else {
+        const serverError = new InternalServer();
+        res.status(serverError.getCode()).send(serverError.serialize());
       }
-    };
-    return wrapped;
+    }
   };
 }

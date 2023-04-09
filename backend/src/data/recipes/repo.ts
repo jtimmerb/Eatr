@@ -1,16 +1,17 @@
+import pg from 'pg';
+
 import {Recipe, RecipeEntity} from './entity';
 import {Repo} from '..';
 import {RecipeMapper as Mapper} from './mapper';
-import db_conn from '../db_conn';
 
 /** This Interface extends the base Repo and implement new methods uniqe to User Entity */
 
 type RecipeRepoInterface = Repo<Recipe>;
 /** The Recipe Repo persists and fetches object from DB */
 export default class RecipeRepo implements RecipeRepoInterface {
-  public psql: db_conn;
+  public psql: pg.Client;
 
-  constructor(psql: db_conn) {
+  constructor(psql: pg.Client) {
     this.psql = psql;
   }
   /** DB INTERACTIONS */
@@ -44,7 +45,7 @@ export default class RecipeRepo implements RecipeRepoInterface {
   public async update(recipe: Recipe): Promise<Recipe> {
     const recipeEnt = Mapper.toDB(recipe);
     const query = `UPDATE recipes SET name='${recipeEnt.name}', steps='${recipeEnt.steps}' WHERE recipe_id='${recipeEnt.recipe_id}'`;
-    this.psql.query(query);
+    await this.psql.query(query);
     return recipe;
   }
 

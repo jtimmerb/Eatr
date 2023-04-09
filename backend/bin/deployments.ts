@@ -5,6 +5,10 @@ import {getDeploymentEnv, envSpecificName} from '../lib/utils';
 
 const app = new App();
 new EatrServiceStack(app, envSpecificName('eatr-service-stack'), {
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_DEFAULT_REGION,
+  },
   tags: {
     environment: getDeploymentEnv(),
   },
