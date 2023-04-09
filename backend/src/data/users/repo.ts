@@ -1,18 +1,19 @@
+import pg from 'pg';
 import {User} from './entity';
 import {Repo} from '..';
 import {UserMapper as Mapper} from './mapper';
-import db_conn from '../db_conn';
 
 /** This Interface extends the base Repo and implement new methods uniqe to User Entity */
 type InterfaceUserRepo = Repo<User>;
 
 /** The User Repo persists and fetches object from DB */
 export default class UserRepo implements InterfaceUserRepo {
-  public psql: db_conn;
+  private psql: pg.Client;
 
-  constructor(psql: db_conn) {
+  constructor(psql: pg.Client) {
     this.psql = psql;
   }
+
   /** DB INTERACTIONS */
   /** Checks if user exists in DB */
   public async exists(user: User): Promise<boolean> {
@@ -37,12 +38,17 @@ export default class UserRepo implements InterfaceUserRepo {
 
   /** Creates user in DB*/
   public async create(user: User): Promise<User> {
+    console.log('Data create', user.name);
     const query = `INSERT INTO users (name) VALUES ('${user.name}') RETURNING user_id`;
     const result = await this.psql.query(query);
-    return {
+
+    const newUser = {
       userId: result.rows[0].user_id,
       name: user.name,
     };
+
+    console.log('New user created: ' + JSON.stringify(newUser));
+    return newUser;
   }
 
   public async update(user: User): Promise<User> {

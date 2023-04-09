@@ -69,7 +69,7 @@ export default class RecipeGroup extends RoutesGroup {
 
       res.send(response);
     };
-    return ErrorHandler.errorWrapper(handler);
+    return handler;
   }
 
   private getRecipeHandler() {
@@ -83,7 +83,7 @@ export default class RecipeGroup extends RoutesGroup {
 
       res.send(response);
     };
-    return ErrorHandler.errorWrapper(handler);
+    return handler;
   }
 
   private getRandomRecipesHandler() {
@@ -95,7 +95,7 @@ export default class RecipeGroup extends RoutesGroup {
       res.send(recipes);
     };
 
-    return ErrorHandler.errorWrapper(handler);
+    return handler;
   }
 
   private deleteRecipeHandler() {
@@ -105,7 +105,7 @@ export default class RecipeGroup extends RoutesGroup {
       await this.recipeIngredientController.deleteRecipe(recipeId);
       res.sendStatus(200);
     };
-    return ErrorHandler.errorWrapper(handler);
+    return handler;
   }
 
   private updateRecipeHandler() {
@@ -137,6 +137,6 @@ export default class RecipeGroup extends RoutesGroup {
       await this.recipeIngredientController.updateRecipe(recipeIngredientArray);
       res.sendStatus(200);
     };
-    return ErrorHandler.errorWrapper(handler);
+    return handler;
   }
 }

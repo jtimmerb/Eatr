@@ -1,8 +1,8 @@
 import express from 'express';
+import {SecretsManagerClient, GetSecretValueCommand} from '@aws-sdk/client-secrets-manager';
+import pg from 'pg';
 
-import db_conn from './data/db_conn';
 import EatrService from './service/service';
-import {Postgres, PORT} from './utility/config/config';
 
 import RecipeRepo from './data/recipes/repo';
 import IngredientRepo from './data/ingredient/repo';
@@ -10,30 +10,68 @@ import UserRepo from './data/users/repo';
 import RecipeIngredientRepo from './data/recipe-ingredient/repo';
 import UserPantryRepo from './data/user-pantry/repo';
 import UserRecipeRepo from './data/user-recipe/repo';
+import {Handler, Context, APIGatewayProxyCallback, APIGatewayEvent} from 'aws-lambda';
 
-const app = express();
-const database = new db_conn(Postgres.host, Postgres.user, Postgres.password, Postgres.database, Postgres.port);
-//console.log(database);
+var appHandler: Handler<any, any> | undefined;
 
-app.use(express.json());
-app.use(express.urlencoded());
-//app.use(bodyparser.json());
+const init = async (): Promise<Handler<any, any>> => {
+  const app = express();
 
-const userRepo = new UserRepo(database);
-const recipeRepo = new RecipeRepo(database);
-const ingredientRepo = new IngredientRepo(database);
-const recipeIngredientRepo = new RecipeIngredientRepo(database);
-const userPantryRepo = new UserPantryRepo(database);
-const userRecipeRepo = new UserRecipeRepo(database);
+  const SECRET_NAME = process.env.PG_SECRET_NAME;
+  const client = new SecretsManagerClient({});
 
-const service = new EatrService(
-  app,
-  userRepo,
-  recipeRepo,
-  ingredientRepo,
-  recipeIngredientRepo,
-  userPantryRepo,
-  userRecipeRepo,
-);
+  const params = {
+    SecretId: SECRET_NAME,
+  };
 
-export const handler = service.getHandler()
+  const command = new GetSecretValueCommand(params);
+  const response = await client.send(command);
+
+  const pgSecret = JSON.parse(response.SecretString || '');
+
+  const pgClient = new pg.Client({
+    host: pgSecret.host,
+    port: pgSecret.port,
+    database: pgSecret.dbname,
+    user: pgSecret.username,
+    password: pgSecret.password,
+    ssl: true,
+  });
+
+  await pgClient.connect();
+  //const database = new db_conn(pgSecret.host, pgSecret.user, pgSecret.password, pgSecret.database, pgSecret.port);
+  //await database
+  app.use(express.json());
+  app.use(express.urlencoded());
+  //app.use(bodyparser.json());
+
+  const userRepo = new UserRepo(pgClient);
+  const recipeRepo = new RecipeRepo(pgClient);
+  const ingredientRepo = new IngredientRepo(pgClient);
+  const recipeIngredientRepo = new RecipeIngredientRepo(pgClient);
+  const userPantryRepo = new UserPantryRepo(pgClient);
+  const userRecipeRepo = new UserRecipeRepo(pgClient);
+
+  const service = new EatrService(
+    app,
+    userRepo,
+    recipeRepo,
+    ingredientRepo,
+    recipeIngredientRepo,
+    userPantryRepo,
+    userRecipeRepo,
+  );
+
+  return service.getHandler();
+};
+
+export const handler = async (
+  event: APIGatewayEvent,
+  context: Context,
+  callback: APIGatewayProxyCallback,
+): Promise<void> => {
+  if (appHandler === undefined) {
+    appHandler = await init();
+  }
+  await appHandler(event, context, callback);
+};

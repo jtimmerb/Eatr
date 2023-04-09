@@ -74,7 +74,7 @@ export default class EatrService implements Service {
   }
 
   private initRoutes() {
-    this.app.use(ErrorHandler.errorHandler);
+    // this.app.use(ErrorHandler.errorHandler);
 
     const recipeGroup = new RecipeGroup(this.recipeController, this.recipeIngredientController);
     recipeGroup.mount(API_VERSION + '/recipes', this.app);
