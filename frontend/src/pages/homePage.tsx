@@ -1,9 +1,13 @@
-import React, { useState } from "react";
 import "../index.css";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function App(): JSX.Element {
+const Home = (): JSX.Element => {
+  const navigate = useNavigate();
+
   const handleLogin = () => {
     console.log("login");
+    navigate("/login");
   };
 
   const handleSignUp = () => {
@@ -20,7 +24,7 @@ function App(): JSX.Element {
       </header>
     </div>
   );
-}
+};
 
 interface LoginFormProps {
   onLogin: () => void;
@@ -43,7 +47,7 @@ function LoginForm(props: LoginFormProps): JSX.Element {
       <div className="py-2">
         <button
           className="box-border relative w-56 h-10 bg-red-400 text-white text-center rounded-full shadow"
-          type="button"
+          type="submit"
           onClick={handleLogin}
         >
           Login
@@ -52,7 +56,7 @@ function LoginForm(props: LoginFormProps): JSX.Element {
       <div>
         <button
           className="bg-transparent border-2 text-center relative w-56 h-10 border-red-400 text-red-400 rounded-full shadow"
-          type="button"
+          type="submit"
           onClick={handleSignUp}
         >
           Sign Up
@@ -62,4 +66,4 @@ function LoginForm(props: LoginFormProps): JSX.Element {
   );
 }
 
-export default App;
+export default Home;
