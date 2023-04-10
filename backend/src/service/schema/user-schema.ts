@@ -39,3 +39,14 @@ export const createUserIngredientSchema: JSONSchemaType<CreateUserIngredient> = 
   },
   required: ['ingredientId', 'ingredientAmount'],
 };
+
+type UpdateUserIngredient = CreateUserIngredient;
+
+export const updateUserIngredientSchema: JSONSchemaType<UpdateUserIngredient> = {
+  type: 'object',
+  properties: {
+    ingredientId: {type: 'number'},
+    ingredientAmount: {type: 'string'},
+  },
+  required: ['ingredientId', 'ingredientAmount'],
+};

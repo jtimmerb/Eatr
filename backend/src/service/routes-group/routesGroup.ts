@@ -29,9 +29,9 @@ export default class RoutesGroup {
   public validateSchema(schema: JSONSchemaType<any>, data: any): void {
     const validate = this.ajv.compile(schema);
     if (validate(data)) {
-      //console.log('valid');
+      console.log('valid');
     } else {
-      //console.log('not valid');
+      console.log('not valid');
       throw new BadRequest(JSON.stringify(validate.errors));
     }
   }

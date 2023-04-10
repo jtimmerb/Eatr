@@ -28,7 +28,7 @@ export default class IngredientGroup extends RoutesGroup {
   private createIngredientHandler() {
     const handler: RequestHandler = async (req, res, next) => {
       this.validateSchema(createIngredientSchema as JSONSchemaType<any>, req.body);
-      const ingredient: Ingredient = {ingredientId: 0, ...req.body.ingredient};
+      const ingredient: Ingredient = {ingredientId: 0, ...req.body};
       const db_ingredient = await this.ingredientController.createIngredient(ingredient);
       res.send(db_ingredient);
     };
@@ -48,7 +48,7 @@ export default class IngredientGroup extends RoutesGroup {
     const handler: RequestHandler = async (req, res, next) => {
       this.validateSchema(updateIngredientSchema as JSONSchemaType<any>, req.body);
       const ingredientId = parseInt(req.params.ingredientId);
-      const ingredient: Ingredient = {ingredientId: ingredientId, ...req.body.ingredient};
+      const ingredient: Ingredient = {ingredientId: ingredientId, ...req.body};
       await this.ingredientController.updateIngredientMacros(ingredient);
       res.sendStatus(200);
     };

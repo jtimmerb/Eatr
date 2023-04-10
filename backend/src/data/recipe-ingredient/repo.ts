@@ -60,8 +60,7 @@ export default class RecipeIngredientRepo implements RecipeIngredientRepoInterfa
 
   public async update(recipeIngredient: RecipeIngredient): Promise<RecipeIngredient> {
     const recipeIngredientEnt = Mapper.toDB(recipeIngredient);
-    const query = `UPDATE recipe_ingredients SET (recipe_id, ingredient_id, ingredient_amount) VALUES ('${recipeIngredientEnt.recipe_id}',
-    '${recipeIngredientEnt.ingredient_id}','${recipeIngredientEnt.ingredient_amount}') WHERE recipe_ingredient_membership_id='${recipeIngredientEnt.recipe_ingredient_membership_id}'`;
+    const query = `UPDATE recipe_ingredients SET recipe_id='${recipeIngredientEnt.recipe_id}', ingredient_id='${recipeIngredientEnt.ingredient_id}', ingredient_amount='${recipeIngredientEnt.ingredient_amount}' WHERE recipe_ingredient_membership_id='${recipeIngredientEnt.recipe_ingredient_membership_id}'`;
     this.psql.query(query);
     return recipeIngredient;
   }
