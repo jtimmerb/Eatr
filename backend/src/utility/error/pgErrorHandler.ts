@@ -12,6 +12,7 @@ export default class PgErrorHandler {
     console.log(err.code);
     console.log(err.detail);
     console.log(sql);
+    console.log(err);
     this.errorStack.push(err);
     this.sqlStack.push(sql);
   }

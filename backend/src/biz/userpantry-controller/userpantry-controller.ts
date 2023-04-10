@@ -1,6 +1,6 @@
 import UserPantryRepo from '../../data/user-pantry/repo';
 import {Ingredient} from '../../data/ingredient/entity';
-import {UserPantry} from '../../data/user-pantry/entity';
+import {UserPantry, UserPantryIngredients} from '../../data/user-pantry/entity';
 import IngredientController from '../ingredient-controller/ingredient-controller';
 import UserController from '../user-controller/user-controller';
 
@@ -54,7 +54,7 @@ export default class UserPantryController {
     return receivedIngredient;
   };
 
-  public getUsersPantry = async (userID: number): Promise<Ingredient[]> => {
+  public getUsersPantry = async (userID: number): Promise<UserPantryIngredients[]> => {
     const userPantry: UserPantry = {
       upMembershipId: 0,
       userId: userID,
@@ -63,11 +63,15 @@ export default class UserPantryController {
     };
     if (await this.userController.existUser(userID)) {
       const receivedUserPantry: UserPantry[] = await this.repo.getByUserId(userPantry);
-      const receivedIngredients: Ingredient[] = [];
+      const receivedUserPantryIngredients: UserPantryIngredients[] = [];
       for (let i = 0; i < receivedUserPantry.length; i++) {
-        receivedIngredients.push(await this.ingredientController.getIngredient(receivedUserPantry[i].ingredientId));
+        const userPantryIngredients: UserPantryIngredients = {
+          userPantry : receivedUserPantry[i],
+          ingredient: await this.ingredientController.getIngredient(receivedUserPantry[i].ingredientId)
+        }
+        receivedUserPantryIngredients.push(userPantryIngredients);
       }
-      return receivedIngredients;
+      return receivedUserPantryIngredients;
     } else {
       throw new Error();
     }

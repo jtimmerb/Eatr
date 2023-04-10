@@ -58,8 +58,7 @@ export default class UserPantryRepo implements UserRecipeRepoInterface {
 
   public async update(userPantry: UserPantry): Promise<UserPantry> {
     const userPantryEnt = Mapper.toDB(userPantry);
-    const query = `UPDATE user_pantries SET (user_id, ingredient_id, ingredient_amount) VALUES ('${userPantryEnt.user_id}',
-    '${userPantryEnt.ingredient_id}, '${userPantryEnt.ingredient_amount}') WHERE up_membership_id='${userPantryEnt.up_membership_id}'`;
+    const query = `UPDATE user_pantries SET user_id='${userPantryEnt.user_id}', ingredient_id='${userPantryEnt.ingredient_id}', ingredient_amount='${userPantryEnt.ingredient_amount}' WHERE up_membership_id='${userPantryEnt.up_membership_id}'`;
     this.psql.query(query);
     return userPantry;
   }
