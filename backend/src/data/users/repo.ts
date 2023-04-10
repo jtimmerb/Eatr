@@ -16,7 +16,15 @@ export default class UserRepo implements InterfaceUserRepo {
   /** DB INTERACTIONS */
   /** Checks if user exists in DB */
   public async exists(user: User): Promise<boolean> {
-    const query = `SELECT EXISTS (SELECT 1 FROM users WHERE user_id='${user.userId}')`;
+    const userEnt = Mapper.toDB(user);
+    const query = `SELECT EXISTS (SELECT 1 FROM users WHERE user_id='${userEnt.user_id}')`;
+    const result = await this.psql.query(query);
+    return result.rows[0].exists;
+  }
+
+  public async existsByName(user: User): Promise<boolean> {
+    const userEnt = Mapper.toDB(user);
+    const query = `SELECT EXISTS (SELECT 1 FROM users WHERE name='${userEnt.name}')`;
     const result = await this.psql.query(query);
     return result.rows[0].exists;
   }

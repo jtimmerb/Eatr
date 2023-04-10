@@ -1,3 +1,6 @@
+import { Recipe } from "../recipes/entity";
+import { User } from "../users/entity";
+
 export interface UserRecipe {
   userRecipeMembershipId: number;
   userId: number;
@@ -11,3 +14,7 @@ export interface UserRecipeEntity {
 }
 
 
+export interface UserRecipeWithSteps {
+    userRecipe: UserRecipe
+    recipe : Recipe
+}
