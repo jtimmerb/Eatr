@@ -1,3 +1,4 @@
+import pg from 'pg';
 import {UserRecipe, UserRecipeEntity} from './entity';
 import {UserRecipeMapper as Mapper} from './mapper';
 import {Repo} from '..';
@@ -5,9 +6,9 @@ import {Repo} from '..';
 type UserRecipeRepoInterface = Repo<UserRecipe>;
 
 export default class UserRecipeRepo implements UserRecipeRepoInterface {
-  private psql: any;
+  private psql: pg.Client;
 
-  constructor(psql: any) {
+  constructor(psql: pg.Client) {
     this.psql = psql;
   }
   public async exists(userRecipe: UserRecipe): Promise<boolean> {

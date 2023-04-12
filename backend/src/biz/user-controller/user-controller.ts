@@ -1,19 +1,20 @@
 import {User} from '../../data/users/entity';
 import UserRepo from '../../data/users/repo';
 
-
 export default class UserController {
   private repo: UserRepo;
 
-  constructor(repo: UserRepo){
-    this.repo = repo; 
+  constructor(repo: UserRepo) {
+    this.repo = repo;
   }
   public createUser = async (userName: string): Promise<User> => {
     const user: User = {
       userId: 0,
       name: userName,
     };
+    console.log('biz before create');
     const newUser = await this.repo.create(user);
+    console.log('biz after create', newUser);
     return newUser;
   };
 
@@ -34,14 +35,13 @@ export default class UserController {
     return user;
   };
 
-  public existUser = async(userId: number): Promise<boolean> => {
+  public existUser = async (userId: number): Promise<boolean> => {
     const queryUser: User = {
       userId: userId,
       name: '',
     };
     return await this.repo.exists(queryUser);
-    
-  }
+  };
 
   // public getUsersLikedRecipes = async (userID: number): Promise<Recipe[]> => {
   //   const userRecipe: UserRecipe = {

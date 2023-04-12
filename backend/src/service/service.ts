@@ -1,4 +1,6 @@
 import {Application} from 'express';
+import serverlessExpress from '@vendia/serverless-express';
+import {Handler} from 'aws-lambda';
 
 import IngredientController from '../biz/ingredient-controller/ingredient-controller';
 import UserController from '../biz/user-controller/user-controller';
@@ -63,12 +65,18 @@ export default class EatrService implements Service {
     this.initRoutes();
   }
 
+  public getHandler(): Handler<any, any> {
+    return serverlessExpress({app: this.app});
+  }
+
   public listen(port: number): void {
     this.app.listen(port, () => console.log('Server running'));
   }
 
   private initRoutes() {
-    this.app.use(ErrorHandler.errorHandler);
+    // Health check routes
+    this.app.get('/', (_, res) => res.end());
+    this.app.get(API_VERSION, (_, res) => res.end());
 
     const recipeGroup = new RecipeGroup(this.recipeController, this.recipeIngredientController);
     recipeGroup.mount(API_VERSION + '/recipes', this.app);
@@ -78,5 +86,7 @@ export default class EatrService implements Service {
 
     const ingredientGroup = new IngredientGroup(this.ingredientController);
     ingredientGroup.mount(API_VERSION + '/ingredients', this.app);
+
+    this.app.use(ErrorHandler.errorHandler);
   }
 }

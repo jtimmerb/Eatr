@@ -8,8 +8,6 @@ export default abstract class ErrorHandler {
     console.log(error);
     if (error instanceof HttpError) {
       res.status(error.getCode()).send(error.serialize());
-    } else if (error.name === 'UnauthorizedError') {
-      res.status(401).send(error);
     } else {
       const serverError = new InteralServer();
       res.status(serverError.getCode()).send(serverError.serialize());

@@ -65,8 +65,10 @@ export default class UserGroup extends RoutesGroup {
   private createUserHandler() {
     const handler: RequestHandler = async (req, res, next) => {
       this.validateSchema(createUserSchema as JSONSchemaType<any>, req.body);
+      console.log('Service route group', req.body.name);
       const user = await this.userController.createUser(req.body.name);
-      res.send(user);
+      console.log('service after create', user);
+      res.status(404).send(user);
     };
     return ErrorHandler.errorWrapper(handler);
   }

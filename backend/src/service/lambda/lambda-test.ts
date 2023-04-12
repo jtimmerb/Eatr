@@ -1,4 +1,6 @@
 import {Context, APIGatewayProxyCallback, APIGatewayEvent} from 'aws-lambda';
+import express from 'express';
+import serverlessExpress from '@vendia/serverless-express';
 
 export const lambdaHandler = (event: APIGatewayEvent, context: Context, callback: APIGatewayProxyCallback): void => {
   console.log(`Event: ${JSON.stringify(event, null, 2)}`);
@@ -10,3 +12,9 @@ export const lambdaHandler = (event: APIGatewayEvent, context: Context, callback
     }),
   });
 };
+
+const app = express();
+app.get('/api/v1/test', (req, res) => {
+  res.send('Hello World');
+});
+export const handler = serverlessExpress({app});

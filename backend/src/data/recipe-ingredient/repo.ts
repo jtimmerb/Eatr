@@ -1,8 +1,10 @@
+import pg from 'pg';
+
 import {RecipeIngredient, RecipeIngredientEntity} from './entity';
 import {RecipeIngredientMapper as Mapper} from './mapper';
 import {Repo} from '..';
 import {Ingredient} from '../ingredient/entity';
-import db_conn from '../db_conn';
+
 import {Recipe} from '../recipes/entity';
 
 interface IngredientAmount {
@@ -13,9 +15,9 @@ interface IngredientAmount {
 type RecipeIngredientRepoInterface = Repo<RecipeIngredient>;
 
 export default class RecipeIngredientRepo implements RecipeIngredientRepoInterface {
-  private psql: db_conn;
+  private psql: pg.Client;
 
-  constructor(psql: db_conn) {
+  constructor(psql: pg.Client) {
     this.psql = psql;
   }
   public async exists(recipeIngredient: RecipeIngredient): Promise<boolean> {
@@ -60,8 +62,9 @@ export default class RecipeIngredientRepo implements RecipeIngredientRepoInterfa
 
   public async update(recipeIngredient: RecipeIngredient): Promise<RecipeIngredient> {
     const recipeIngredientEnt = Mapper.toDB(recipeIngredient);
-    const query = `UPDATE recipe_ingredients SET recipe_id='${recipeIngredientEnt.recipe_id}', ingredient_id='${recipeIngredientEnt.ingredient_id}', ingredient_amount='${recipeIngredientEnt.ingredient_amount}' WHERE recipe_ingredient_membership_id='${recipeIngredientEnt.recipe_ingredient_membership_id}'`;
-    this.psql.query(query);
+    const query = `UPDATE recipe_ingredients SET (recipe_id, ingredient_id, ingredient_amount) VALUES ('${recipeIngredientEnt.recipe_id}',
+    '${recipeIngredientEnt.ingredient_id}','${recipeIngredientEnt.ingredient_amount}') WHERE recipe_ingredient_membership_id='${recipeIngredientEnt.recipe_ingredient_membership_id}'`;
+    await this.psql.query(query);
     return recipeIngredient;
   }
 
