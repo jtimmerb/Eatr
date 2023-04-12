@@ -2,6 +2,8 @@ docker build -t eatr-db ./
 docker run -d --name eatr-container -p 5432:5432 eatr-db
 docker start eatr-container
 
+sudo chmod 666 /var/run/docker.sock
+
 { 
   host: '0.0.0.0',
   user: 'postgres',

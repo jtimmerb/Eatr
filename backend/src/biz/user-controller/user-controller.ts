@@ -40,7 +40,6 @@ export default class UserController {
       name: '',
     };
     return await this.repo.exists(queryUser);
-    
   }
 
   // public getUsersLikedRecipes = async (userID: number): Promise<Recipe[]> => {
