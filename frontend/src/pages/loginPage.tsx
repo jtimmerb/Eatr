@@ -46,11 +46,12 @@ function LoginForm(props: LoginFormProps): JSX.Element {
       props.loginSucc();
       console.log(username);
     } else {
-      
+      setPopup(true);
     }
   };
 
   const [username, setUsername] = useState("");
+  const [popup, setPopup] = useState(false);
 
   return (
     <form className="" onSubmit={handleLogin}>
@@ -72,6 +73,14 @@ function LoginForm(props: LoginFormProps): JSX.Element {
         >
           Login
         </button>
+        {popup ? (
+          <div className="modal">
+            <div className="modal_content">
+              <span className="close">&times;</span>
+              <p>I'm A Pop Up!!!</p>
+            </div>
+          </div>
+        ) : null}
       </div>
     </form>
   );
