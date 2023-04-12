@@ -32,7 +32,7 @@ export default class IngredientGroup extends RoutesGroup {
       const db_ingredient = await this.ingredientController.createIngredient(ingredient);
       res.send(db_ingredient);
     };
-    return handler;
+    return ErrorHandler.errorWrapper(handler);
   }
 
   private getIngredientHandler() {
@@ -41,7 +41,7 @@ export default class IngredientGroup extends RoutesGroup {
       const ingredient = await this.ingredientController.getIngredient(ingredientId);
       res.send(ingredient);
     };
-    return handler;
+    return ErrorHandler.errorWrapper(handler);
   }
 
   private updateIngredientHandler() {
@@ -52,7 +52,7 @@ export default class IngredientGroup extends RoutesGroup {
       await this.ingredientController.updateIngredientMacros(ingredient);
       res.sendStatus(200);
     };
-    return handler;
+    return ErrorHandler.errorWrapper(handler);
   }
 
   private deleteIngredientHandler() {
@@ -61,6 +61,6 @@ export default class IngredientGroup extends RoutesGroup {
       await this.ingredientController.deleteIngredient(ingredientId);
       res.sendStatus(200);
     };
-    return handler;
+    return ErrorHandler.errorWrapper(handler);
   }
 }

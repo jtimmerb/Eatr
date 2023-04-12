@@ -10,37 +10,53 @@ import UserRepo from './data/users/repo';
 import RecipeIngredientRepo from './data/recipe-ingredient/repo';
 import UserPantryRepo from './data/user-pantry/repo';
 import UserRecipeRepo from './data/user-recipe/repo';
-import {Handler, Context, APIGatewayProxyCallback, APIGatewayEvent} from 'aws-lambda';
 
-var appHandler: Handler<any, any> | undefined;
-
-const init = async (): Promise<Handler<any, any>> => {
+(async () => {
   const app = express();
 
-  const SECRET_NAME = process.env.PG_SECRET_NAME;
-  const client = new SecretsManagerClient({});
+  const localDebug = process.env.LOCAL_DEBUG;
+  let pgClient: pg.Client;
+  if (localDebug) {
+    pgClient = new pg.Client({
+      host: '',
+      port: 5432,
+      database: 'pgSecret.dbname',
+      user: '',
+      password: '',
+      ssl: {rejectUnauthorized: false},
+    });
+  } else {
+    let pgSecret: any = {};
+    const pgCreds = process.env.PG_CREDENTIALS;
+    if (pgCreds) {
+      console.log('Reading postgres credentials from env...');
+      pgSecret = JSON.parse(pgCreds);
+    } else {
+      const client = new SecretsManagerClient({region: process.env.AWS_DEFAULT_REGION || ''});
 
-  const params = {
-    SecretId: SECRET_NAME,
-  };
+      const params = {
+        SecretId: process.env.PG_SECRET_NAME,
+      };
 
-  const command = new GetSecretValueCommand(params);
-  const response = await client.send(command);
+      console.log('Fetching secrets...');
+      const command = new GetSecretValueCommand(params);
+      const response = await client.send(command);
 
-  const pgSecret = JSON.parse(response.SecretString || '');
+      pgSecret = JSON.parse(response.SecretString || '');
+    }
 
-  const pgClient = new pg.Client({
-    host: pgSecret.host,
-    port: pgSecret.port,
-    database: pgSecret.dbname,
-    user: pgSecret.username,
-    password: pgSecret.password,
-    ssl: true,
-  });
+    console.log('Connecting to postgres...');
+    pgClient = new pg.Client({
+      host: pgSecret.host,
+      port: pgSecret.port,
+      database: pgSecret.dbname,
+      user: pgSecret.username,
+      password: pgSecret.password,
+      ssl: {rejectUnauthorized: false},
+    });
 
-  await pgClient.connect();
-  //const database = new db_conn(pgSecret.host, pgSecret.user, pgSecret.password, pgSecret.database, pgSecret.port);
-  //await database
+    await pgClient.connect();
+  }
   app.use(express.json());
   app.use(express.urlencoded());
   //app.use(bodyparser.json());
@@ -62,16 +78,13 @@ const init = async (): Promise<Handler<any, any>> => {
     userRecipeRepo,
   );
 
-  return service.getHandler();
-};
-
-export const handler = async (
-  event: APIGatewayEvent,
-  context: Context,
-  callback: APIGatewayProxyCallback,
-): Promise<void> => {
-  if (appHandler === undefined) {
-    appHandler = await init();
-  }
-  await appHandler(event, context, callback);
-};
+  const port = process.env.PORT || 8080;
+  await new Promise((resolve, reject) => {
+    const server = app.listen(port, () => {
+      console.log(`Listening on port ${port}...`);
+    });
+    server.on('close', () => console.log('Server closing...'));
+  });
+})().catch(err => {
+  console.error(err);
+});

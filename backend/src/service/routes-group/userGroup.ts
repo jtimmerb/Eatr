@@ -70,7 +70,7 @@ export default class UserGroup extends RoutesGroup {
       console.log('service after create', user);
       res.status(404).send(user);
     };
-    return handler;
+    return ErrorHandler.errorWrapper(handler);
   }
 
   private getUserHandler() {
@@ -79,7 +79,7 @@ export default class UserGroup extends RoutesGroup {
       const user = await this.userController.getUser(userId);
       res.send(user);
     };
-    return handler;
+    return ErrorHandler.errorWrapper(handler);
   }
 
   private deleteUserHandler() {
@@ -88,7 +88,7 @@ export default class UserGroup extends RoutesGroup {
       await this.userController.deleteUser(userId);
       res.sendStatus(200);
     };
-    return handler;
+    return ErrorHandler.errorWrapper(handler);
   }
 
   private addUserRecipeHandler() {
@@ -99,7 +99,7 @@ export default class UserGroup extends RoutesGroup {
       const userRecipe = await this.userRecipeController.createUserRecipe(userId, req.body.recipeId);
       res.send(userRecipe);
     };
-    return handler;
+    return ErrorHandler.errorWrapper(handler);
   }
 
   private getUserRecipesHandler() {
@@ -108,7 +108,7 @@ export default class UserGroup extends RoutesGroup {
       const userRecipes: UserRecipeWithSteps[] = await this.userRecipeController.getUsersLikedRecipes(userId);
       res.send(userRecipes)
     };
-    return handler;
+    return ErrorHandler.errorWrapper(handler);
   }
 
   private deleteUserRecipeHandler() {
@@ -118,7 +118,7 @@ export default class UserGroup extends RoutesGroup {
       await this.userRecipeController.deleteUserRecipe(userId, recipeId);
       res.sendStatus(200);
     };
-    return handler;
+    return ErrorHandler.errorWrapper(handler);
   }
 
   private addUserPantryHandler() {
@@ -130,7 +130,7 @@ export default class UserGroup extends RoutesGroup {
 
       res.send(userPantry);
     };
-    return handler;
+    return ErrorHandler.errorWrapper(handler);
   }
 
   private getUserPantryHandler() {
@@ -151,7 +151,7 @@ export default class UserGroup extends RoutesGroup {
       const userPantry = await this.userPantryController.createUserPantry(userId, ingredientId, ingredientAmount);
       res.send(userPantry);
     };
-    return handler;
+    return ErrorHandler.errorWrapper(handler);
   }
 
   private deleteUserPantryHandler() {
@@ -162,6 +162,6 @@ export default class UserGroup extends RoutesGroup {
       await this.userPantryController.deleteUserPantry(userId, ingredientId);
       res.sendStatus(200);
     };
-    return handler;
+    return ErrorHandler.errorWrapper(handler);
   }
 }
