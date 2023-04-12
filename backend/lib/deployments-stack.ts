@@ -5,26 +5,22 @@ import {
   StackProps,
   Duration,
   RemovalPolicy,
-  aws_apigateway as apigateway,
   aws_rds as rds,
-  aws_lambda as lambda,
   aws_ec2 as ec2,
+  aws_ecs as ecs,
+  aws_ecr as ecr,
+  aws_ecr_assets as assets,
+  aws_elasticloadbalancingv2 as elbv2,
+  aws_lambda as lambda,
   aws_iam as iam,
 } from 'aws-cdk-lib';
 import {Secret} from 'aws-cdk-lib/aws-secretsmanager';
+import {envSpecificName} from './utils';
 import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
-import {HttpApi, HttpMethod} from '@aws-cdk/aws-apigatewayv2-alpha';
-import {HttpLambdaIntegration} from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-
-const METHOD_GET = 'GET';
-const METHOD_POST = 'POST';
-const METHOD_PUT = 'PUT';
-const METHOD_DELETE = 'DELETE';
-const PG_PORT = 5432;
-const PG_DATABASE = 'eatr_db';
 
 // Constants
-const LAMBDA_FN_TIMEOUT_SECONDS = 5;
+const PG_PORT = 5432;
+const PG_DATABASE = 'eatr_db';
 
 // Service Stack
 export class EatrServiceStack extends Stack {
@@ -37,7 +33,7 @@ export class EatrServiceStack extends Stack {
 
     // Create master user detail secrets
     const masterUserSecret = new Secret(this, 'eatr_master_user_secret', {
-      secretName: 'eatr_master_user_secret',
+      secretName: envSpecificName('eatr_master_user_secret'),
       description: 'DB master credentials',
       generateSecretString: {
         secretStringTemplate: JSON.stringify({username: 'postgres'}),
@@ -48,9 +44,7 @@ export class EatrServiceStack extends Stack {
     });
 
     // get VPC
-    //const myVpc = ec2.Vpc.fromLookup(this, 'eatr-vpc', {vpcId: 'vpc-0fe90249bef0528ca'});
-
-    const myVpc = new ec2.Vpc(this, 'eatr-vpc', {
+    const vpc = new ec2.Vpc(this, 'eatr-vpc', {
       natGateways: 1,
       subnetConfiguration: [
         {
@@ -73,20 +67,20 @@ export class EatrServiceStack extends Stack {
 
     // create secruity group for eatr
     const dbSecurityGroup = new ec2.SecurityGroup(this, 'eatr-db-sg', {
-      securityGroupName: 'eatr-db-sg',
-      vpc: myVpc,
+      securityGroupName: envSpecificName('eatr-db-sg'),
+      vpc: vpc,
     });
 
     // add inbound rule
     dbSecurityGroup.addIngressRule(
-      ec2.Peer.ipv4(myVpc.vpcCidrBlock),
+      ec2.Peer.ipv4(vpc.vpcCidrBlock),
       ec2.Port.tcp(PG_PORT),
       `Allow port ${PG_PORT} connection from only within the vpc`,
     );
 
     // RDS instance
     const dbInstance = new rds.DatabaseInstance(this, 'eatr-postgres-db', {
-      vpc: myVpc,
+      vpc: vpc,
       vpcSubnets: {
         subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
       },
@@ -101,10 +95,67 @@ export class EatrServiceStack extends Stack {
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
+    // Create an ECS cluster
+    const cluster = new ecs.Cluster(this, 'Cluster', {vpc: vpc});
+
+    // Add capacity to it
+    cluster.addCapacity('DefaultAutoScalingGroupCapacity', {
+      instanceType: instanceType,
+      desiredCapacity: 3,
+    });
+
+    const taskDefinition = new ecs.FargateTaskDefinition(this, 'EatrTask');
+
+    const container = taskDefinition.addContainer('DefaultContainer', {
+      image: ecs.ContainerImage.fromAsset(path.join(__dirname, '/../'), {
+        platform: assets.Platform.LINUX_AMD64,
+      }),
+      // image: ecs.ContainerImage.fromEcrRepository(repository, imageTag),
+      portMappings: [{containerPort: 8080, hostPort: 8080}],
+      environment: {
+        PORT: (8080).toString(),
+        PGSSLMODE: 'no-verify',
+      },
+      secrets: {
+        PG_CREDENTIALS: ecs.Secret.fromSecretsManager(masterUserSecret),
+      },
+      memoryLimitMiB: 512,
+      logging: ecs.LogDrivers.awsLogs({streamPrefix: envSpecificName('eatr-backend-svc')}),
+    });
+
+    masterUserSecret.grantRead(taskDefinition.taskRole);
+    if (taskDefinition.executionRole) masterUserSecret.grantRead(taskDefinition.executionRole);
+    dbInstance.connections.allowFromAnyIpv4(ec2.Port.tcp(PG_PORT));
+
+    // Instantiate an Amazon ECS Service
+    const ecsService = new ecs.FargateService(this, 'Service', {
+      cluster: cluster,
+      taskDefinition: taskDefinition,
+      securityGroups: [dbSecurityGroup],
+      assignPublicIp: true,
+      desiredCount: 1,
+    });
+
+    dbInstance.connections.allowFrom(ecsService, ec2.Port.tcp(PG_PORT));
+
+    const lb = new elbv2.ApplicationLoadBalancer(this, 'LB', {vpc, internetFacing: true});
+    const listener = lb.addListener('Listener', {port: 80});
+    ecsService.registerLoadBalancerTargets({
+      containerName: container.containerName,
+      containerPort: 8080,
+      newTargetGroupId: 'ECS',
+      listener: ecs.ListenerConfig.applicationListener(listener, {
+        protocol: elbv2.ApplicationProtocol.HTTP,
+        healthCheck: {
+          path: '/api/v1',
+          healthyHttpCodes: '200-499',
+        },
+      }),
+    });
+
     /** Lambda functions */
     const commonLambda = {
       runtime: lambda.Runtime.NODEJS_16_X,
-      timeout: Duration.seconds(LAMBDA_FN_TIMEOUT_SECONDS),
       bundling: {
         minify: true,
         externalModules: ['aws-sdk', 'pg-native'],
@@ -116,24 +167,7 @@ export class EatrServiceStack extends Stack {
       ...commonLambda,
       entry: path.join(__dirname, '/../src/service/lambda/init-table-lambda.ts'), // accepts .js, .jsx, .ts, .tsx and .mjs files
       handler: 'lambdaTableHandler', // defaults to 'handler'
-      vpc: myVpc,
-      vpcSubnets: {
-        subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
-      },
-      securityGroups: [dbSecurityGroup],
-      environment: {
-        SECRET_NAME: masterUserSecret.secretArn,
-      },
-    });
-    masterUserSecret.grantRead(initializeLambda);
-    dbInstance.connections.allowFrom(initializeLambda, ec2.Port.tcp(PG_PORT));
-
-    // Eatr Service
-    const eatrService = new NodejsFunction(this, 'EatrService', {
-      ...commonLambda,
-      entry: path.join(__dirname, '/../src/app.ts'),
-      handler: 'handler',
-      vpc: myVpc,
+      vpc: vpc,
       vpcSubnets: {
         subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
       },
@@ -143,22 +177,8 @@ export class EatrServiceStack extends Stack {
       },
     });
 
-    masterUserSecret.grantRead(eatrService);
-    dbInstance.connections.allowFrom(eatrService, ec2.Port.tcp(PG_PORT));
-
-    const eatrServiceIntegration = new HttpLambdaIntegration('EatrServiceIntegration', eatrService);
-
-    const httpApi = new HttpApi(this, 'HttpApi');
-
-    httpApi.addRoutes({
-      path: '/api/v1',
-      methods: [HttpMethod.ANY],
-      integration: eatrServiceIntegration,
-    });
-    httpApi.addRoutes({
-      path: '/api/v1/{proxy+}',
-      methods: [HttpMethod.ANY],
-      integration: eatrServiceIntegration,
-    });
+    initializeLambda.role?.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('SecretsManagerReadWrite'));
+    masterUserSecret.grantRead(initializeLambda);
+    dbInstance.connections.allowFrom(initializeLambda, ec2.Port.tcp(PG_PORT));
   }
 }
