@@ -6,8 +6,10 @@ sudo chmod 666 /var/run/docker.sock
 
 { 
   host: '0.0.0.0',
-  user: 'postgres',
+  username: 'postgres',
   password: 'Eatr123!',
   database: 'eatr',
   port: 5432
 }
+
+sudo chmod 666 /var/run/docker.sock
