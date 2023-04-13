@@ -1,12 +1,19 @@
-import { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./pages/homePage";
+import Login from "./pages/loginPage";
+import SignUp from "./pages/signupPage";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <div className="">
-      <p className="text-xl text-red-400">Eatr Base</p>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" Component={Home} />
+        <Route path="/login" Component={Login} />
+        <Route path="/signup" Component={SignUp} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

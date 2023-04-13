@@ -12,6 +12,7 @@ const Home = (): JSX.Element => {
 
   const handleSignUp = () => {
     console.log("signup");
+    navigate("/signup");
   };
 
   return (
