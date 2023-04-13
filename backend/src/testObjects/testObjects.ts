@@ -1,10 +1,3 @@
-import {User} from '../data/users/entity';
-import { UserRecipe } from '../data/user-recipe/entity';
-import { UserPantry } from '../data/user-pantry/entity';
-import { RecipeIngredient } from '../data/recipe-ingredient/entity';
-import {Recipe} from '../data/recipes/entity';
-import { Ingredient } from '../data/ingredient/entity';
-
 export const userOne= {
     name : 'userOne'
 }
@@ -43,3 +36,81 @@ export const ingredientCucumber= {
   carbohydrates: 3,
   fats: 4
 }  
+
+export const userOnePantryOnion = {
+  ingredientId: 0,
+  ingredientAmount: "1 cup"
+}
+
+export const userOnePantryTomato = {
+  ingredientId: 0,
+  ingredientAmount: "1 cup"
+}
+
+export const userOnePantryCucumber = {
+  ingredientId: 0,
+  ingredientAmount: "1 cup"
+}
+
+export const recipePasta = {
+  recipe : {
+    name: 'Pasta',
+    steps: ['Pasta1','Pasta2','Pasta3']
+  },
+  recipeIngredients: [
+  {
+    recipeIngredientMembershipId: 0,
+    recipeId: 0,
+    ingredientId: 0,
+    ingredientAmount: '2 cups'
+  },
+  {
+    recipeIngredientMembershipId: 0,
+    recipeId: 0,
+    ingredientId: 0,
+    ingredientAmount: '3 cups'
+  }
+  ]
+}
+
+export const recipeBurger = {
+  recipe : {
+    name: 'Burger',
+    steps: ['Burger1','Burger2','Burger3']
+  },
+  recipeIngredients: [
+  {
+    recipeIngredientMembershipId: 0,
+    recipeId: 0,
+    ingredientId: 0,
+    ingredientAmount: '3 cups'
+  },
+  {
+    recipeIngredientMembershipId: 0,
+    recipeId: 0,
+    ingredientId: 0,
+    ingredientAmount: '5 spoons'
+  }
+  ]
+}
+
+export const recipePie = {
+  recipe : {
+    name: 'Pie',
+    steps: ['Pie1','Pie2','Pie3']
+  },
+  recipeIngredients: [
+  {
+    recipeIngredientMembershipId: 0,
+    recipeId: 0,
+    ingredientId: 0,
+    ingredientAmount: '3 bowls'
+  },
+  {
+    recipeIngredientMembershipId: 0,
+    recipeId: 0,
+    ingredientId: 0,
+    ingredientAmount: '5 spoons'
+  }
+  ]
+}

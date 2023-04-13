@@ -94,7 +94,6 @@ export default class UserGroup extends RoutesGroup {
   private addUserRecipeHandler() {
     const handler: RequestHandler = async (req, res, next) => {
       this.validateSchema(createUserRecipeSchema as JSONSchemaType<any>, req.body);
-      console.log(req.params);
       const userId = parseInt(req.params.userId);
       const userRecipe = await this.userRecipeController.createUserRecipe(userId, req.body.recipeId);
       res.send(userRecipe);

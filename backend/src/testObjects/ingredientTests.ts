@@ -3,8 +3,7 @@ import app from '../app';
 import {API_VERSION} from '../utility/config/config';
 
 export default class ingredientAPITests {
-    public testCreateAndGetIngredient = async (ingredient : any) => {
-        console.log(ingredient)
+    public testCreateAndGetIngredient = async (ingredient : any) : Promise<number> => {
         let response = await request(app)
           .post(API_VERSION + '/ingredients')
           .send(ingredient);
@@ -24,8 +23,9 @@ export default class ingredientAPITests {
         expect(response.body.fats).toBe(ingredient.fats);
         expect(response.body.calories).toBe(ingredient.calories);
         expect(response.body.carbohydrates).toBe(ingredient.carbohydrates);
+        return ingredientId;
       
         // Call the function to delete the ingredient
-        request(app).delete(API_VERSION + `/ingredients/${ingredientId}`);
+        //request(app).delete(API_VERSION + `/ingredients/${ingredientId}`);
       };
 }
