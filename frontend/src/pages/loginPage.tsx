@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Modal from "../elements/modal";
 
 const Login = (): JSX.Element => {
   const navigate = useNavigate();
@@ -46,12 +47,13 @@ function LoginForm(props: LoginFormProps): JSX.Element {
       props.loginSucc();
       console.log(username);
     } else {
-      setPopup(true);
+      setShowModal(true);
+      // alert("Invalid Login");
     }
   };
 
   const [username, setUsername] = useState("");
-  const [popup, setPopup] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <form className="" onSubmit={handleLogin}>
@@ -67,20 +69,14 @@ function LoginForm(props: LoginFormProps): JSX.Element {
       </div>
 
       <div className="py-2">
-        <button
-          className="box-border relative w-56 h-10 bg-red-400 text-white text-center rounded-full shadow"
-          type="submit"
-        >
-          Login
-        </button>
-        {popup ? (
-          <div className="modal">
-            <div className="modal_content">
-              <span className="close">&times;</span>
-              <p>I'm A Pop Up!!!</p>
-            </div>
-          </div>
-        ) : null}
+        <Modal
+          buttonTitle="Login"
+          buttonStyle="box-border relative w-56 h-10 bg-red-400 text-white text-center rounded-full shadow"
+          bodyText="Uh-Oh! This username does not exist in our database. Please try again or create a new account."
+          showModal={showModal}
+          setShowModal={setShowModal}
+          event={handleLogin}
+        />
       </div>
     </form>
   );
