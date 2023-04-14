@@ -41,11 +41,14 @@ interface SignUpFormProps {
 }
 
 function SignUpForm(props: SignUpFormProps): JSX.Element {
+  const navigate = useNavigate();
+
   const handleSignUp = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (username != "") {
       props.signUpSucc();
       console.log(username);
+      navigate("/userHome");
     } else {
       setShowModal(true);
       // alert("Invalid Login");
