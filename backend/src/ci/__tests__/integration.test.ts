@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../../app';
+import {getApp} from '../../testObjects/app'
 import {API_VERSION} from '../../utility/config/config';
 import userAPITests from '../../testObjects/userTests';
 import ingredientAPITests from '../../testObjects/ingredientTests';
@@ -70,12 +70,17 @@ describe('Test the database routes', () => {
     await userTests.testGetUserRecipe(userIdOne)
 
   });
-  request(app).delete(API_VERSION + `/users/${userIdOne}`);
-  request(app).delete(API_VERSION + `/users/${userIdTwo}`);
-  request(app).delete(API_VERSION + `/users/${userIdThree}`);
-  request(app).delete(API_VERSION + `/ingredients/${ingredientIdOne}`);
-  request(app).delete(API_VERSION + `/ingredients/${ingredientIdTwo}`);
-  request(app).delete(API_VERSION + `/ingredients/${ingredientIdThree}`);
+  (async () => {
+    const app = await getApp()
+    request(app).delete(API_VERSION + `/users/${userIdOne}`);
+    request(app).delete(API_VERSION + `/users/${userIdTwo}`);
+    request(app).delete(API_VERSION + `/users/${userIdThree}`);
+    request(app).delete(API_VERSION + `/ingredients/${ingredientIdOne}`);
+    request(app).delete(API_VERSION + `/ingredients/${ingredientIdTwo}`);
+    request(app).delete(API_VERSION + `/ingredients/${ingredientIdThree}`);
+  })();
+
+
 });
 
 //let response = await request(app)

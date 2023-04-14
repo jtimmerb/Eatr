@@ -1,9 +1,11 @@
 import request from 'supertest';
-import app from '../app';
+import {getApp} from './app'
 import {API_VERSION} from '../utility/config/config';
+
 
 export default class userAPITests {
     public testCreateAndGetUser = async (user : any) => {
+        const app = await getApp()
         let response = await request(app)
           .post(API_VERSION + '/users')
           .send(user);
@@ -20,6 +22,7 @@ export default class userAPITests {
       };
     
     public testCreateUserPantry = async (userID : number, userIngr : any) => {
+        const app = await getApp()
         let response = await request(app)
           .post(API_VERSION + `/users/ingredients/${userID}`)
           .send(userIngr);
@@ -35,6 +38,7 @@ export default class userAPITests {
     }
 
     public testGetUserPantry = async (userID : number) => {
+      const app = await getApp()
       let response = await request(app).get(API_VERSION + `/users/ingredients/${userID}`);
       expect(response.status).toBe(200)
       expect(response.body).toBeInstanceOf(Array);
@@ -55,6 +59,7 @@ export default class userAPITests {
     }
   
     public testCreateUserRecipe = async (userID : number, recipeID: number) => {
+      const app = await getApp()
       let response = await request(app)
           .post(API_VERSION + `/users/recipes/${userID}`)
           .send({recipeId : recipeID});
@@ -64,6 +69,7 @@ export default class userAPITests {
     }
 
     public testGetUserRecipe = async (userID : number) => {
+      const app = await getApp()
       let response = await request(app).get(API_VERSION + `/users/recipes/${userID}`);
       expect(response.statusCode).toBe(200)
       expect(response.body[0]).toHaveProperty('userRecipe')
