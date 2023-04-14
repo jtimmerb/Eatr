@@ -64,7 +64,7 @@ jobs:
 
       - name: Run and Start Docker container
         run: |
-          docker run -e PG_CREDENTIALS=${PG_CREDENTIALS} -e PG_SSLDISABLE=1 
+          docker run -e PG_CREDENTIALS=${PG_CREDENTIALS} -e PG_SSLDISABLE=1 eatr-db
 
       - name: Build and test
         env:
