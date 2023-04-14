@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { updateName, updateRecipes } from "../states/userSlice";
 import { useNavigate } from "react-router-dom";
 import Modal from "../elements/modal";
+import PageHeader from "../elements/pageHeader";
 
 const Login = (): JSX.Element => {
   const navigate = useNavigate();
@@ -10,27 +11,10 @@ const Login = (): JSX.Element => {
     console.log("login");
   };
 
-  const back = () => {
-    navigate("/");
-  };
-
   return (
     <div className="">
-      <div className="flex items-center justify-between mx-auto pt-10 pb-52">
-        <button name="backArrow" className="ml-4" type="button" onClick={back}>
-          <svg width="21" height="21" viewBox="0 0 21 21" fill="none">
-            <path
-              d="M8.41667 15.7917L1.125 8.5M1.125 8.5L8.41667 1.20833M1.125 8.5H19.875"
-              stroke="#FD7171"
-            />
-          </svg>
-        </button>
-        <label className="not-italic font-extrabold text-3xl tracking-tighter text-black">
-          Login
-        </label>
-        <div className="w-6"></div>
-      </div>
-      <header className="App-header flex flex-col items-center pt-24">
+      <PageHeader pageName="Login" backAddr="/" />
+      <header className="App-header flex flex-col items-center pt-52">
         <LoginForm loginSucc={loginSucc} />
       </header>
     </div>
@@ -63,7 +47,7 @@ function LoginForm(props: LoginFormProps): JSX.Element {
 
   return (
     <form className="" onSubmit={handleLogin}>
-      <div className="pb-28">
+      <div className="pb-44">
         <div className="flex text-gray-400">Username</div>
         <div>
           <input
