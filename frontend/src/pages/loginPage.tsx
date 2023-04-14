@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { updateName, updateRecipes } from "../states/userSlice";
 import { useNavigate } from "react-router-dom";
 import Modal from "../elements/modal";
 
 const Login = (): JSX.Element => {
   const navigate = useNavigate();
-
   const loginSucc = () => {
     console.log("login");
   };
@@ -41,11 +42,16 @@ interface LoginFormProps {
 }
 
 function LoginForm(props: LoginFormProps): JSX.Element {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (username != "") {
       props.loginSucc();
       console.log(username);
+      dispatch(updateName(username));
+      //todo update id and liked recipes
+      navigate("/userHome");
     } else {
       setShowModal(true);
       // alert("Invalid Login");
