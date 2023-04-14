@@ -52,7 +52,7 @@ import UserRecipeRepo from './data/user-recipe/repo';
       database: pgSecret.dbname,
       user: pgSecret.username,
       password: pgSecret.password,
-      ssl: {rejectUnauthorized: false},
+      ssl: process.env.PG_SSLDISABLE ? false : {rejectUnauthorized: false},
     });
 
     await pgClient.connect();
