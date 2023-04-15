@@ -73,7 +73,7 @@ jobs:
           #PG_PASSWORD: Eatr123!
           #PG_DATABASE: eatr
           #PG_PORT: 5432
-          PG_CREDENTIALS: '{"host":"127.0.0.1","port":"5432","username":"postgres","password":"Eatr123!"}'
+          PG_CREDENTIALS: '{"host":"0.0.0.0","port":"5432","username":"postgres","password":"Eatr123!"}'
           #PG_SSLDISABLE: 1
         run: |
           cd backend
