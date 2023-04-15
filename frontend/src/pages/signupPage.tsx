@@ -4,19 +4,17 @@ import Modal from "../elements/modal";
 import PageHeader from "../elements/pageHeader";
 
 const SignUp = (): JSX.Element => {
-  const navigate = useNavigate();
-
   const signUpSucc = () => {
     console.log("signUp");
   };
 
   return (
-    <div className="">
+    <>
       <PageHeader pageName="Sign Up" backAddr="/" />
-      <header className="App-header flex flex-col items-center pt-52">
+      <div className="App-header flex flex-col items-center pt-52">
         <SignUpForm signUpSucc={signUpSucc} />
-      </header>
-    </div>
+      </div>
+    </>
   );
 };
 
