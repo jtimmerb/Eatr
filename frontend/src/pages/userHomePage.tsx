@@ -1,7 +1,7 @@
 import "../index.css";
-import SearchGlass from "../images/searchGlass";
 import HomeIcon from "../images/homeIcon";
-import RecipeStack from "../images/recipeIcon";
+import SaveTab from "../images/saveTab";
+import PageSearch from "../images/searchPage";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "../elements/pageHeader";
 
@@ -20,7 +20,6 @@ const UserHome = (): JSX.Element => {
     console.log("savedRecipes");
     navigate("/savedrecipes");
   };
-
   return (
     <>
       <PageHeader pageName="Home" backAddr="/login" />
@@ -32,7 +31,7 @@ const UserHome = (): JSX.Element => {
           type="button"
           onClick={navSavedRecipes}
         >
-          <RecipeStack />
+          <SaveTab />
         </button>
       </div>
       <div className="flex flex-col justify-center items-center w-full pt-32">
@@ -56,7 +55,7 @@ const UserHome = (): JSX.Element => {
           type="button"
           onClick={navFindRec}
         >
-          <SearchGlass />
+          <PageSearch />
         </button>
       </div>
     </>

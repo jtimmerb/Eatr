@@ -12,12 +12,12 @@ const Login = (): JSX.Element => {
   };
 
   return (
-    <div className="">
+    <>
       <PageHeader pageName="Login" backAddr="/" />
-      <header className="App-header flex flex-col items-center pt-52">
+      <div className="App-header flex flex-col items-center pt-52">
         <LoginForm loginSucc={loginSucc} />
-      </header>
-    </div>
+      </div>
+    </>
   );
 };
 
