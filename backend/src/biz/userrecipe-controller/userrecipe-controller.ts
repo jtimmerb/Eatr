@@ -32,7 +32,6 @@ export default class UserRecipeController {
     };
     //console.log(userRecipe);
     const newUserRecipe: UserRecipe = await this.repo.create(userRecipe);
-    console.log(newUserRecipe);
     return newUserRecipe;
   };
 

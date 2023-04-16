@@ -38,6 +38,9 @@ jobs:
 
       - name: Build
         run: cd backend/ && npm run build
+        
+      - name: Print PG_CREDENTIALS
+        run: echo "$PG_CREDENTIALS"
 
   test:
     runs-on: ubuntu-latest
@@ -60,17 +63,21 @@ jobs:
         working-directory: ./backend
 
       - name: Run and Start Docker container
+        env:
+          PG_CREDENTIALS: '{"host":"127.0.0.1","port":"5432","username":"postgres","password":"Eatr123!","database":"eatr"}'
         run: |
-          docker run -d --name eatr-container -p 5432:5432 eatr-db
+          docker run -e PG_CREDENTIALS=${PG_CREDENTIALS} -e PG_SSLDISABLE=1 -d --name eatr-container -p 5432:5432 eatr-db
           docker start eatr-container
 
       - name: Build and test
         env:
-          PG_HOST: 0.0.0.0
-          PG_USERNAME: postgres
-          PG_PASSWORD: Eatr123!
-          PG_DATABASE: eatr
-          PG_PORT: 5432
+          #PG_HOST: 0.0.0.0
+          #PG_USERNAME: postgres
+          #PG_PASSWORD: Eatr123!
+          #PG_DATABASE: eatr
+          #PG_PORT: 5432
+          PG_CREDENTIALS: '{"host":"127.0.0.1","port":"5432","username":"postgres","password":"Eatr123!","database":"eatr"}'
+          #PG_SSLDISABLE: 1
         run: |
           cd backend
           npm test
