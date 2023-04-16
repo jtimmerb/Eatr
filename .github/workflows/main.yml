@@ -63,6 +63,8 @@ jobs:
         working-directory: ./backend
 
       - name: Run and Start Docker container
+        env:
+          PG_CREDENTIALS: '{"host":"127.0.0.1","port":"5432","username":"postgres","password":"Eatr123!","database":"eatr"}'
         run: |
           docker run -e PG_CREDENTIALS=${PG_CREDENTIALS} -e PG_SSLDISABLE=1 -d --name eatr-container -p 5432:5432 eatr-db
           docker start eatr-container
