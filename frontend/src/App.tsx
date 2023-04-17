@@ -6,6 +6,7 @@ import UserHome from "./pages/userHomePage";
 import SavedRecipesPage from "./pages/savedRecipesPage";
 import UserRecipePage from "./pages/userPantryPage";
 import DiscoverPage from "./pages/discoverPage";
+import React from "react";
 
 export default function App() {
   return (
