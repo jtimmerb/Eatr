@@ -13,6 +13,8 @@ import {
   aws_elasticloadbalancingv2 as elbv2,
   aws_lambda as lambda,
   aws_iam as iam,
+  aws_s3 as s3,
+  aws_s3_deployment as s3deploy,
 } from 'aws-cdk-lib';
 import {Secret} from 'aws-cdk-lib/aws-secretsmanager';
 import {envSpecificName} from './utils';
@@ -180,5 +182,21 @@ export class EatrServiceStack extends Stack {
     initializeLambda.role?.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('SecretsManagerReadWrite'));
     masterUserSecret.grantRead(initializeLambda);
     dbInstance.connections.allowFrom(initializeLambda, ec2.Port.tcp(PG_PORT));
+
+    // Frontend
+    // S3 bucket -> storing static files
+    // cdn infront of bucket
+    //
+
+    const websiteBucket = new s3.Bucket(this, 'eatrfrontend-bucket', {
+      websiteIndexDocument: 'index.html',
+      publicReadAccess: true,
+    });
+
+    new s3deploy.BucketDeployment(this, 'deploy-eatr-frontent', {
+      sources: [s3deploy.Source.asset('/../../frontend/dist')],
+      destinationBucket: websiteBucket,
+      destinationKeyPrefix: 'eatr-frontned/',
+    });
   }
 }
