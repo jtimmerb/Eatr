@@ -40,13 +40,13 @@ export default class UserController {
     }
   };
 
-  public getUserByName = async (userName: string): Promise<User> => {
+  public getUserByName = async (userName: string): Promise<User[]> => {
     const queryUser: User = {
       userId: 0,
       name: userName,
     };
     if(await this.existUserByName(userName)){
-      const user = await this.repo.get(queryUser);
+      const user : User[] = await this.repo.getbyName(queryUser);
       return user;
     }
     else{

@@ -35,11 +35,11 @@ export default class UserGroup extends RoutesGroup {
     // create user
     this.getRouter().post('/', this.createUserHandler());
 
-    // get user by id
-    this.getRouter().get('/id/:userId', this.getUserHandler());
+    // get user 
+    this.getRouter().get('/:userId', this.getUserHandler());
 
-    //get user by name
-    this.getRouter().get('/:name', this.getUserByNameHandler());
+    // list users
+    this.getRouter().get('/', this.listUserHandler());
 
     // delete user by id
     this.getRouter().delete('/:userId', this.deleteUserHandler());
@@ -79,23 +79,31 @@ export default class UserGroup extends RoutesGroup {
 
   private getUserHandler() {
     const handler: RequestHandler = async (req, res, next) => {
-      if(req.params.userId != null){
-        const userId = parseInt(req.params.userId);
-        const user = await this.userController.getUser(userId);
+      const userId = parseInt(req.params.userId);
+      const user = await this.userController.getUser(userId);
+      res.send(user);
+    };
+    return ErrorHandler.errorWrapper(handler);
+  }
+
+  private listUserHandler(){
+    const handler: RequestHandler = async (req,res,next) =>{
+      const { name } = req.query as { [key: string]: string}
+      const user : User[] = await this.userController.getUserByName(name);
+      if(user.length == 0){
+        res.sendStatus(404);
+      }
+      else{
         res.send(user);
       }
-      else if(req.params.name != null){
-        const name = req.params.name;
-        const user = await this.userController.getUserByName(name);
-        res.send(user);
-      }
+
     };
     return ErrorHandler.errorWrapper(handler);
   }
   
   private deleteUserHandler() {
     const handler: RequestHandler = async (req, res, next) => {
-      const userId = parseInt(req.params.userId);
+      const userId  = parseInt(req.params.userId);
       await this.userController.deleteUser(userId);
       res.sendStatus(200);
     };
