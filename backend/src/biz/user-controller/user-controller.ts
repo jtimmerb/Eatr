@@ -31,17 +31,46 @@ export default class UserController {
       userId: userId,
       name: '',
     };
-    const user = await this.repo.get(queryUser);
-    return user;
+    if(await this.existUserById(userId)){
+      const user = await this.repo.get(queryUser);
+      return user;
+    }
+    else{
+      throw new Error()
+    }
   };
 
-  public existUser = async (userId: number): Promise<boolean> => {
+  public getUserByName = async (userName: string): Promise<User> => {
+    const queryUser: User = {
+      userId: 0,
+      name: userName,
+    };
+    if(await this.existUserByName(userName)){
+      const user = await this.repo.get(queryUser);
+      return user;
+    }
+    else{
+      throw new Error()
+    }
+  };
+
+  public existUserById = async (userId: number): Promise<boolean> => {
     const queryUser: User = {
       userId: userId,
       name: '',
     };
     return await this.repo.exists(queryUser);
   };
+
+  public existUserByName = async (userName: string): Promise<boolean> => {
+    const queryUser: User = {
+      userId: 0,
+      name: userName,
+    };
+    return await this.repo.existsByName(queryUser);
+  };
+
+
 
   // public getUsersLikedRecipes = async (userID: number): Promise<Recipe[]> => {
   //   const userRecipe: UserRecipe = {

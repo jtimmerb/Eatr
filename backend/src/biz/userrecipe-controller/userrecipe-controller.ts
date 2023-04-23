@@ -31,28 +31,43 @@ export default class UserRecipeController {
       recipeId: recipeID,
     };
     //console.log(userRecipe);
-    const newUserRecipe: UserRecipe = await this.repo.create(userRecipe);
-    return newUserRecipe;
+    if(await this.userController.existUserById(userID) && await this.recipeController.existsRecipe(recipeID)){
+      const newUserRecipe: UserRecipe = await this.repo.create(userRecipe);
+      return newUserRecipe;
+    }
+    else{
+      throw new Error();
+    } 
   };
 
   public deleteUserRecipe = async (userID: number, recipeID: number): Promise<void> => {
-    const userRecipe: UserRecipe = {
-      userRecipeMembershipId: 0,
-      userId: userID,
-      recipeId: recipeID,
-    };
-    await this.repo.deleteByUserAndRecipe(userRecipe);
+    if(await this.userController.existUserById(userID) && await this.recipeController.existsRecipe(recipeID)){
+      const userRecipe: UserRecipe = {
+        userRecipeMembershipId: 0,
+        userId: userID,
+        recipeId: recipeID,
+      };
+      await this.repo.deleteByUserAndRecipe(userRecipe);
+    }
+    else{
+      throw new Error()
+    }
   };
 
   public getMembershipCount = async (userID: number): Promise<number> => {
-    const userRecipe: UserRecipe = {
-      userRecipeMembershipId: 0,
-      userId: userID,
-      recipeId: 0,
-    };
-    const recievedUserRecipe: UserRecipe[] = await this.repo.getByUserId(userRecipe);
-    console.log(recievedUserRecipe);
-    return recievedUserRecipe.length;
+    if(await this.userController.existUserById(userID)){
+      const userRecipe: UserRecipe = {
+        userRecipeMembershipId: 0,
+        userId: userID,
+        recipeId: 0,
+      };
+      const recievedUserRecipe: UserRecipe[] = await this.repo.getByUserId(userRecipe);
+      console.log(recievedUserRecipe);
+      return recievedUserRecipe.length;
+    }
+    else{
+      throw new Error()
+    }
   };
 
   public getRecipeFromId = async (userRecipeMembershipID: number): Promise<Recipe> => {
@@ -72,7 +87,7 @@ export default class UserRecipeController {
       userId: userID,
       recipeId: 0,
     };
-    if (await this.userController.existUser(userID)) {
+    if (await this.userController.existUserById(userID)) {
       const receivedUserRecipe: UserRecipe[] = await this.repo.getByUserId(userRecipe);
       const receivedUserRecipeWithSteps: UserRecipeWithSteps[] = [];
       for (let i = 0; i < receivedUserRecipe.length; i++) {

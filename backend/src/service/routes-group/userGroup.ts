@@ -37,6 +37,9 @@ export default class UserGroup extends RoutesGroup {
     // get user by id
     this.getRouter().get('/:userId', this.getUserHandler());
 
+    //get user by name
+    this.getRouter().get('/:name'), this.getUserByNameHandler();
+
     // delete user by id
     this.getRouter().delete('/:userId', this.deleteUserHandler());
 
@@ -77,6 +80,15 @@ export default class UserGroup extends RoutesGroup {
     const handler: RequestHandler = async (req, res, next) => {
       const userId = parseInt(req.params.userId);
       const user = await this.userController.getUser(userId);
+      res.send(user);
+    };
+    return ErrorHandler.errorWrapper(handler);
+  }
+
+  private getUserByNameHandler() {
+    const handler: RequestHandler = async (req, res, next) => {
+      const userName = req.params.name;
+      const user = await this.userController.getUserByName(userName);
       res.send(user);
     };
     return ErrorHandler.errorWrapper(handler);

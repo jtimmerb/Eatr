@@ -25,10 +25,10 @@ export default class RecipeIngredientController {
     const returnRecipeIngredient: RecipeIngredient[] = [];
 
     for (let i = 0; i < newRecipeIngredients.length; i++) {
-      const item = await this.repo.create(newRecipeIngredients[i]);
-      returnRecipeIngredient.push(item);
-    }
-    return returnRecipeIngredient;
+        const item = await this.repo.create(newRecipeIngredients[i]);
+        returnRecipeIngredient.push(item);
+      }
+      return returnRecipeIngredient;
   };
 
   public deleteRecipe = async (recipeID: number): Promise<void> => {
