@@ -39,7 +39,7 @@ export default class UserGroup extends RoutesGroup {
     this.getRouter().get('/id/:userId', this.getUserHandler());
 
     //get user by name
-    this.getRouter().get('/name/:name', this.getUserHandler());
+    this.getRouter().get('/:name', this.getUserByNameHandler());
 
     // delete user by id
     this.getRouter().delete('/:userId', this.deleteUserHandler());
