@@ -18,7 +18,7 @@ export default class RecipeRepo implements RecipeRepoInterface {
   /** Checks if user exists in DB */
   public async exists(recipe: Recipe): Promise<boolean> {
     const recipeEnt = Mapper.toDB(recipe);
-    const query = `SELECT EXISTS (SELECT 1 FROM recipes WHERE name='${recipeEnt.name}')`;
+    const query = `SELECT EXISTS (SELECT 1 FROM recipes WHERE recipe_id='${recipeEnt.recipe_id}')`;
     const result = await this.psql.query(query);
     return result.rows[0].exists;
   }

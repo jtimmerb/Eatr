@@ -13,6 +13,7 @@ import {Recipe} from '../../data/recipes/entity';
 import {Ingredient} from '../../data/ingredient/entity';
 import { UserPantry, UserPantryIngredients } from '../../data/user-pantry/entity';
 import { UserRecipe, UserRecipeWithSteps } from '../../data/user-recipe/entity';
+import { not } from 'ajv/dist/compile/codegen';
 
 export default class UserGroup extends RoutesGroup {
   private userController: UserController;
@@ -34,8 +35,11 @@ export default class UserGroup extends RoutesGroup {
     // create user
     this.getRouter().post('/', this.createUserHandler());
 
-    // get user by id
+    // get user 
     this.getRouter().get('/:userId', this.getUserHandler());
+
+    // list users
+    this.getRouter().get('/', this.listUserHandler());
 
     // delete user by id
     this.getRouter().delete('/:userId', this.deleteUserHandler());
@@ -82,9 +86,24 @@ export default class UserGroup extends RoutesGroup {
     return ErrorHandler.errorWrapper(handler);
   }
 
+  private listUserHandler(){
+    const handler: RequestHandler = async (req,res,next) =>{
+      const { name } = req.query as { [key: string]: string}
+      const user : User[] = await this.userController.getUserByName(name);
+      if(user.length == 0){
+        res.sendStatus(404);
+      }
+      else{
+        res.send(user);
+      }
+
+    };
+    return ErrorHandler.errorWrapper(handler);
+  }
+  
   private deleteUserHandler() {
     const handler: RequestHandler = async (req, res, next) => {
-      const userId = parseInt(req.params.userId);
+      const userId  = parseInt(req.params.userId);
       await this.userController.deleteUser(userId);
       res.sendStatus(200);
     };

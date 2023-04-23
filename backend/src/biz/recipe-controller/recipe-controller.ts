@@ -9,12 +9,17 @@ export default class RecipeController extends RepoController<RecipeRepo> {
   };
 
   public deleteRecipe = async (recipeID: number): Promise<void> => {
-    const recipe: Recipe = {
-      recipeId: recipeID,
-      name: '',
-      steps: [],
-    };
-    await this.getRepo().delete(recipe);
+    if(await this.existsRecipe(recipeID)){
+      const recipe: Recipe = {
+        recipeId: recipeID,
+        name: '',
+        steps: [],
+      };
+      await this.getRepo().delete(recipe);
+    }
+    else{
+      throw new Error();
+    }
   };
 
   public updateRecipe = async (newRecipe: Recipe): Promise<void> => {
@@ -22,14 +27,26 @@ export default class RecipeController extends RepoController<RecipeRepo> {
   };
 
   public getRecipe = async (recipeID: number): Promise<Recipe> => {
+    if(await this.existsRecipe(recipeID)){
+      const recipe: Recipe = {
+        recipeId: recipeID,
+        name: '',
+        steps: [],
+      };
+      const recipeReceived = await this.getRepo().get(recipe);
+      return recipeReceived;
+    }
+    else{
+      throw new Error()
+    }
+  };
+
+  public existsRecipe = async (recipeID: number): Promise<Boolean> =>{
     const recipe: Recipe = {
       recipeId: recipeID,
       name: '',
       steps: [],
     };
-    const recipeReceived = await this.getRepo().get(recipe);
-    return recipeReceived;
-  };
-
-  
+    return await this.getRepo().exists(recipe)
+  }
 }

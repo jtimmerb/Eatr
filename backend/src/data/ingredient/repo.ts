@@ -16,7 +16,7 @@ export default class IngredientRepo implements IngredientRepoInterface {
 
   public async exists(ingredient: Ingredient): Promise<boolean> {
     const ingredientEnt = Mapper.toDB(ingredient);
-    const query = `SELECT EXISTS (SELECT 1 FROM ingredients WHERE name='${ingredientEnt.name}')`;
+    const query = `SELECT EXISTS (SELECT 1 FROM ingredients WHERE ingredient_id='${ingredientEnt.ingredient_id}')`;
     const result = await this.psql.query(query);
     return result.rows[0].exists;
   }

@@ -9,16 +9,21 @@ export default class IngredientController extends RepoController<IngredientRepo>
   };
 
   public deleteIngredient = async (ingredientID: number): Promise<void> => {
-    const ingredient: Ingredient = {
-      ingredientId: ingredientID,
-      name: '',
-      servingSize: '',
-      calories: 0,
-      proteins: 0,
-      carbohydrates: 0,
-      fats: 0,
-    };
-    await this.getRepo().delete(ingredient);
+    if(await this.existsIngredient(ingredientID)){
+      const ingredient: Ingredient = {
+        ingredientId: ingredientID,
+        name: '',
+        servingSize: '',
+        calories: 0,
+        proteins: 0,
+        carbohydrates: 0,
+        fats: 0,
+      };
+      await this.getRepo().delete(ingredient);
+    }
+    else{
+      throw new Error()
+    }
   };
 
   public updateIngredientMacros = async (ingredient: Ingredient): Promise<void> => {
@@ -26,6 +31,25 @@ export default class IngredientController extends RepoController<IngredientRepo>
   };
 
   public getIngredient = async (ingredientID: number): Promise<Ingredient> => {
+    if(await this.existsIngredient(ingredientID)){
+      const ingredient: Ingredient = {
+        ingredientId: ingredientID,
+        name: '',
+        servingSize: '',
+        calories: 0,
+        proteins: 0,
+        carbohydrates: 0,
+        fats: 0,
+      };
+      const ingredientReceived = await this.getRepo().get(ingredient);
+      return ingredientReceived;
+    }
+    else{
+      throw new Error();
+    }
+  };
+
+  public existsIngredient = async (ingredientID: number): Promise<Boolean> => {
     const ingredient: Ingredient = {
       ingredientId: ingredientID,
       name: '',
@@ -35,7 +59,6 @@ export default class IngredientController extends RepoController<IngredientRepo>
       carbohydrates: 0,
       fats: 0,
     };
-    const ingredientReceived = await this.getRepo().get(ingredient);
-    return ingredientReceived;
+    return this.getRepo().exists(ingredient)
   };
 }

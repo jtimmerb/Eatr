@@ -20,24 +20,34 @@ export default class UserPantryController {
     ingredientID: number,
     ingredientAmount: string,
   ): Promise<UserPantry> => {
-    const userPantry: UserPantry = {
-      upMembershipId: 0,
-      userId: userID,
-      ingredientId: ingredientID,
-      ingredientAmount: ingredientAmount,
-    };
-    const newUserPantry = await this.repo.create(userPantry);
-    return newUserPantry;
+    if(await this.userController.existUserById(userID) && await this.ingredientController.existsIngredient(ingredientID)){
+      const userPantry: UserPantry = {
+        upMembershipId: 0,
+        userId: userID,
+        ingredientId: ingredientID,
+        ingredientAmount: ingredientAmount,
+      };
+      const newUserPantry = await this.repo.create(userPantry);
+      return newUserPantry;
+    }
+    else{
+      throw new Error();
+    }
   };
 
   public deleteUserPantry = async (userID: number, ingredientID: number): Promise<void> => {
-    const userPantry: UserPantry = {
-      upMembershipId: 0,
-      userId: userID,
-      ingredientId: ingredientID,
-      ingredientAmount: '',
-    };
-    await this.repo.deleteByUserAndIngr(userPantry);
+    if(await this.userController.existUserById(userID) && await this.ingredientController.existsIngredient(ingredientID)){
+      const userPantry: UserPantry = {
+        upMembershipId: 0,
+        userId: userID,
+        ingredientId: ingredientID,
+        ingredientAmount: '',
+      };
+      await this.repo.deleteByUserAndIngr(userPantry);
+    }
+    else{
+      throw new Error();
+    }
   };
 
   public getPantryItem = async (upMembershipID: number): Promise<Ingredient> => {
@@ -61,7 +71,7 @@ export default class UserPantryController {
       ingredientId: 0,
       ingredientAmount: '',
     };
-    if (await this.userController.existUser(userID)) {
+    if (await this.userController.existUserById(userID)) {
       const receivedUserPantry: UserPantry[] = await this.repo.getByUserId(userPantry);
       const receivedUserPantryIngredients: UserPantryIngredients[] = [];
       for (let i = 0; i < receivedUserPantry.length; i++) {

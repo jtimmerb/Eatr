@@ -64,6 +64,12 @@ export default class UserRepo implements InterfaceUserRepo {
     return Mapper.fromDB(result.rows[0]);
   }
 
+  public async getbyName(user: User): Promise<User[]> {
+    const query = `SELECT * FROM users WHERE name=${user.name}`;
+    const result = await this.psql.query(query);
+    return result.rows.map((row) => Mapper.fromDB(row));
+  }
+
   async getUsersTable() {
     const query = 'SELECT * FROM users';
     const result = await this.psql.query(query);
