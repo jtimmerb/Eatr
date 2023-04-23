@@ -13,6 +13,7 @@ import {Recipe} from '../../data/recipes/entity';
 import {Ingredient} from '../../data/ingredient/entity';
 import { UserPantry, UserPantryIngredients } from '../../data/user-pantry/entity';
 import { UserRecipe, UserRecipeWithSteps } from '../../data/user-recipe/entity';
+import { not } from 'ajv/dist/compile/codegen';
 
 export default class UserGroup extends RoutesGroup {
   private userController: UserController;
@@ -35,10 +36,10 @@ export default class UserGroup extends RoutesGroup {
     this.getRouter().post('/', this.createUserHandler());
 
     // get user by id
-    this.getRouter().get('/:userId', this.getUserHandler());
+    this.getRouter().get('/id/:userId', this.getUserHandler());
 
     //get user by name
-    this.getRouter().get('/:name'), this.getUserByNameHandler();
+    this.getRouter().get('/name/:name', this.getUserHandler());
 
     // delete user by id
     this.getRouter().delete('/:userId', this.deleteUserHandler());
@@ -78,22 +79,20 @@ export default class UserGroup extends RoutesGroup {
 
   private getUserHandler() {
     const handler: RequestHandler = async (req, res, next) => {
-      const userId = parseInt(req.params.userId);
-      const user = await this.userController.getUser(userId);
-      res.send(user);
+      if(req.params.userId != null){
+        const userId = parseInt(req.params.userId);
+        const user = await this.userController.getUser(userId);
+        res.send(user);
+      }
+      else if(req.params.name != null){
+        const name = req.params.name;
+        const user = await this.userController.getUserByName(name);
+        res.send(user);
+      }
     };
     return ErrorHandler.errorWrapper(handler);
   }
-
-  private getUserByNameHandler() {
-    const handler: RequestHandler = async (req, res, next) => {
-      const userName = req.params.name;
-      const user = await this.userController.getUserByName(userName);
-      res.send(user);
-    };
-    return ErrorHandler.errorWrapper(handler);
-  }
-
+  
   private deleteUserHandler() {
     const handler: RequestHandler = async (req, res, next) => {
       const userId = parseInt(req.params.userId);
