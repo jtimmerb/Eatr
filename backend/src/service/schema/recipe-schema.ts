@@ -2,7 +2,7 @@ import {JSONSchemaType} from 'ajv';
 import {RecipeIngredient} from '../../data/recipe-ingredient/entity';
 
 interface CreateRecipe {
-  recipe: {name: string; steps: string[]};
+  recipe: {name: string; steps: string[]; image: string};
   recipeIngredients: RecipeIngredient[];
 }
 
@@ -12,8 +12,8 @@ export const createRecipeSchema: JSONSchemaType<CreateRecipe> = {
   properties: {
     recipe: {
       type: 'object',
-      properties: {name: {type: 'string'}, steps: {type: 'array', minItems: 1, items: {type: 'string'}}},
-      required: ['name', 'steps'],
+      properties: {name: {type: 'string'}, steps: {type: 'array', minItems: 1, items: {type: 'string'}}, image: {type: 'string'}},
+      required: ['name', 'steps', 'image'],
     },
     recipeIngredients: {
       type: 'array',
@@ -40,8 +40,8 @@ export const updateRecipeSchema: JSONSchemaType<UpdateRecipe> = {
   properties: {
     recipe: {
       type: 'object',
-      properties: {name: {type: 'string'}, steps: {type: 'array', minItems: 1, items: {type: 'string'}}},
-      required: ['name', 'steps'],
+      properties: {name: {type: 'string'}, steps: {type: 'array', minItems: 1, items: {type: 'string'}}, image: {type: 'string'}},
+      required: ['name', 'steps','image'],
     },
     recipeIngredients: {
       type: 'array',
