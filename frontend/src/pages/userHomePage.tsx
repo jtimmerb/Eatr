@@ -1,11 +1,26 @@
-import "../index.css";
+import React from "react";
+
 import HomeIcon from "../images/homeIcon";
 import SaveTab from "../images/saveTab";
 import PageSearch from "../images/searchPage";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "../elements/pageHeader";
+import HomeCard from "../elements/layout/homeCard";
+import RecipeDashboardCard from "../elements/layout/recipeDashboardCard";
+import ArrowIcon from "../images/arrowIcon";
+import Container from "../elements/layout/container";
 
-const UserHome = (): JSX.Element => {
+const SectionHeader: React.FC<{ children: React.ReactNode }> = (props) => (
+  <p className="text-lg font-bold text-gray-900">{props.children}</p>
+);
+
+const Divider: React.FC = () => <div className="h-[1px] w-full bg-gray-300" />;
+
+interface IRecipe {
+  name: string;
+}
+
+const UserHome: React.FC = () => {
   const navigate = useNavigate();
 
   const navFindRec = () => {
@@ -20,44 +35,61 @@ const UserHome = (): JSX.Element => {
     console.log("savedRecipes");
     navigate("/savedrecipes");
   };
+
+  const recipes: IRecipe[] = [
+    {
+      name: "Chicken Parmesian",
+    },
+    {
+      name: "Mushroom Risotto",
+    },
+    {
+      name: "Sunday Gravy",
+    },
+  ];
+
   return (
     <>
       <PageHeader pageName="Home" backAddr="/login" />
-      <div className="pt-32 flex flex-col justify-center items-center w-full">
-        <label>LIKED RECIPES</label>
-        <button
-          name="likedRecipes"
-          className="mt-6 w-52 h-10 bg-red-400 rounded-md flex justify-center items-center"
-          type="button"
-          onClick={navSavedRecipes}
-        >
-          <SaveTab />
-        </button>
-      </div>
-      <div className="flex flex-col justify-center items-center w-full pt-32">
-        <label>MY RECIPES</label>
-        <button
-          name="myRecipes"
-          className="mt-6 w-52 h-10 bg-red-400 rounded-md flex justify-center items-center"
-          type="button"
-          onClick={navMyRecipes}
-        >
-          <HomeIcon />
-        </button>
-      </div>
-      <div className="flex flex-col justify-center items-center w-full">
-        <div className="pt-32 flex flex-row  justify-center">
-          <label>FIND FOOD</label>
+      <Container className="mt-4">
+        {/* Discover section */}
+        <div className="mt-6 mb-5">
+          <HomeCard title="Discover" background="floral-pattern" />
         </div>
-        <button
-          name="myRecipes"
-          className="mt-6 w-52 h-10 bg-red-400 rounded-md flex justify-center items-center"
-          type="button"
-          onClick={navFindRec}
-        >
-          <PageSearch />
-        </button>
-      </div>
+
+        <Divider />
+
+        {/* Saved recipes section */}
+        <div className="mt-6 mb-5">
+          <div className="flex flex-row justify-between">
+            <SectionHeader>Saved Recipes</SectionHeader>
+            <div className="flex flex-row items-center">
+              <p className="text-base text-center font-medium text-gray-500 mr-2">
+                View All
+              </p>
+              <ArrowIcon className="stroke-gray-500 rotate-180 w-5 h-5 mt-[-5px]" />
+            </div>
+          </div>
+          <div className="flex flex-row flex-no-wrap overflow-x-scroll py-2">
+            {recipes.map((recipe, i) => (
+              <RecipeDashboardCard
+                key={recipe.name}
+                hasMargin={i < recipes.length - 1 && i > 0}
+                title={recipe.name}
+              />
+            ))}
+          </div>
+        </div>
+
+        <Divider />
+
+        {/* My Pantry section */}
+        <div className="mt-6 mb-5">
+          <SectionHeader>My Pantry</SectionHeader>
+          <div className="my-2" />
+          <HomeCard title="6 Ingredients" background="food-pattern" />
+        </div>
+      </Container>
     </>
   );
 };
