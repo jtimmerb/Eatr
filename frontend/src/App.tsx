@@ -1,25 +1,35 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./pages/homePage";
-import Login from "./pages/loginPage";
-import SignUp from "./pages/signupPage";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import React from "react";
+
+import LandingPage from "./pages/landing-page";
+import ErrorPage from "./pages/error-page"
+import LoginPage from "./pages/loginPage";
+import SignUpPage from "./pages/signupPage";
 import UserHome from "./pages/userHomePage";
 import SavedRecipesPage from "./pages/savedRecipesPage";
 import UserPantryPage from "./pages/userPantryPage";
 import DiscoverPage from "./pages/discoverPage";
-import React from "react";
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <LandingPage/>,
+    errorElement: <ErrorPage/>
+  },
+  {
+    path: 'login',
+    element: <LoginPage/>,
+    errorElement: <ErrorPage/>
+  },
+  {
+    path: 'signup',
+    element: <SignUpPage/>,
+    errorElement:<ErrorPage/>
+  }
+])
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" Component={Home} />
-        <Route path="/login" Component={Login} />
-        <Route path="/signup" Component={SignUp} />
-        <Route path="/userhome" Component={UserHome} />
-        <Route path="/savedrecipes" Component={SavedRecipesPage} />
-        <Route path="/pantry" Component={UserPantryPage} />
-        <Route path="/discover" Component={DiscoverPage} />
-      </Routes>
-    </BrowserRouter>
+    <RouterProvider router={router}/>
   );
 }
