@@ -4,7 +4,7 @@ import Login from "./pages/loginPage";
 import SignUp from "./pages/signupPage";
 import UserHome from "./pages/userHomePage";
 import SavedRecipesPage from "./pages/savedRecipesPage";
-import UserRecipePage from "./pages/userPantryPage";
+import UserPantryPage from "./pages/userPantryPage";
 import DiscoverPage from "./pages/discoverPage";
 import React from "react";
 
@@ -17,7 +17,7 @@ export default function App() {
         <Route path="/signup" Component={SignUp} />
         <Route path="/userhome" Component={UserHome} />
         <Route path="/savedrecipes" Component={SavedRecipesPage} />
-        <Route path="/myrecipes" Component={UserRecipePage} />
+        <Route path="/pantry" Component={UserPantryPage} />
         <Route path="/discover" Component={DiscoverPage} />
       </Routes>
     </BrowserRouter>
