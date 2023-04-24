@@ -76,6 +76,7 @@ export default class RecipeIngredientController {
       recipeId: recipeID,
       name: '',
       steps: [],
+      image: ''
     };
     const recipeIngredients: RecipeIngredient[] = await this.repo.getByRecipeID(recipe);
     return recipeIngredients;
