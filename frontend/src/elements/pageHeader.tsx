@@ -3,13 +3,11 @@ import { useNavigate } from "react-router-dom";
 import ArrowIcon from "../images/arrowIcon";
 
 interface IProps {
-  pageName: string;
+  children: React.ReactNode;
   backAddr: string;
 }
 
-const PageHeader: React.FC<IProps> = (props) => {
-  const { backAddr, pageName } = props;
-
+const PageHeader: React.FC<IProps> = ({children, backAddr}) => {
   const navigate = useNavigate();
   const back = () => {
     navigate(backAddr);
@@ -22,7 +20,7 @@ const PageHeader: React.FC<IProps> = (props) => {
           <ArrowIcon className="stroke-red-400" />
         </button>
         <label className="not-italic font-extrabold text-3xl tracking-tighter text-black">
-          {pageName}
+          {children}
         </label>
         <div className="w-16"></div>
       </div>
