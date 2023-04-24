@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 import PageHeader from "../elements/pageHeader";
 import Container from "../elements/layout/container";
 import RedSolidButton from "../elements/buttons/red-solid-button";
@@ -11,7 +10,7 @@ interface IProps {}
 const LoginPage: React.FC<IProps> = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
-  
+
   const changeToSignUp = () => {
     navigate("../signup");
   };
