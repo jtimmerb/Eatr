@@ -14,6 +14,7 @@ export default class RecipeController extends RepoController<RecipeRepo> {
         recipeId: recipeID,
         name: '',
         steps: [],
+        image: ''
       };
       await this.getRepo().delete(recipe);
     }
@@ -32,6 +33,7 @@ export default class RecipeController extends RepoController<RecipeRepo> {
         recipeId: recipeID,
         name: '',
         steps: [],
+        image: ''
       };
       const recipeReceived = await this.getRepo().get(recipe);
       return recipeReceived;
@@ -46,6 +48,7 @@ export default class RecipeController extends RepoController<RecipeRepo> {
       recipeId: recipeID,
       name: '',
       steps: [],
+      image: ''
     };
     return await this.getRepo().exists(recipe)
   }
