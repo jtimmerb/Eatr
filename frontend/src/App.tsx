@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import React from "react";
 
 import LandingPage from "./pages/landing-page";
-import ErrorPage from "./pages/error-page"
+import ErrorPage from "./pages/error-page";
 import LoginPage from "./pages/loginPage";
 import SignUpPage from "./pages/signupPage";
 import UserHome from "./pages/userHomePage";
@@ -12,24 +12,22 @@ import DiscoverPage from "./pages/discoverPage";
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <LandingPage/>,
-    errorElement: <ErrorPage/>
+    path: "/",
+    element: <LandingPage />,
+    errorElement: <ErrorPage />,
   },
   {
-    path: 'login',
-    element: <LoginPage/>,
-    errorElement: <ErrorPage/>
+    path: "login",
+    element: <LoginPage />,
+    errorElement: <ErrorPage />,
   },
   {
-    path: 'signup',
-    element: <SignUpPage/>,
-    errorElement:<ErrorPage/>
-  }
-])
+    path: "signup",
+    element: <SignUpPage />,
+    errorElement: <ErrorPage />,
+  },
+]);
 
 export default function App() {
-  return (
-    <RouterProvider router={router}/>
-  );
+  return <RouterProvider router={router} />;
 }
