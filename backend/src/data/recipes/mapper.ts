@@ -9,6 +9,7 @@ export const RecipeMapper: Mapper<Recipe, RecipeEntity> = class {
       recipeId: d.recipe_id,
       name: d.name,
       steps: JSON.parse(d.steps),
+      image: d.image
     };
   }
 
@@ -17,6 +18,7 @@ export const RecipeMapper: Mapper<Recipe, RecipeEntity> = class {
       recipe_id: d.recipeId,
       name: d.name,
       steps: JSON.stringify(d.steps),
+      image: d.image
     };
   }
 };
