@@ -1,70 +1,67 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Modal from "../elements/modal";
-import PageHeader from "../elements/pageHeader";
 
-const SignUp = (): JSX.Element => {
-  const signUpSucc = () => {
-    console.log("signUp");
+import PageHeader from "../elements/pageHeader";
+import Container from "../elements/layout/container";
+import RedSolidButton from "../elements/buttons/red-solid-button";
+
+interface IProps {}
+
+const SignUpPage: React.FC<IProps> = () => {
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+
+  const changeToLogin = () => {
+    navigate("../login");
   };
 
+  const handleUsernameChange = (event: any) => {
+    setUsername(event.target.value);
+  };
+
+  const handleSubmit = () => {};
+
   return (
-    <>
-      <PageHeader pageName="Sign Up" backAddr="/" />
-      <div className="App-header flex flex-col items-center pt-52">
-        <SignUpForm signUpSucc={signUpSucc} />
-      </div>
-    </>
+    <Container>
+      <PageHeader backAddr="..">Sign Up</PageHeader>
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col content-center items-center pt-52"
+      >
+        <div className="mb-4 w-3/4">
+          <label
+            htmlFor="username"
+            className="block text-gray-700 text-sm font-bold mb-2"
+          >
+            Username
+          </label>
+          <input
+            type="text"
+            id="username"
+            placeholder="Username"
+            name="username"
+            value={username}
+            onChange={handleUsernameChange}
+            className="border rounded-md py-2 px-3 w-full text-gray-700 text-sm"
+            required
+          />
+        </div>
+
+        <div className="pt-40">
+          <RedSolidButton onClick={handleSubmit}>Sign Up</RedSolidButton>
+          <div className="flex justify-center mt-4">
+            <p className="text-gray-600 text-sm">Already have an account?</p>
+            <a
+              className="text-red-400 ml-2 font-bold text-sm"
+              onClick={changeToLogin}
+            >
+              Login
+            </a>
+          </div>
+        </div>
+      </form>
+    </Container>
   );
 };
 
-interface SignUpFormProps {
-  signUpSucc: () => void;
-}
-
-function SignUpForm(props: SignUpFormProps): JSX.Element {
-  const navigate = useNavigate();
-
-  const handleSignUp = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (username != "") {
-      props.signUpSucc();
-      console.log(username);
-      navigate("/userHome");
-    } else {
-      setShowModal(true);
-      // alert("Invalid Login");
-    }
-  };
-
-  const [username, setUsername] = useState("");
-  const [showModal, setShowModal] = useState(false);
-
-  return (
-    <form className="" onSubmit={handleSignUp}>
-      <div className="pb-44">
-        <div className="flex text-gray-400">Username</div>
-        <div>
-          <input
-            name="username"
-            className="border border-gray-400 rounded-md relative w-full h-10"
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-      </div>
-
-      <div className="py-2">
-        <Modal
-          buttonTitle="SignUp"
-          buttonStyle="box-border relative w-56 h-10 bg-red-400 text-white text-center rounded-full shadow"
-          bodyText="Uh-Oh! This username already exists in our database please try again."
-          showModal={showModal}
-          setShowModal={setShowModal}
-          event={handleSignUp}
-        />
-      </div>
-    </form>
-  );
-}
-
-export default SignUp;
+export default SignUpPage;
