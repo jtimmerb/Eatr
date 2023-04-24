@@ -5,71 +5,64 @@ import { useNavigate } from "react-router-dom";
 import Modal from "../elements/modal";
 import PageHeader from "../elements/pageHeader";
 
-const Login = (): JSX.Element => {
-  const navigate = useNavigate();
-  const loginSucc = () => {
-    console.log("login");
-  };
 
-  return (
-    <>
-      <PageHeader pageName="Login" backAddr="/" />
-      <div className="App-header flex flex-col items-center pt-52">
-        <LoginForm loginSucc={loginSucc} />
-      </div>
-    </>
-  );
-};
+import RedSolidButton from "../elements/buttons/red-solid-button";
 
-interface LoginFormProps {
-  loginSucc: () => void;
+interface IProps {
+
 }
 
-function LoginForm(props: LoginFormProps): JSX.Element {
-  const dispatch = useDispatch();
+const LoginPage: React.FC<IProps> = () => {
+  const [username, setUsername] = useState('');
+
+  const [loginStatus, setLoginStatus] = useState(false);
   const navigate = useNavigate();
-  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (username != "") {
-      props.loginSucc();
-      console.log(username);
-      dispatch(updateName(username));
-      //todo update id and liked recipes
-      navigate("/userHome");
-    } else {
-      setShowModal(true);
-      // alert("Invalid Login");
-    }
+
+  const changeToSignUp = () => {
+    navigate('../signup');
   };
 
-  const [username, setUsername] = useState("");
-  const [showModal, setShowModal] = useState(false);
+  const handleUsernameChange = (event: any) => {
+    setUsername(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    
+  };
 
   return (
-    <form className="" onSubmit={handleLogin}>
-      <div className="pb-44">
-        <div className="flex text-gray-400">Username</div>
-        <div>
-          <input
-            name="username"
-            className="border border-gray-400 rounded-md relative w-full h-10"
-            onChange={(e) => setUsername(e.target.value)}
-          />
+    <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <h1 className="text-center text-3xl font-extrabold text-gray-900 mb-8">Login</h1>
+        <div className="mt-6">
+          <form onSubmit={handleSubmit} className="">
+            <div className="mb-4">
+              <label htmlFor="username" className="block text-gray-700 text-sm font-bold mb-2">
+                Username
+              </label>
+              <input
+                type="text"
+                id="username"
+                placeholder="Username"
+                name="username"
+                value={username}
+                onChange={handleUsernameChange}
+                className="border rounded-md py-2 px-3 w-full text-gray-700 focus:outline-none focus:ring-1"
+                required
+              />
+            </div>
+            <RedSolidButton onClick={handleSubmit}>Login</RedSolidButton>
+            <div className="flex justify-center mt-4">
+              <p className="text-gray-600">Don't have an account?</p>
+              <a className="text-red-400 ml-2 font-bold hover:underline" onClick={changeToSignUp}>
+                Sign up
+              </a>
+            </div>
+          </form>
         </div>
       </div>
-
-      <div className="py-2">
-        <Modal
-          buttonTitle="Login"
-          buttonStyle="box-border relative w-56 h-10 bg-red-400 text-white text-center rounded-full shadow"
-          bodyText="Uh-Oh! This username does not exist in our database. Please try again or create a new account."
-          showModal={showModal}
-          setShowModal={setShowModal}
-          event={handleLogin}
-        />
-      </div>
-    </form>
+    </div>
   );
-}
+}; 
 
-export default Login;
+export default LoginPage;
