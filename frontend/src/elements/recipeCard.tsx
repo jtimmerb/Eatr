@@ -15,7 +15,7 @@ function RecipeCard({ recipes }: { recipes: Recipe[] }) {
   };
 
   return (
-    <div>
+    <div >
       <div className="cardContainer mx-5">
         {recipes.map((character) => (
           <TinderCard

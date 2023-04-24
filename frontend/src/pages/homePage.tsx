@@ -1,7 +1,9 @@
+import React from "react";
+
 import "../index.css";
 import { useNavigate } from "react-router-dom";
 
-const Home = (): JSX.Element => {
+const Home: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogin = () => {
