@@ -14,6 +14,8 @@ import NumberInput from "../elements/input/number";
 import SelectInput from "../elements/input/select";
 import ListStep from "../elements/createRecipe/listStep";
 
+import { RootState, useAppDispatch } from "../state";
+
 const Divider: React.FC = () => <div className="h-[1px] w-full bg-gray-200" />;
 
 interface IIngredientItem {
@@ -50,11 +52,33 @@ const CreateRecipePage: React.FC = () => {
 
   const handleSubmit = () => {};
 
+  const unitOptions = [
+    { label: "Unit", value: "unit" },
+    { label: "Pound", value: "lb" },
+    { label: "Ounce", value: "oz" },
+  ];
+
   const [showOptsModal, setShowOptsModal] = useState<boolean>(false);
   const [showAddPrepModal, setShowAddPrepModal] = useState<boolean>(false);
   const [showAddIngrModal, setShowAddIngrModal] = useState<boolean>(false);
   const [recipeName, setRecipeName] = useState("");
   const [stepDescr, setStepDescr] = useState("");
+  const [ingredientName, setIngredientName] = useState("");
+  const [ingredientCount, setIngredientCount] = useState(1);
+  const [ingredientUnit, setIngredientUnit] = useState(unitOptions[0].value);
+  const { search: ingredient, items: stateItems } = useSelector(
+    (state: RootState) => state.pantry
+  );
+
+  const formValid = () => {
+    const nameValid = ingredientName !== "";
+    const countValid = ingredientCount > 0;
+    const unitValid = ingredientUnit !== "";
+
+    const validIngredient = ingredient ? !Number.isNaN(ingredient.id) : false;
+
+    return nameValid && countValid && unitValid && validIngredient;
+  };
 
   const navFindRec = () => {
     console.log("findrec");
@@ -68,7 +92,9 @@ const CreateRecipePage: React.FC = () => {
     setStepDescr(event.target.value);
   };
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+  const handleChangeIngr: React.ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
     const newItems: IIngredientItem[] = [...items];
 
     const { name, value } = event.target;
@@ -82,11 +108,21 @@ const CreateRecipePage: React.FC = () => {
     setItems(newItems);
   };
 
-  const unitOptions = [
-    { label: "Unit", value: "unit" },
-    { label: "Pound", value: "lb" },
-    { label: "Ounce", value: "oz" },
-  ];
+  const handleChangeSteps: React.ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    const newSteps: IPrepItem[] = [...steps];
+
+    const { name, value } = event.target;
+    console.log(name, value);
+
+    // Toggle checked
+    newSteps.forEach((item) => {
+      if (item.name === name) item.checked = !item.checked;
+    });
+
+    setSteps(newSteps);
+  };
 
   return (
     <>
@@ -135,7 +171,7 @@ const CreateRecipePage: React.FC = () => {
                     name={item.name}
                     checked={item.checked}
                     count={item.count}
-                    onChange={handleChange}
+                    onChange={handleChangeIngr}
                   ></ListItem>
                 </div>
                 {items.length > 1 && i < items.length - 1 ? <Divider /> : null}
@@ -163,7 +199,7 @@ const CreateRecipePage: React.FC = () => {
                     name={item.name}
                     checked={item.checked}
                     content={item.content}
-                    onChange={handleChange}
+                    onChange={handleChangeSteps}
                   ></ListStep>
                 </div>
                 {items.length > 1 && i < items.length - 1 ? <Divider /> : null}
@@ -181,19 +217,36 @@ const CreateRecipePage: React.FC = () => {
       {showAddIngrModal ? (
         <Modal title="New Item" onClose={() => setShowAddIngrModal(false)}>
           <div>
-            <TextInput label="Name" placeholder="Enter ingredient name" />
+            <TextInput
+              label="Name"
+              onChange={(event) => setIngredientName(event.target.value)}
+              placeholder="Enter ingredient name"
+              value={ingredientName}
+            />
             <div className="flex flex-row justify-around">
-              <NumberInput label="Count" placeholder="Enter count" value={1} />
+              <NumberInput
+                label="Count"
+                placeholder="Enter count"
+                value={ingredientCount}
+                onChange={(event) =>
+                  setIngredientCount(parseInt(event.target.value, 10))
+                }
+              />
               <div className="mx-2"></div>
               <SelectInput
                 label="Unit"
-                value={unitOptions[0].value}
+                value={ingredientUnit}
                 options={unitOptions}
+                onChange={(event) => setIngredientUnit(event.target.value)}
               />
             </div>
 
             <div className="w-full mt-4">
-              <RedSolidButton className="w-full" onClick={() => null}>
+              <RedSolidButton
+                className="w-full"
+                onClick={handleSubmit}
+                disabled={!formValid()}
+              >
                 Add Item
               </RedSolidButton>
             </div>
