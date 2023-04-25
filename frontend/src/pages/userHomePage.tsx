@@ -50,7 +50,7 @@ const UserHome: React.FC = () => {
 
   return (
     <>
-      <PageHeader pageName="Home" backAddr="/login" />
+      <PageHeader backAddr="/login">Home</PageHeader>
       <Container className="mt-4">
         {/* Discover section */}
         <div className="mt-6 mb-5">

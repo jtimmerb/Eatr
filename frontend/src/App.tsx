@@ -26,6 +26,19 @@ const router = createBrowserRouter([
     element: <SignUpPage />,
     errorElement: <ErrorPage />,
   },
+<<<<<<< HEAD
+=======
+  {
+    path: "home",
+    element: <UserHome />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "pantry",
+    element: <UserPantryPage />,
+    errorElement: <ErrorPage />,
+  },
+>>>>>>> 675b6bc (create both pantry modals for creation and options (#21))
 ]);
 
 export default function App() {
