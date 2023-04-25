@@ -7,6 +7,12 @@ import PageHeader from "../elements/pageHeader";
 import Card from "../elements/layout/card";
 import Container from "../elements/layout/container";
 import ListItem from "../elements/pantry/listItem";
+import RedSolidButton from "../elements/buttons/red-solid-button";
+import Modal from "../elements/layout/modal";
+import TextInput from "../elements/input/text";
+import NumberInput from "../elements/input/number";
+import SelectInput from "../elements/input/select";
+import EllipsisIcon from "../images/ellipsisIcon";
 
 const Divider: React.FC = () => <div className="h-[1px] w-full bg-gray-200" />;
 
@@ -27,6 +33,9 @@ const UserRecipePage: React.FC = () => {
     { name: "pasta", count: 2, checked: true },
   ]);
 
+  const [showOptsModal, setShowOptsModal] = useState<boolean>(false);
+  const [showAddModal, setShowAddModal] = useState<boolean>(false);
+
   const navFindRec = () => {
     console.log("findrec");
   };
@@ -45,9 +54,24 @@ const UserRecipePage: React.FC = () => {
     setItems(newItems);
   };
 
+  const unitOptions = [
+    { label: "Unit", value: "unit" },
+    { label: "Pound", value: "lb" },
+    { label: "Ounce", value: "oz" },
+  ];
+
   return (
     <>
-      <PageHeader pageName="My Pantry" backAddr="/userhome" />
+      <PageHeader
+        backAddr="/home"
+        secondaryIcon={
+          <button onClick={() => setShowOptsModal(true)}>
+            <EllipsisIcon className="w-6 h-6" />
+          </button>
+        }
+      >
+        My Pantry
+      </PageHeader>
 
       <Container className="mt-4">
         <Card>
@@ -66,7 +90,49 @@ const UserRecipePage: React.FC = () => {
             </>
           ))}
         </Card>
+
+        <div className="w-full mt-8">
+          <RedSolidButton
+            className="w-full"
+            onClick={() => setShowAddModal(true)}
+          >
+            Add Item
+          </RedSolidButton>
+        </div>
       </Container>
+
+      {showAddModal ? (
+        <Modal title="New Item" onClose={() => setShowAddModal(false)}>
+          <div>
+            <TextInput label="Name" placeholder="Enter ingredient name" />
+            <div className="flex flex-row justify-around">
+              <NumberInput label="Count" placeholder="Enter count" value={1} />
+              <div className="mx-2"></div>
+              <SelectInput
+                label="Unit"
+                value={unitOptions[0].value}
+                options={unitOptions}
+              />
+            </div>
+
+            <div className="w-full mt-4">
+              <RedSolidButton className="w-full" onClick={() => null}>
+                Add Item
+              </RedSolidButton>
+            </div>
+          </div>
+        </Modal>
+      ) : null}
+
+      {showOptsModal ? (
+        <Modal title="Options" onClose={() => setShowOptsModal(false)}>
+          <div className="w-full mt-4">
+            <RedSolidButton className="w-full" onClick={() => null}>
+              Delete Checked Items
+            </RedSolidButton>
+          </div>
+        </Modal>
+      ) : null}
     </>
   );
 };
