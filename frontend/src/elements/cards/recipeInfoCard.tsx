@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 
 import InfoSection from "./infoSection";
-import { Recipe } from "../../api/recipe";
+import { Recipe, IngredientPortion } from "../../api/recipe";
 import IconButton from "../buttons/iconButtons";
 import ChevronDown from "../icons/chevronDown";
+import { Ingredient } from "../../api/pantry";
 
 
 // Divider (1px tall horizontal line)
@@ -44,9 +45,10 @@ const swipePower = (offset: number, velocity: number) => {
 interface IProps {
   name?: string;
   recipe: Recipe;
+  ingredients?: IngredientPortion[];
 }
 
-const RecipeInfoCard: React.FC<IProps> = ({ recipe }) => {
+const RecipeInfoCard: React.FC<IProps> = ({ recipe , ingredients = []}) => {
   const [open, setOpen] = useState<boolean>(false);
   const toggle = () => setOpen(!open);
 
@@ -95,7 +97,7 @@ const RecipeInfoCard: React.FC<IProps> = ({ recipe }) => {
 
         <div className="flex flex-col space-y-3 overflow-hidden px-1">
           <div className="flex flex-col space-y-2 py-2"></div>
-          <InfoSection ingredients={[]} steps={recipe.steps}/>
+          <InfoSection ingredients={ingredients} recipe={recipe}/>
         </div>
       </motion.div>
     </motion.div>

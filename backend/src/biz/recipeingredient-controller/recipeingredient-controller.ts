@@ -4,6 +4,7 @@ import {Ingredient} from '../../data/ingredient/entity';
 import RecipeIngredientRepo from '../../data/recipe-ingredient/repo';
 import RecipeController from '../recipe-controller/recipe-controller';
 import IngredientController from '../ingredient-controller/ingredient-controller';
+import {IngredientPortion, RecipeDetails} from './recipeDetails';
 
 export default class RecipeIngredientController {
   private repo: RecipeIngredientRepo;
@@ -70,7 +71,7 @@ export default class RecipeIngredientController {
     return recipes;
   };
 
-  public getRecipeIngredient = async (recipeID: number): Promise<RecipeIngredient[]> => {
+  public getRecipeDetails = async (recipeID: number): Promise<RecipeDetails> => {
     const recipe: Recipe = {
       recipeId: recipeID,
       name: '',
@@ -78,6 +79,15 @@ export default class RecipeIngredientController {
       image: '',
     };
     const recipeIngredients: RecipeIngredient[] = await this.repo.getByRecipeID(recipe);
-    return recipeIngredients;
+
+    const recipeDetails: IngredientPortion[] = [];
+
+    for (const recipeIng of recipeIngredients) {
+      const ingredient = await this.ingredientController.getIngredient(recipeIng.ingredientId);
+
+      recipeDetails.push({name: ingredient.name, amount: recipeIng.ingredientAmount});
+    }
+
+    return {ingredients: recipeDetails};
   };
 }

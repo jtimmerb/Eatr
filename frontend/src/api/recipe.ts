@@ -1,8 +1,19 @@
+import { Ingredient } from "./pantry";
+
 export interface Recipe {
   recipeId: number;
   name: string;
   steps: string[];
   image: string;
+}
+
+export interface IngredientPortion {
+  name: string;
+  amount: string;
+}
+
+export interface RecipeDetails {
+  ingredients: IngredientPortion[];
 }
 
 export type ListRecipesResponse = Recipe[];
@@ -18,3 +29,10 @@ export interface CreateUserRecipeRequest {
 }
 
 export interface CreateUserRecipeResponse extends UserRecipe {}
+
+export interface RecipeDetails {
+  recipe: Recipe;
+  details: RecipeDetails;
+}
+
+export type GetRecipeDetails = RecipeDetails;

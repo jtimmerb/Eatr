@@ -77,10 +77,10 @@ export default class RecipeGroup extends RoutesGroup {
     const handler: RequestHandler = async (req, res, next) => {
       const reqRecipeId = parseInt(req.params.recipeId);
 
-      const db_recipe = await this.recipeController.getRecipe(reqRecipeId);
-      const db_recipeIngredients = await this.recipeIngredientController.getRecipeIngredient(db_recipe.recipeId);
+      const recipe = await this.recipeController.getRecipe(reqRecipeId);
+      const details = await this.recipeIngredientController.getRecipeDetails(recipe.recipeId);
 
-      const response = {db_recipe, db_recipeIngredients};
+      const response = {recipe, details};
 
       res.send(response);
     };
