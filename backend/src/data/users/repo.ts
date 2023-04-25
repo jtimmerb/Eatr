@@ -2,6 +2,7 @@ import pg from 'pg';
 import {User} from './entity';
 import {Repo} from '..';
 import {UserMapper as Mapper} from './mapper';
+import NotFound from '../../utility/error/notFound';
 
 /** This Interface extends the base Repo and implement new methods uniqe to User Entity */
 type InterfaceUserRepo = Repo<User>;
@@ -58,16 +59,19 @@ export default class UserRepo implements InterfaceUserRepo {
   }
 
   /** Get user by userID */
-  public async get(user: User): Promise<User> {
-    const query = `SELECT * FROM users WHERE user_id=${user.userId}`;
-    const result = await this.psql.query(query);
+  public async getById(userId: number): Promise<User> {
+    const query = 'SELECT * FROM users WHERE user_id=$1';
+    const result = await this.psql.query(query, [userId]);
+    // Throw error if user is not found
+    if (result.rowCount === 0) throw new NotFound('' + userId, 'userId');
+
     return Mapper.fromDB(result.rows[0]);
   }
 
-  public async getbyName(user: User): Promise<User[]> {
-    const query = `SELECT * FROM users WHERE name=${user.name}`;
-    const result = await this.psql.query(query);
-    return result.rows.map((row) => Mapper.fromDB(row));
+  public async getbyName(name: string): Promise<User[]> {
+    const query = 'SELECT * FROM users WHERE name=$1';
+    const result = await this.psql.query(query, [name]);
+    return result.rows.map(row => Mapper.fromDB(row));
   }
 
   async getUsersTable() {
