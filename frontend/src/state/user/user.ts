@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-import { add as addError } from "../errors/errors";
+import { add as addError, addAxios } from "../errors/errors";
 import {
   CreateUserResponse,
   CreateUserRequest,
@@ -14,7 +14,6 @@ export interface State {
   name?: string;
   likedRecipes: [];
   pending: boolean;
-  error?: string;
 }
 
 // API calls
@@ -41,13 +40,7 @@ export const login = createAsyncThunk(
       return user;
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        dispatch(
-          addError({
-            message: err.response?.data.message
-              ? err.response?.data.message
-              : err.message,
-          })
-        );
+        dispatch(addAxios(err));
       }
       throw err;
     }
@@ -66,13 +59,7 @@ export const signup = createAsyncThunk(
       return response.data;
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        dispatch(
-          addError({
-            message: err.response?.data.message
-              ? err.response?.data.message
-              : err.message,
-          })
-        );
+        dispatch(addAxios(err));
       }
       throw err;
     }
@@ -101,6 +88,7 @@ export const userSlice = createSlice({
     builder.addCase(login.fulfilled, (state, { payload }) => {
       state.name = payload.name;
       state.userId = payload.userId;
+      state.pending = false;
     });
     builder.addCase(login.pending, (state) => {
       state.pending = true;
@@ -118,17 +106,11 @@ export const userSlice = createSlice({
       state.pending = true;
     });
     builder.addCase(signup.rejected, (state, action) => {
-      if (action.payload) state.error = action.payload as string;
-      else state.error = action.error.message;
-
       state.pending = false;
     });
   },
 });
 
 export const { updateName, updateRecipes } = userSlice.actions;
-
-export const selectName = (state: any) => state.user.userName;
-export const selectId = (state: any) => state.user.userId;
 
 export default userSlice.reducer;

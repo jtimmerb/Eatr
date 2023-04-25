@@ -32,7 +32,9 @@ const SelectInput: React.FC<IProps> = (props) => {
         className="border bg-white rounded-md py-2 px-3 w-full text-gray-700 focus:outline-none focus:ring-1"
       >
         {options.map((option) => (
-          <option value={option.value}>{option.label}</option>
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
         ))}
       </select>
     </div>

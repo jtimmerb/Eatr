@@ -20,10 +20,12 @@ const Router: React.FC = () => {
 
   const { userId } = useSelector((state: RootState) => state.user);
 
-  console.log(location.pathname);
   useEffect(() => {
-    if (userId === undefined && !NO_USER_PATHS.includes(location.pathname))
-      navigate("/");
+    if (!NO_USER_PATHS.includes(location.pathname)) {
+      if (userId === undefined) navigate("/");
+    } else {
+      if (userId !== undefined) navigate("/home");
+    }
   }, [location.pathname]);
 
   return (
