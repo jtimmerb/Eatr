@@ -50,13 +50,13 @@ export default class UserGroup extends RoutesGroup {
     this.getRouter().delete('/:userId', this.deleteUserHandler());
 
     // add recipe to user's recipe list
-    this.getRouter().post('/recipes/:userId', this.addUserRecipeHandler());
+    this.getRouter().post('/:userId/recipes/', this.addUserRecipeHandler());
 
     // get list of user's recipes
-    this.getRouter().get('/recipes/:userId', this.getUserRecipesHandler());
+    this.getRouter().get('/:userId/recipes/', this.getUserRecipesHandler());
 
     // remove a recipe from user's liked recipes
-    this.getRouter().delete('/recipes/:userId/:recipeId', this.deleteUserRecipeHandler());
+    this.getRouter().delete('/:userId/recipes//:recipeId', this.deleteUserRecipeHandler());
 
     // add ingredient to user's pantry
     this.getRouter().post('/:userId/ingredients', this.addUserPantryHandler());

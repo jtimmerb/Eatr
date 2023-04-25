@@ -25,10 +25,10 @@ export default class RecipeIngredientController {
     const returnRecipeIngredient: RecipeIngredient[] = [];
 
     for (let i = 0; i < newRecipeIngredients.length; i++) {
-        const item = await this.repo.create(newRecipeIngredients[i]);
-        returnRecipeIngredient.push(item);
-      }
-      return returnRecipeIngredient;
+      const item = await this.repo.create(newRecipeIngredients[i]);
+      returnRecipeIngredient.push(item);
+    }
+    return returnRecipeIngredient;
   };
 
   public deleteRecipe = async (recipeID: number): Promise<void> => {
@@ -36,9 +36,9 @@ export default class RecipeIngredientController {
       recipeIngredientMembershipId: 0,
       recipeId: recipeID,
       ingredientId: 0,
-      ingredientAmount: ''
-    }
-    await this.repo.deleteByRecipeId(recipeIngredient)
+      ingredientAmount: '',
+    };
+    await this.repo.deleteByRecipeId(recipeIngredient);
   };
 
   public updateRecipe = async (newRecipeIngredients: RecipeIngredient[]): Promise<void> => {
@@ -47,28 +47,27 @@ export default class RecipeIngredientController {
     });
   };
 
-  public getFiveRandomRecipes = async (ingredientFilter: number[]): Promise<Recipe[]> => {
-    const ingredient: Ingredient = {
-      ingredientId: ingredientFilter[0],
-      name: '',
-      servingSize: '',
-      calories: 0,
-      proteins: 0,
-      carbohydrates: 0,
-      fats: 0,
-    };
-    const receivedRecipeIngredient = await this.repo.getByIngredientID(ingredient);
-    const randomNums: number[] = [];
-    const randomRecipes: Recipe[] = [];
-
-    for (let i = 0; i < receivedRecipeIngredient.length; i++) {
-      const randomInt = Math.floor(Math.random() * (receivedRecipeIngredient.length - 1));
-      if (randomNums.includes(randomInt) == false && randomRecipes.length < 5) {
-        randomNums.push(randomInt);
-        randomRecipes.push(await this.recipeController.getRecipe(receivedRecipeIngredient[randomInt].recipeId));
-      }
+  public getRecipesByIngredients = async (ingredientIDs: number[]): Promise<Recipe[]> => {
+    // Fetch all recipe ingredients
+    let recipeIngredients: RecipeIngredient[] = [];
+    for (const ingredientID of ingredientIDs) {
+      recipeIngredients.push(...(await this.repo.getByIngredientID(ingredientID)));
     }
-    return randomRecipes;
+
+    // Filter for unique recipes
+    const uniq = new Set<number>();
+    recipeIngredients = recipeIngredients.filter(ri => {
+      if (uniq.has(ri.recipeId)) return false;
+      uniq.add(ri.recipeId);
+      return true;
+    });
+
+    const recipes: Recipe[] = [];
+
+    for (const ri of recipeIngredients) {
+      recipes.push(await this.recipeController.getRecipe(ri.recipeId));
+    }
+    return recipes;
   };
 
   public getRecipeIngredient = async (recipeID: number): Promise<RecipeIngredient[]> => {
@@ -76,7 +75,7 @@ export default class RecipeIngredientController {
       recipeId: recipeID,
       name: '',
       steps: [],
-      image: ''
+      image: '',
     };
     const recipeIngredients: RecipeIngredient[] = await this.repo.getByRecipeID(recipe);
     return recipeIngredients;
