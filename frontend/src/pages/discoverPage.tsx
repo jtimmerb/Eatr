@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -11,66 +11,126 @@ import PageHeader from "../elements/pageHeader";
 import EllipsisIcon from "../images/ellipsisIcon";
 import RedSolidButton from "../elements/buttons/red-solid-button";
 import Modal from "../elements/layout/modal";
+import { RootState, useAppDispatch } from "../state";
+import {
+  listRecipes,
+  saveRecipe,
+  addSwipedID,
+  resetSwiped,
+} from "../state/recipes/recipes";
+import { listItems } from "../state/pantry/pantry";
 
-const recipe: Recipe = {
-  recipeId: 0,
-  name: "Chicken Parm",
-  steps: ["step1", "step2"],
-  image: "https://thestayathomechef.com/wp-content/uploads/2022/08/Best-Chicken-Parmesan-4.jpg",
-};
-
-const pop = (array: string[]): string[] =>
+const pop = (array: Recipe[]): Recipe[] =>
   array.filter((_, index) => {
     return index < array.length - 1;
   });
 
-
-
 const DiscoverPage: React.FC = () => {
-  const [stack, setStack] = useState<Recipe[]>([recipe]);
+  const [stack, setStack] = useState<Recipe[]>([]);
   const [liked, setLiked] = useState<boolean | undefined>(undefined);
   const [showOptsModal, setShowOptsModal] = useState<boolean>(false);
 
+  const curRecipeId = stack.length ? stack[stack.length - 1].recipeId : null;
+
+  const dispatch = useAppDispatch();
+
+  const { items } = useSelector((state: RootState) => state.pantry);
+  const { recipes, swipedIDs } = useSelector(
+    (state: RootState) => state.recipes
+  );
+
+  // Fetch user ingredients
+  useEffect(() => {
+    dispatch(listItems({}));
+
+    // TODO: Disable this when not debugging
+    dispatch(resetSwiped());
+  }, []);
+
+  // Fetch recipes
+  useEffect(() => {
+    if (items.length)
+      dispatch(listRecipes({ ingredientIDs: items.map((item) => item.id) }));
+  }, [items]);
+
+  // Filter recipes
+  useEffect(() => {
+    setStack(recipes.filter((recipe) => !swipedIDs.includes(recipe.recipeId)));
+  }, [recipes, swipedIDs]);
 
   // Handle swipe
   const onChange = (like: boolean) => {
     setLiked(like);
   };
 
-  const outOfRecipes = stack.length === 0 //&& !partyMovies.pending;
+  // Handle a swipe
+  useEffect(() => {
+    if (liked !== undefined && curRecipeId) {
+      setStack(pop(stack)); // Change redux state
+      if (liked) {
+        dispatch(saveRecipe({ recipeId: curRecipeId }));
+      }
+      dispatch(addSwipedID(curRecipeId));
+    }
+  }, [liked]);
+  useEffect(() => {
+    setLiked(undefined);
+  }, [stack]);
+
+  const outOfRecipes = stack.length === 0; //&& !partyMovies.pending;
+
+  const Head = () => (
+    <PageHeader
+      backAddr="/home"
+      className="pb-8"
+      secondaryIcon={
+        <button onClick={() => setShowOptsModal(true)}>
+          <EllipsisIcon className="w-6 h-6" />
+        </button>
+      }
+    >
+      Discovery
+    </PageHeader>
+  );
 
   if (outOfRecipes)
     return (
-      <div className="flex flex-col align-center justify-center w-full h-full">
-        <FadeOut>
-          <p className="text-gray-600 text-center">No more recipes to swipe.</p>
-        </FadeOut>
-      </div>
+      <>
+        <Head />
+        <Container>
+          <div className="flex flex-col align-center justify-center w-full h-full">
+            <FadeOut>
+              <p className="text-gray-600 text-center">
+                No more recipes to swipe.
+              </p>
+            </FadeOut>
+          </div>
+        </Container>
+      </>
     );
-    
-    const queue = stack.slice(stack.length - 11, stack.length);
- 
+
+  const queue = stack.slice(stack.length - 11, stack.length);
+
   return (
     <div>
-      <PageHeader
-        backAddr="/home"
-        className="pb-8"
-        secondaryIcon={
-          <button onClick={() => setShowOptsModal(true)}>
-            <EllipsisIcon className="w-6 h-6" />
-          </button>
-        }
-      >
-        Discovery
-      </PageHeader>
+      <Head />
       <Container>
         <div className="flex flex-col space-y-8 w-full h-full">
           <div className="relative h-[70vh]">
             <AnimatePresence>
               {queue.map((r) => {
-                const isActive = true;
+                const isActive = r.recipeId === curRecipeId;
 
-                return <RecipeCard key={r} recipe={r} active={isActive} />;
+                return (
+                  <RecipeCard
+                    key={r.recipeId}
+                    liked={isActive ? liked : undefined}
+                    recipe={r}
+                    hidden={!isActive}
+                    active={isActive}
+                    onChange={onChange}
+                  />
+                );
               })}
             </AnimatePresence>
           </div>

@@ -8,6 +8,7 @@ import {Recipe} from '../../data/recipes/entity';
 import {RecipeIngredient, RecipeIngredientQuery} from '../../data/recipe-ingredient/entity';
 import ErrorHandler from '../../utility/error/errorHandler';
 import {createRecipeSchema, updateRecipeSchema} from '../schema/recipe-schema';
+import BadRequest from '../../utility/error/badRequest';
 
 export default class RecipeGroup extends RoutesGroup {
   private recipeController: RecipeController;
@@ -27,7 +28,7 @@ export default class RecipeGroup extends RoutesGroup {
     this.getRouter().get('/:recipeId', this.getRecipeHandler());
 
     // get random recipe endpoint
-    this.getRouter().get('/', this.getRandomRecipesHandler());
+    this.getRouter().get('/', this.getRecipesHandler());
 
     // delete recipe endpoint
     this.getRouter().delete('/:recipeId', this.deleteRecipeHandler());
@@ -65,7 +66,7 @@ export default class RecipeGroup extends RoutesGroup {
       );
 
       const db_recipeIngredient = await this.recipeIngredientController.createRecipeIngredient(recipeIngredientArray);
-      const response = {db_recipe, db_recipeIngredient};
+      const response = {recipe: db_recipe, recipeIngriedents: db_recipeIngredient};
 
       res.send(response);
     };
@@ -86,11 +87,15 @@ export default class RecipeGroup extends RoutesGroup {
     return ErrorHandler.errorWrapper(handler);
   }
 
-  private getRandomRecipesHandler() {
+  private getRecipesHandler() {
     const handler: RequestHandler = async (req, res, next) => {
-      const filterIngredients = req.body.filterIngredients;
+      const {ingredients} = req.query as {[key: string]: string | undefined};
+      const filterIngredients = ingredients?.split(',').map(ing => parseInt(ing, 10));
 
-      const recipes: Recipe[] = await this.recipeIngredientController.getFiveRandomRecipes(filterIngredients);
+      if (!filterIngredients || !ingredients)
+        throw new BadRequest('must specificy a list of ingredients to filter by.');
+
+      const recipes: Recipe[] = await this.recipeIngredientController.getRecipesByIngredients(filterIngredients);
 
       res.send(recipes);
     };

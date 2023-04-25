@@ -1,0 +1,82 @@
+[
+  {
+    "name": "onions",
+    "servingSize": "cup",
+    "calories": 30,
+    "proteins": 5,
+    "carbohydrates": 4,
+    "fats": 0
+  },
+  {
+    "name": "salt",
+    "servingSize": "cup",
+    "calories": 30,
+    "proteins": 5,
+    "carbohydrates": 4,
+    "fats": 0
+  },
+  {
+    "name": "pepper",
+    "servingSize": "cup",
+    "calories": 30,
+    "proteins": 5,
+    "carbohydrates": 4,
+    "fats": 0
+  },
+  {
+    "name": "couscous",
+    "servingSize": "cup",
+    "calories": 30,
+    "proteins": 5,
+    "carbohydrates": 4,
+    "fats": 0
+  },
+  {
+    "name": "noodles",
+    "servingSize": "cup",
+    "calories": 30,
+    "proteins": 5,
+    "carbohydrates": 4,
+    "fats": 0
+  },
+  {
+    "name": "rice",
+    "servingSize": "cup",
+    "calories": 30,
+    "proteins": 5,
+    "carbohydrates": 4,
+    "fats": 0
+  },
+  {
+    "name": "chicken thighs",
+    "servingSize": "cup",
+    "calories": 30,
+    "proteins": 5,
+    "carbohydrates": 4,
+    "fats": 0
+  },
+  {
+    "name": "cabbage",
+    "servingSize": "cup",
+    "calories": 30,
+    "proteins": 5,
+    "carbohydrates": 4,
+    "fats": 0
+  },
+  {
+    "name": "potatoes",
+    "servingSize": "cup",
+    "calories": 30,
+    "proteins": 5,
+    "carbohydrates": 4,
+    "fats": 0
+  },
+  {
+    "name": "tomatoes",
+    "servingSize": "cup",
+    "calories": 30,
+    "proteins": 5,
+    "carbohydrates": 4,
+    "fats": 0
+  }
+]

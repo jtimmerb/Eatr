@@ -35,6 +35,7 @@ const Router: React.FC = () => {
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/home" element={<UserHomePage />} />
       <Route path="/pantry" element={<UserPantryPage />} />
+      <Route path="/discover" element={<DiscoverPage />} />
       <Route path="/*" element={<ErrorPage />} />
     </Routes>
   );

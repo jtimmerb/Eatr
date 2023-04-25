@@ -5,7 +5,6 @@ import { useWindowSize, useWindowWidth } from "@react-hook/window-size";
 import { Recipe } from "../../../api/recipe/recipe";
 import RecipeInfoCard from "./recipeInfoCard";
 
-
 // Swiping threshold
 const threshold = 0.275;
 const colorThreshold = 10;
@@ -16,7 +15,7 @@ interface IProps {
   liked?: boolean;
   active?: boolean;
   hidden?: boolean;
-  recipe: Recipe
+  recipe: Recipe;
 }
 
 const RecipeCard: React.FC<IProps> = (props) => {
@@ -97,7 +96,7 @@ const RecipeCard: React.FC<IProps> = (props) => {
             <p className="absolute bottom-0 inset-x-6 z-10 h-32 text-gray-100 text-3xl font-bold shadow-lg">
               {recipe.name}
             </p>
-            
+
             <div className="absolute bottom-0 inset-x-0 z-0 h-52 from-black bg-gradient-to-t" />
           </div>
         </div>

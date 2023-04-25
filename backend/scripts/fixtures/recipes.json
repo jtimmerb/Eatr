@@ -1,0 +1,136 @@
+[
+  {
+    "recipe": {
+      "recipeId": 0,
+      "name": "Pad Thai",
+      "steps": ["1. Heat the oil.", "2. Saute the onions.", "3.Cook the noodles."],
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Phat_Thai_kung_Chang_Khien_street_stall.jpg/1200px-Phat_Thai_kung_Chang_Khien_street_stall.jpg"
+    },
+    "recipeIngredients": [
+      {
+        "ingredientName": "noodles",
+        "ingredientAmount": "300 grams"
+      },
+      {
+        "ingredientName": "tomatoes",
+        "ingredientAmount": "1 cup"
+      },
+      {
+        "ingredientName": "rice",
+        "ingredientAmount": "3 quarter"
+      },
+      {
+        "ingredientName": "salt",
+        "ingredientAmount": "2 tbsp"
+      },
+      {
+        "ingredientName": "cabbage",
+        "ingredientAmount": "3 ounces"
+      }
+    ]
+  },
+  {
+    "recipe": {
+      "recipeId": 0,
+      "name": "Pasta",
+      "steps": ["1. Heat the oil.", "2. Boil the pasta.", "3.Cook the pasta."],
+      "image": ""
+    },
+    "recipeIngredients": [
+      {
+        "ingredientName": "noodles",
+        "ingredientAmount": "300 grams"
+      },
+      {
+        "ingredientName": "chicken thighs",
+        "ingredientAmount": "1 cup"
+      },
+      {
+        "ingredientName": "rice",
+        "ingredientAmount": "3 quarter"
+      },
+      {
+        "ingredientName": "salt",
+        "ingredientAmount": "2 tbsp"
+      }
+    ]
+  },
+  {
+    "recipe": {
+      "recipeId": 0,
+      "name": "Chicken Couscous",
+      "steps": ["1. Heat the oil.", "2. Boil the coucous.", "3.Cook the chicken."],
+      "image": "https://static01.nyt.com/images/2020/03/25/dining/ch-moroccan-chicken/merlin_170016399_a730fbd8-51fd-4700-b061-3b3e573076e6-articleLarge.jpg"
+    },
+    "recipeIngredients": [
+      {
+        "ingredientName": "noodles",
+        "ingredientAmount": "300 grams"
+      },
+      {
+        "ingredientName": "chicken thighs",
+        "ingredientAmount": "1 cup"
+      },
+      {
+        "ingredientName": "rice",
+        "ingredientAmount": "3 quarter"
+      },
+      {
+        "ingredientName": "salt",
+        "ingredientAmount": "2 tbsp"
+      }
+    ]
+  },
+  {
+    "recipe": {
+      "recipeId": 0,
+      "name": "Chicken Soup",
+      "steps": ["1. Heat the oil.", "2. Cook the chicken and the noodles.", "3. Make broth."],
+      "image": "https://tastesbetterfromscratch.com/wp-content/uploads/2017/10/Chicken-Noodle-Soup-2-500x375.jpg"
+    },
+    "recipeIngredients": [
+      {
+        "ingredientName": "noodles",
+        "ingredientAmount": "300 grams"
+      },
+      {
+        "ingredientName": "chicken thighs",
+        "ingredientAmount": "1 cup"
+      },
+      {
+        "ingredientName": "rice",
+        "ingredientAmount": "3 quarter"
+      },
+      {
+        "ingredientName": "salt",
+        "ingredientAmount": "2 tbsp"
+      }
+    ]
+  },
+  {
+    "recipe": {
+      "recipeId": 0,
+      "name": "Grilled Chicken Pasta",
+      "steps": ["1. Heat the oil.", "2. Grill the chicken.", "3.Cook the pasta."],
+      "image": "https://www.saltandlavender.com/wp-content/uploads/2017/06/grilled-chicken-pasta-salad-3.jpg"
+    },
+    "recipeIngredients": [
+      {
+        "ingredientName": "noodles",
+        "ingredientAmount": "300 grams"
+      },
+      {
+        "ingredientName": "chicken thighs",
+        "ingredientAmount": "1 cup"
+      },
+      {
+        "ingredientName": "rice",
+        "ingredientAmount": "3 quarter"
+      },
+      {
+        "ingredientName": "salt",
+        "ingredientAmount": "2 tbsp"
+      }
+    ]
+  }
+]

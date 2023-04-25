@@ -101,6 +101,7 @@ export const userSlice = createSlice({
     builder.addCase(signup.fulfilled, (state, { payload }) => {
       state.name = payload.name;
       state.userId = payload.userId;
+      state.pending = false;
     });
     builder.addCase(signup.pending, (state) => {
       state.pending = true;
