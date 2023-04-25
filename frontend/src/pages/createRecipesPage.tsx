@@ -170,7 +170,7 @@ const CreateRecipePage: React.FC = () => {
                     key={item.name}
                     name={item.name}
                     checked={item.checked}
-                    count={item.count}
+                    amount={"5"}
                     onChange={handleChangeIngr}
                   ></ListItem>
                 </div>
