@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { useSelector } from "react-redux";
-import { selectName, selectId } from "../states/userSlice";
+// import { selectName, selectId } from "../states/userSlice";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "../elements/pageHeader";
 import Card from "../elements/layout/card";
@@ -19,8 +19,9 @@ import { RootState, useAppDispatch } from "../state";
 const Divider: React.FC = () => <div className="h-[1px] w-full bg-gray-200" />;
 
 interface IIngredientItem {
+  id: number;
   name: string;
-  count: number;
+  amount: string;
   checked: boolean;
 }
 interface IPrepItem {
@@ -33,11 +34,11 @@ const CreateRecipePage: React.FC = () => {
   const navigate = useNavigate();
 
   const [items, setItems] = useState<IIngredientItem[]>([
-    { name: "tomatoes", count: 6, checked: false },
-    { name: "chicken", count: 2, checked: false },
-    { name: "broccoli", count: 4, checked: false },
-    { name: "beef", count: 1, checked: false },
-    { name: "pasta", count: 2, checked: true },
+    { id: 1, name: "tomatoes", amount: "6", checked: false },
+    { id: 2, name: "chicken", amount: "2", checked: false },
+    { id: 3, name: "broccoli", amount: "4", checked: false },
+    { id: 4, name: "beef", amount: "1", checked: false },
+    { id: 5, name: "pasta", amount: "2", checked: true },
   ]);
 
   const [steps, setSteps] = useState<IPrepItem[]>([
