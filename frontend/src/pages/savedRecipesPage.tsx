@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { selectName, selectId } from "../state/user/user";
+// import { selectName, selectId } from "../state/user/user";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "../elements/pageHeader";
 import Container from "../elements/layout/container";
