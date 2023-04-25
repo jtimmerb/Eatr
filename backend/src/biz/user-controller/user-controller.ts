@@ -1,5 +1,7 @@
 import {User} from '../../data/users/entity';
 import UserRepo from '../../data/users/repo';
+import BadRequest from '../../utility/error/badRequest';
+import NotFound from '../../utility/error/notFound';
 
 export default class UserController {
   private repo: UserRepo;
@@ -12,9 +14,11 @@ export default class UserController {
       userId: 0,
       name: userName,
     };
-    console.log('biz before create');
+
+    // Verify no users exist with this username
+    if (await this.existUserByName(userName)) throw new BadRequest('User already exists with this name');
+
     const newUser = await this.repo.create(user);
-    console.log('biz after create', newUser);
     return newUser;
   };
 
@@ -27,31 +31,13 @@ export default class UserController {
   };
 
   public getUser = async (userId: number): Promise<User> => {
-    const queryUser: User = {
-      userId: userId,
-      name: '',
-    };
-    if(await this.existUserById(userId)){
-      const user = await this.repo.get(queryUser);
-      return user;
-    }
-    else{
-      throw new Error()
-    }
+    const user = await this.repo.getById(userId);
+    return user;
   };
 
-  public getUserByName = async (userName: string): Promise<User[]> => {
-    const queryUser: User = {
-      userId: 0,
-      name: userName,
-    };
-    if(await this.existUserByName(userName)){
-      const user : User[] = await this.repo.getbyName(queryUser);
-      return user;
-    }
-    else{
-      throw new Error()
-    }
+  public getUsersByName = async (userName: string): Promise<User[]> => {
+    const users: User[] = await this.repo.getbyName(userName);
+    return users;
   };
 
   public existUserById = async (userId: number): Promise<boolean> => {
@@ -69,8 +55,6 @@ export default class UserController {
     };
     return await this.repo.existsByName(queryUser);
   };
-
-
 
   // public getUsersLikedRecipes = async (userID: number): Promise<Recipe[]> => {
   //   const userRecipe: UserRecipe = {

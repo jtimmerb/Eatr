@@ -3,7 +3,6 @@ export interface Repo<T> {
   delete(t: T): Promise<void>;
   create(t: T): Promise<T>;
   update(t: T): Promise<T>;
-  get(t: T): Promise<T>;
 }
 
 export interface Mapper<T, I> {
