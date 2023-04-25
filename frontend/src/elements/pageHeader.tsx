@@ -6,12 +6,14 @@ interface IProps {
   children: React.ReactNode;
   backAddr: string;
   secondaryIcon?: React.ReactNode;
+  className?: string
 }
 
 const PageHeader: React.FC<IProps> = ({
   children,
   secondaryIcon,
   backAddr,
+  className
 }) => {
   const navigate = useNavigate();
   const back = () => {
@@ -20,7 +22,7 @@ const PageHeader: React.FC<IProps> = ({
 
   return (
     <>
-      <div className="flex flex-row items-center justify-between mx-auto pt-10 ">
+      <div className={`flex flex-row items-center justify-between mx-auto pt-10 ${className}`}>
         <button name="backArrow" className="ml-12" type="button" onClick={back}>
           <ArrowIcon className="stroke-red-400" />
         </button>
