@@ -93,12 +93,13 @@ const RecipeCard: React.FC<IProps> = (props) => {
               style={{ opacity: greenOpacity }}
             />
             <img className="object-cover h-full w-full " src={recipe.image} />
-            <p className="absolute bottom-0 inset-x-6 z-10 h-32 text-gray-100 text-3xl font-bold shadow-lg">
+            <p className="absolute bottom-0 inset-x-6 z-10 h-28 text-gray-100 text-3xl font-bold shadow-lg">
               {recipe.name}
             </p>
 
             <div className="absolute bottom-0 inset-x-0 z-0 h-52 from-black bg-gradient-to-t" />
           </div>
+          <RecipeInfoCard recipe={recipe}/>
         </div>
       </motion.div>
     </div>
