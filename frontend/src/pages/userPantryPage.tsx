@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { useSelector } from "react-redux";
-import { selectName, selectId } from "../states/userSlice";
+import { selectName, selectId } from "../state/user/user";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "../elements/pageHeader";
 import Card from "../elements/layout/card";

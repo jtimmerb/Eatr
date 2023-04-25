@@ -1,17 +1,20 @@
 import React from "react";
-import { useRouteError } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-export default function ErrorPage() {
-  const error: any = useRouteError();
-  console.error(error);
+import Container from "../elements/layout/container";
 
+const ErrorPage: React.FC = () => {
   return (
-    <div>
-      <h1>Oops!</h1>
-      <p>Sorry, an unexpected error has occurred.</p>
+    <Container className="mt-8">
+      <h1 className="text-2xl font-bold">404</h1>
       <p>
-        <i>{error.statusText || error.message}</i>
+        Page not found.{" "}
+        <Link to="/" className="text-red-400 font-bold">
+          Return Home
+        </Link>
       </p>
-    </div>
+    </Container>
   );
-}
+};
+
+export default ErrorPage;

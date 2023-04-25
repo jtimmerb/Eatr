@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 import PageHeader from "../elements/pageHeader";
 import Container from "../elements/layout/container";
 import RedSolidButton from "../elements/buttons/red-solid-button";
+import { login } from "../state/user/user";
+import { useAppDispatch } from "../state";
 
 interface IProps {}
 
 const LoginPage: React.FC<IProps> = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
-  
+
+  const dispatch = useAppDispatch();
+
   const changeToSignUp = () => {
     navigate("../signup");
   };
@@ -20,7 +23,15 @@ const LoginPage: React.FC<IProps> = () => {
     setUsername(event.target.value);
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    dispatch(
+      login({
+        name: username,
+      })
+    )
+      .unwrap()
+      .then(() => navigate("/home"));
+  };
 
   return (
     <Container>
@@ -49,7 +60,9 @@ const LoginPage: React.FC<IProps> = () => {
         </div>
 
         <div className="pt-40">
-          <RedSolidButton onClick={handleSubmit}>Login</RedSolidButton>
+          <RedSolidButton onClick={handleSubmit} disabled={username === ""}>
+            Login
+          </RedSolidButton>
           <div className="flex justify-center mt-4">
             <p className="text-gray-600 text-sm">Don't have an account?</p>
             <a
