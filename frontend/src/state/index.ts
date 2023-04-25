@@ -3,12 +3,14 @@ import { useDispatch } from "react-redux";
 
 import errorsReducer from "./errors/errors";
 import userReducer from "./user/user";
+import pantryReducer from "./pantry/pantry";
 
 const LOCAL_STORAGE_KEY = "eatr/redux-state";
 
 const rootReducer = combineReducers({
   user: userReducer,
   errors: errorsReducer,
+  pantry: pantryReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

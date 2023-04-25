@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import HomeIcon from "../images/homeIcon";
 import SaveTab from "../images/saveTab";
 import PageSearch from "../images/searchPage";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PageHeader from "../elements/pageHeader";
 import HomeCard from "../elements/layout/homeCard";
 import RecipeDashboardCard from "../elements/layout/recipeDashboardCard";
 import ArrowIcon from "../images/arrowIcon";
 import Container from "../elements/layout/container";
+import { RootState, useAppDispatch } from "../state";
+import { useSelector } from "react-redux";
+import { listItems } from "../state/pantry/pantry";
 
 const SectionHeader: React.FC<{ children: React.ReactNode }> = (props) => (
   <p className="text-lg font-bold text-gray-900">{props.children}</p>
@@ -22,19 +25,11 @@ interface IRecipe {
 
 const UserHome: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const navFindRec = () => {
-    console.log("findrec");
-    navigate("/discover");
-  };
-  const navMyRecipes = () => {
-    console.log("myRecipes");
-    navigate("/myrecipes");
-  };
-  const navSavedRecipes = () => {
-    console.log("savedRecipes");
-    navigate("/savedrecipes");
-  };
+  const { items: pantryItems } = useSelector(
+    (state: RootState) => state.pantry
+  );
 
   const recipes: IRecipe[] = [
     {
@@ -48,13 +43,19 @@ const UserHome: React.FC = () => {
     },
   ];
 
+  useEffect(() => {
+    dispatch(listItems({}));
+  }, []);
+
   return (
     <>
       <PageHeader backAddr="/login">Home</PageHeader>
       <Container className="mt-4">
         {/* Discover section */}
         <div className="mt-6 mb-5">
-          <HomeCard title="Discover" background="floral-pattern" />
+          <Link to="/discover">
+            <HomeCard title="Discover" background="floral-pattern" />
+          </Link>
         </div>
 
         <Divider />
@@ -87,7 +88,12 @@ const UserHome: React.FC = () => {
         <div className="mt-6 mb-5">
           <SectionHeader>My Pantry</SectionHeader>
           <div className="my-2" />
-          <HomeCard title="6 Ingredients" background="food-pattern" />
+          <Link to="/pantry">
+            <HomeCard
+              title={`${pantryItems.length} Ingredients`}
+              background="food-pattern"
+            />
+          </Link>
         </div>
       </Container>
     </>

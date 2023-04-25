@@ -20,34 +20,29 @@ export default class UserPantryController {
     ingredientID: number,
     ingredientAmount: string,
   ): Promise<UserPantry> => {
-    if(await this.userController.existUserById(userID) && await this.ingredientController.existsIngredient(ingredientID)){
-      const userPantry: UserPantry = {
-        upMembershipId: 0,
-        userId: userID,
-        ingredientId: ingredientID,
-        ingredientAmount: ingredientAmount,
-      };
-      const newUserPantry = await this.repo.create(userPantry);
-      return newUserPantry;
-    }
-    else{
-      throw new Error();
-    }
+    const user = await this.userController.getUser(userID);
+    const ingredient = await this.ingredientController.getIngredient(ingredientID);
+    const userPantry: UserPantry = {
+      upMembershipId: 0,
+      userId: user.userId,
+      ingredientId: ingredient.ingredientId,
+      ingredientAmount: ingredientAmount,
+    };
+    const newUserPantry = await this.repo.create(userPantry);
+    return newUserPantry;
   };
 
   public deleteUserPantry = async (userID: number, ingredientID: number): Promise<void> => {
-    if(await this.userController.existUserById(userID) && await this.ingredientController.existsIngredient(ingredientID)){
-      const userPantry: UserPantry = {
-        upMembershipId: 0,
-        userId: userID,
-        ingredientId: ingredientID,
-        ingredientAmount: '',
-      };
-      await this.repo.deleteByUserAndIngr(userPantry);
-    }
-    else{
-      throw new Error();
-    }
+    await this.userController.getUser(userID);
+    await this.ingredientController.getIngredient(ingredientID);
+
+    const userPantry: UserPantry = {
+      upMembershipId: 0,
+      userId: userID,
+      ingredientId: ingredientID,
+      ingredientAmount: '',
+    };
+    await this.repo.deleteByUserAndIngr(userPantry);
   };
 
   public getPantryItem = async (upMembershipID: number): Promise<Ingredient> => {
@@ -76,9 +71,9 @@ export default class UserPantryController {
       const receivedUserPantryIngredients: UserPantryIngredients[] = [];
       for (let i = 0; i < receivedUserPantry.length; i++) {
         const userPantryIngredients: UserPantryIngredients = {
-          userPantry : receivedUserPantry[i],
-          ingredient: await this.ingredientController.getIngredient(receivedUserPantry[i].ingredientId)
-        }
+          userPantry: receivedUserPantry[i],
+          ingredient: await this.ingredientController.getIngredient(receivedUserPantry[i].ingredientId),
+        };
         receivedUserPantryIngredients.push(userPantryIngredients);
       }
       return receivedUserPantryIngredients;

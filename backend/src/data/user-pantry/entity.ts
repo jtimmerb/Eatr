@@ -1,4 +1,4 @@
-import { Ingredient } from "../ingredient/entity";
+import {Ingredient} from '../ingredient/entity';
 
 export interface UserPantry {
   upMembershipId: number;
@@ -15,6 +15,6 @@ export interface UserPantryEntity {
 }
 
 export interface UserPantryIngredients {
-  userPantry : UserPantry;
-  ingredient : Ingredient;
+  userPantry: UserPantry;
+  ingredient: Ingredient;
 }

@@ -18,6 +18,8 @@ export default class IngredientGroup extends RoutesGroup {
   public init(): void {
     this.getRouter().post('/', this.createIngredientHandler());
 
+    this.getRouter().get('/', this.listIngredientsHandler());
+
     this.getRouter().get('/:ingredientId', this.getIngredientHandler());
 
     this.getRouter().put('/:ingredientId', this.updateIngredientHandler());
@@ -40,6 +42,15 @@ export default class IngredientGroup extends RoutesGroup {
       const ingredientId = parseInt(req.params.ingredientId);
       const ingredient = await this.ingredientController.getIngredient(ingredientId);
       res.send(ingredient);
+    };
+    return ErrorHandler.errorWrapper(handler);
+  }
+
+  private listIngredientsHandler() {
+    const handler: RequestHandler = async (req, res, next) => {
+      const {name} = req.query as {[key: string]: string};
+      const ingredients = await this.ingredientController.getIngredientsByName(name);
+      res.send(ingredients);
     };
     return ErrorHandler.errorWrapper(handler);
   }

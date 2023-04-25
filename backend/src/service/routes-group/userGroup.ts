@@ -59,16 +59,16 @@ export default class UserGroup extends RoutesGroup {
     this.getRouter().delete('/recipes/:userId/:recipeId', this.deleteUserRecipeHandler());
 
     // add ingredient to user's pantry
-    this.getRouter().post('/ingredients/:userId', this.addUserPantryHandler());
+    this.getRouter().post('/:userId/ingredients', this.addUserPantryHandler());
 
     // get list user's pantry
-    this.getRouter().get('/ingredients/:userId', this.getUserPantryHandler());
+    this.getRouter().get('/:userId/ingredients', this.getUserPantryHandler());
 
     //update user's pantry
-    this.getRouter().put('/ingredients/:userId', this.updateUserPantryHandler());
+    this.getRouter().put('/:userId/ingredients', this.updateUserPantryHandler());
 
     // remove item from user's pantry
-    this.getRouter().delete('/ingredients/:userId/:ingredientId', this.deleteUserPantryHandler());
+    this.getRouter().delete('/:userId/ingredients/:ingredientId', this.deleteUserPantryHandler());
   }
 
   private createUserHandler() {
