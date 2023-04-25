@@ -4,7 +4,6 @@ import {Ingredient, IngredientEntity} from './entity';
 import {IngredientMapper as Mapper} from './mapper';
 import {Repo} from '..';
 
-
 type IngredientRepoInterface = Repo<Ingredient>;
 
 export default class IngredientRepo implements IngredientRepoInterface {
@@ -59,6 +58,12 @@ export default class IngredientRepo implements IngredientRepoInterface {
     const query = `SELECT * FROM ingredients WHERE ingredient_id=${ingredientEnt.ingredient_id}`;
     const result = await this.psql.query(query);
     return Mapper.fromDB(result.rows[0] as IngredientEntity);
+  }
+
+  public async listIngredients(searchQuery: string): Promise<Ingredient[]> {
+    const query = 'SELECT * FROM ingredients WHERE name=$1';
+    const result = await this.psql.query(query, [searchQuery]);
+    return result.rows.map(row => Mapper.fromDB(row));
   }
 
   async getIngredientTable() {

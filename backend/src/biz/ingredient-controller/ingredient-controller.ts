@@ -9,7 +9,7 @@ export default class IngredientController extends RepoController<IngredientRepo>
   };
 
   public deleteIngredient = async (ingredientID: number): Promise<void> => {
-    if(await this.existsIngredient(ingredientID)){
+    if (await this.existsIngredient(ingredientID)) {
       const ingredient: Ingredient = {
         ingredientId: ingredientID,
         name: '',
@@ -20,9 +20,8 @@ export default class IngredientController extends RepoController<IngredientRepo>
         fats: 0,
       };
       await this.getRepo().delete(ingredient);
-    }
-    else{
-      throw new Error()
+    } else {
+      throw new Error();
     }
   };
 
@@ -31,7 +30,7 @@ export default class IngredientController extends RepoController<IngredientRepo>
   };
 
   public getIngredient = async (ingredientID: number): Promise<Ingredient> => {
-    if(await this.existsIngredient(ingredientID)){
+    if (await this.existsIngredient(ingredientID)) {
       const ingredient: Ingredient = {
         ingredientId: ingredientID,
         name: '',
@@ -43,8 +42,7 @@ export default class IngredientController extends RepoController<IngredientRepo>
       };
       const ingredientReceived = await this.getRepo().get(ingredient);
       return ingredientReceived;
-    }
-    else{
+    } else {
       throw new Error();
     }
   };
@@ -59,6 +57,11 @@ export default class IngredientController extends RepoController<IngredientRepo>
       carbohydrates: 0,
       fats: 0,
     };
-    return this.getRepo().exists(ingredient)
+    return this.getRepo().exists(ingredient);
+  };
+
+  public listIngredients = async (query: string): Promise<Ingredient[]> => {
+    const ingredients: Ingredient[] = await this.getRepo().listIngredients(query);
+    return ingredients;
   };
 }
