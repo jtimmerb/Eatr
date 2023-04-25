@@ -6,7 +6,7 @@ import {
   CreateUserResponse,
   CreateUserRequest,
   ListUsersResponse,
-} from "api/users";
+} from "../../api/users";
 import { API_PREFIX } from "../../utils/config";
 
 export interface State {
