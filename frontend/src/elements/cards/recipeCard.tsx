@@ -5,8 +5,6 @@ import { useWindowSize, useWindowWidth } from "@react-hook/window-size";
 import { Recipe } from "../../../api/recipe/recipe";
 import RecipeInfoCard from "./recipeInfoCard";
 
-const IMAGE =
-  "https://thestayathomechef.com/wp-content/uploads/2022/08/Best-Chicken-Parmesan-4.jpg";
 
 // Swiping threshold
 const threshold = 0.275;
@@ -23,7 +21,6 @@ interface IProps {
 
 const RecipeCard: React.FC<IProps> = (props) => {
   const { onChange = () => ({}), active, liked, recipe, hidden } = props;
-
   const [key, setKey] = useState(0);
   const x = useMotionValue(0);
 
@@ -86,7 +83,7 @@ const RecipeCard: React.FC<IProps> = (props) => {
           }
         }}
       >
-        <div className="w-full h-full rounded-xl overflow-hidden duration-500 ease-in-out relative shadow-xl">
+        <div className="w-full h-full rounded-3xl overflow-hidden duration-500 ease-in-out relative shadow-lg">
           <div className="inset-0 absolute z-10 bg-indigo-200">
             <motion.div
               className="absolute bottom-0 inset-0 z-10 bg-red-500"
@@ -96,13 +93,13 @@ const RecipeCard: React.FC<IProps> = (props) => {
               className="absolute bottom-0 inset-0 z-10 bg-green-500"
               style={{ opacity: greenOpacity }}
             />
-            <img
-              className="object-cover h-full w-full "
-              src={IMAGE}
-            />
-            <div className="absolute bottom-0 inset-x-0 z-0 h-24 from-black bg-gradient-to-t" />
+            <img className="object-cover h-full w-full " src={recipe.image} />
+            <p className="absolute bottom-0 inset-x-6 z-10 h-32 text-gray-100 text-3xl font-bold shadow-lg">
+              {recipe.name}
+            </p>
+            
+            <div className="absolute bottom-0 inset-x-0 z-0 h-52 from-black bg-gradient-to-t" />
           </div>
-          
         </div>
       </motion.div>
     </div>
