@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useWindowSize, useWindowWidth } from "@react-hook/window-size";
 
+import { RootState, useAppDispatch } from "../../state";
 import { Recipe } from "../../api/recipe";
 import RecipeInfoCard from "./recipeInfoCard";
+import { getRecipeDetails, removeRecipeDetails } from "../../state/recipes/recipes";
+import { useSelector } from "react-redux";
 
 // Swiping threshold
 const threshold = 0.275;
@@ -58,6 +61,21 @@ const RecipeCard: React.FC<IProps> = (props) => {
   }, [windowSize]);
 
   // console.log(useWindowSize());
+  const dispatch = useAppDispatch()
+
+  const {recipeDetails} = useSelector((state: RootState) => state.recipes);
+
+  // Fetch Recipe Ingredients
+  useEffect(() => {
+    dispatch(getRecipeDetails({
+      recipeID: recipe.recipeId
+    }))
+  }, [])
+
+  // Delete details on unmount
+  useEffect(() => () => {
+    dispatch(removeRecipeDetails(recipe.recipeId));
+  }, [])
 
   return (
     <div key={key} className={`absolute inset-0 ${hidden ? "hidden" : ""}`}>
@@ -99,7 +117,7 @@ const RecipeCard: React.FC<IProps> = (props) => {
 
             <div className="absolute bottom-0 inset-x-0 z-0 h-52 from-black bg-gradient-to-t" />
           </div>
-          <RecipeInfoCard recipe={recipe}/>
+          <RecipeInfoCard recipe={recipe} ingredients={recipeDetails[recipe.recipeId] ? recipeDetails[recipe.recipeId].details.ingredients : undefined}/>
         </div>
       </motion.div>
     </div>
@@ -107,3 +125,4 @@ const RecipeCard: React.FC<IProps> = (props) => {
 };
 
 export default RecipeCard;
+

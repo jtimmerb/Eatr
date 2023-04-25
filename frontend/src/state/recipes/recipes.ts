@@ -6,12 +6,15 @@ import { API_PREFIX } from "../../utils/config";
 import {
   CreateUserRecipeRequest,
   CreateUserRecipeResponse,
+  GetRecipeDetails,
   ListRecipesResponse,
   Recipe,
+  RecipeDetails,
 } from "../../api/recipe";
 
 export interface State {
   recipes: Recipe[];
+  recipeDetails: { [key: number]: RecipeDetails };
   swipedIDs: number[];
   pending: boolean;
 }
@@ -26,6 +29,23 @@ export const listRecipes = createAsyncThunk(
         { params }
       );
 
+      return response.data;
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        dispatch(addAxios(err));
+      }
+      throw err;
+    }
+  }
+);
+
+export const getRecipeDetails = createAsyncThunk(
+  "recipe/getDetails",
+  async (input: { recipeID: number }, { dispatch, getState }) => {
+    try {
+      const response = await axios.get<GetRecipeDetails>(
+        `${API_PREFIX}/recipes/${input.recipeID}`
+      );
       return response.data;
     } catch (err) {
       if (axios.isAxiosError(err)) {
@@ -61,6 +81,7 @@ export const recipesSlice = createSlice({
   initialState: {
     recipes: [],
     swipedIDs: [],
+    recipeDetails: {},
     pending: false,
   } as State,
   reducers: {
@@ -72,7 +93,16 @@ export const recipesSlice = createSlice({
       state.swipedIDs = [];
       return state;
     },
+    removeRecipeDetails: (state, action: PayloadAction<number>) => {
+      delete state.recipeDetails[action.payload];
+      return state;
+    },
+    resetRecipeDetails: (state) => {
+      state.recipeDetails = {};
+      return state;
+    },
   },
+
   extraReducers: (builder) => {
     // List
     builder.addCase(listRecipes.fulfilled, (state, { payload }) => {
@@ -85,9 +115,24 @@ export const recipesSlice = createSlice({
     builder.addCase(listRecipes.rejected, (state, action) => {
       state.pending = false;
     });
+    builder.addCase(getRecipeDetails.fulfilled, (state, { payload }) => {
+      state.recipeDetails[payload.recipe.recipeId] = payload;
+      state.pending = false;
+    });
+    builder.addCase(getRecipeDetails.pending, (state) => {
+      state.pending = true;
+    });
+    builder.addCase(getRecipeDetails.rejected, (state, action) => {
+      state.pending = false;
+    });
   },
 });
 
-export const { addSwipedID, resetSwiped } = recipesSlice.actions;
+export const {
+  addSwipedID,
+  resetSwiped,
+  removeRecipeDetails,
+  resetRecipeDetails,
+} = recipesSlice.actions;
 
 export default recipesSlice.reducer;
