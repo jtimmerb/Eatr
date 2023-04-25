@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 
 import InfoSection from "./infoSection";
-import { Recipe } from "../../../api/recipe/recipe";
+import { Recipe } from "../../api/recipe";
 import IconButton from "../buttons/iconButtons";
 import ChevronDown from "../icons/chevronDown";
 
@@ -95,7 +95,7 @@ const RecipeInfoCard: React.FC<IProps> = ({ recipe }) => {
 
         <div className="flex flex-col space-y-3 overflow-hidden px-1">
           <div className="flex flex-col space-y-2 py-2"></div>
-          <InfoSection ingredients={recipe.ingredients} steps={recipe.steps}/>
+          <InfoSection ingredients={[]} steps={recipe.steps}/>
         </div>
       </motion.div>
     </motion.div>

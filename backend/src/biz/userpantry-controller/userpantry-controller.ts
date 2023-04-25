@@ -66,20 +66,17 @@ export default class UserPantryController {
       ingredientId: 0,
       ingredientAmount: '',
     };
-    if (await this.userController.existUserById(userID)) {
-      const receivedUserPantry: UserPantry[] = await this.repo.getByUserId(userPantry);
-      const receivedUserPantryIngredients: UserPantryIngredients[] = [];
-      for (let i = 0; i < receivedUserPantry.length; i++) {
-        const userPantryIngredients: UserPantryIngredients = {
-          userPantry: receivedUserPantry[i],
-          ingredient: await this.ingredientController.getIngredient(receivedUserPantry[i].ingredientId),
-        };
-        receivedUserPantryIngredients.push(userPantryIngredients);
-      }
-      return receivedUserPantryIngredients;
-    } else {
-      throw new Error();
+    await this.userController.getUser(userID);
+    const receivedUserPantry: UserPantry[] = await this.repo.getByUserId(userPantry);
+    const receivedUserPantryIngredients: UserPantryIngredients[] = [];
+    for (let i = 0; i < receivedUserPantry.length; i++) {
+      const userPantryIngredients: UserPantryIngredients = {
+        userPantry: receivedUserPantry[i],
+        ingredient: await this.ingredientController.getIngredient(receivedUserPantry[i].ingredientId),
+      };
+      receivedUserPantryIngredients.push(userPantryIngredients);
     }
+    return receivedUserPantryIngredients;
   };
   // public updateIngredientAmount = async(userPantry, newAmount: string): Promise<void> =>{
   //   constItem =

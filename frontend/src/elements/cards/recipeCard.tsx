@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useWindowSize, useWindowWidth } from "@react-hook/window-size";
 
-import { Recipe } from "../../../api/recipe/recipe";
+import { Recipe } from "../../api/recipe";
 import RecipeInfoCard from "./recipeInfoCard";
 
 // Swiping threshold

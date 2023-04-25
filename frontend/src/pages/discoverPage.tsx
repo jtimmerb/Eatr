@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
 
-import { Recipe } from "../../api/recipe/recipe";
+import { Recipe } from "../api/recipe";
 import FadeOut from "../elements/animation/fadeOut";
 import RecipeCard from "../elements/cards/recipeCard";
 import ThumbButton from "../elements/buttons/thumb-button";

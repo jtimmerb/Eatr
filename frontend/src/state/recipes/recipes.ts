@@ -8,7 +8,7 @@ import {
   CreateUserRecipeResponse,
   ListRecipesResponse,
   Recipe,
-} from "../../../api/recipe/recipe";
+} from "../../api/recipe";
 
 export interface State {
   recipes: Recipe[];

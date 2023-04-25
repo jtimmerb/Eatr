@@ -11,10 +11,11 @@ const InfoSection: React.FC<IProps> = (props) => {
   return (
     <div className="flex flex-col space-y-4">
       <div className="flex flex-col space-y-2">
-        <h3 className="font-bold text-xl pb-1">Ingredients</h3>
+        <h3 className="font-bold text-xl pb-1">Ingredients</h3> 
         {ingredients.map((ingredient) => (
           <p className="text-sm text-gray-700">{ingredient}</p>
         ))}
+        
       </div>
 
       <div className="flex flex-col space-y-2">
