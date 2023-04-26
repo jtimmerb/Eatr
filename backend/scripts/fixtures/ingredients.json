@@ -1,82 +1,282 @@
 [
   {
-    "name": "onions",
-    "servingSize": "cup",
+    "name": "Olive oil",
+    "servingSize": "1 tbsp",
+    "calories": 120,
+    "proteins": 0,
+    "carbohydrates": 0,
+    "fats": 14
+  },
+  {
+    "name": "Chicken breast",
+    "servingSize": "1 fillet",
+    "calories": 284,
+    "proteins": 53,
+    "carbohydrates": 0,
+    "fats": 4.3
+  },
+  {
+    "name": "Salt",
+    "servingSize": "1 tsp",
     "calories": 30,
     "proteins": 5,
-    "carbohydrates": 4,
+    "carbohydrates": 0,
     "fats": 0
   },
   {
-    "name": "salt",
-    "servingSize": "cup",
-    "calories": 30,
-    "proteins": 5,
-    "carbohydrates": 4,
+    "name": "Black pepper",
+    "servingSize": "1 tsp",
+    "calories": 6,
+    "proteins": 0,
+    "carbohydrates": 1,
     "fats": 0
   },
   {
-    "name": "pepper",
+    "name": "Milk",
     "servingSize": "cup",
-    "calories": 30,
-    "proteins": 5,
-    "carbohydrates": 4,
+    "calories": 149,
+    "proteins": 8,
+    "carbohydrates": 12,
+    "fats": 8
+  },
+  {
+    "name": "Chicken broth",
+    "servingSize": "1 cup",
+    "calories": 38,
+    "proteins": 4.8,
+    "carbohydrates": 2.9,
+    "fats": 1.4
+  },
+  {
+    "name": "Garlic",
+    "servingSize": "1 clove",
+    "calories": 13,
+    "proteins": 0,
+    "carbohydrates": 3,
     "fats": 0
   },
   {
-    "name": "couscous",
-    "servingSize": "cup",
-    "calories": 30,
-    "proteins": 5,
+    "name": "Fettucine",
+    "servingSize": "1 oz",
+    "calories": 28,
+    "proteins": 2,
     "carbohydrates": 4,
+    "fats": 1
+  },
+  {
+    "name": "Heavy cream",
+    "servingSize": "1 tbsp",
+    "calories": 51,
+    "proteins": 0.5,
+    "carbohydrates": 0.5,
+    "fats": 6
+  },
+  {
+    "name": "Parmesan",
+    "servingSize": "1 oz",
+    "calories": 122,
+    "proteins": 11,
+    "carbohydrates": 0,
+    "fats": 8
+  },
+  {
+    "name": "Coriander",
+    "servingSize": "1 tsp",
+    "calories": 2,
+    "proteins": 1,
+    "carbohydrates": 1,
+    "fats": 1
+  },
+  {
+    "name": "Oregano",
+    "servingSize": "1 oz",
+    "calories": 5,
+    "proteins": 0,
+    "carbohydrates": 1,
     "fats": 0
   },
   {
-    "name": "noodles",
-    "servingSize": "cup",
-    "calories": 30,
-    "proteins": 5,
-    "carbohydrates": 4,
+    "name": "Vinegar",
+    "servingSize": "1 tbsp",
+    "calories": 3,
+    "proteins": 0,
+    "carbohydrates": 0,
     "fats": 0
   },
   {
-    "name": "rice",
-    "servingSize": "cup",
-    "calories": 30,
-    "proteins": 5,
-    "carbohydrates": 4,
+    "name": "Romaine lettuce",
+    "servingSize": "1 cup",
+    "calories": 8,
+    "proteins": 0.6,
+    "carbohydrates": 1.5,
     "fats": 0
   },
   {
-    "name": "chicken thighs",
-    "servingSize": "cup",
-    "calories": 30,
+    "name": "Cucumber",
+    "servingSize": "1 cup",
+    "calories": 15,
+    "proteins": 1,
+    "carbohydrates": 3,
+    "fats": 0.2
+  },
+  {
+    "name": "Cherry tomato",
+    "servingSize": "1 cup",
+    "calories": 27,
+    "proteins": 1,
+    "carbohydrates": 6,
+    "fats": 0.3
+  },
+  {
+    "name": "Avocado",
+    "servingSize": "1 cup",
+    "calories": 234,
+    "proteins": 1,
+    "carbohydrates": 12,
+    "fats": 21
+  },
+  {
+    "name": "Cod",
+    "servingSize": "1 fillet",
+    "calories": 189,
+    "proteins": 41,
+    "carbohydrates": 0,
+    "fats": 1.5
+  },
+  {
+    "name": "Lemon",
+    "servingSize": "1 ct",
+    "calories": 17,
+    "proteins": 0.6,
+    "carbohydrates": 5,
+    "fats": 0.2
+  },
+  {
+    "name": "Thyme",
+    "servingSize": "1 tsp",
+    "calories": 0.8,
+    "proteins": 0,
+    "carbohydrates": 0.2,
+    "fats": 0.1
+  },
+  {
+    "name": "Pineapple",
+    "servingSize": "1 ct",
+    "calories": 452,
     "proteins": 5,
-    "carbohydrates": 4,
+    "carbohydrates": 119,
+    "fats": 1.9
+  },
+  {
+    "name": "Brown sugar",
+    "servingSize": "1 tbsp",
+    "calories": 34,
+    "proteins": 0,
+    "carbohydrates": 9,
     "fats": 0
   },
   {
-    "name": "cabbage",
-    "servingSize": "cup",
-    "calories": 30,
-    "proteins": 5,
-    "carbohydrates": 4,
+    "name": "Basil",
+    "servingSize": "1 tbsp",
+    "calories": 1,
+    "proteins": 0,
+    "carbohydrates": 0,
     "fats": 0
   },
   {
-    "name": "potatoes",
-    "servingSize": "cup",
-    "calories": 30,
-    "proteins": 5,
-    "carbohydrates": 4,
+    "name": "Mozzarella",
+    "servingSize": "1 slice",
+    "calories": 78,
+    "proteins": 8,
+    "carbohydrates": 1,
+    "fats": 4.8
+  },
+  {
+    "name": "White bread",
+    "servingSize": "1 slice",
+    "calories": 79,
+    "proteins": 2.7,
+    "carbohydrates": 15,
+    "fats": 1
+  },
+  {
+    "name": "Cheddar cheese",
+    "servingSize": "1 slice",
+    "calories": 113,
+    "proteins": 7,
+    "carbohydrates": 0.4,
+    "fats": 9
+  },
+  {
+    "name": "Butter",
+    "servingSize": "1 tbsp",
+    "calories": 102,
+    "proteins": 0.1,
+    "carbohydrates": 0,
+    "fats": 12
+  },
+  {
+    "name": "Strawberry",
+    "servingSize": "1 quart",
+    "calories": 114,
+    "proteins": 2.5,
+    "carbohydrates": 27,
+    "fats": 1.1
+  },
+  {
+    "name": "Peach",
+    "servingSize": "1 ct",
+    "calories": 68,
+    "proteins": 2,
+    "carbohydrates": 17,
     "fats": 0
   },
   {
-    "name": "tomatoes",
-    "servingSize": "cup",
-    "calories": 30,
-    "proteins": 5,
-    "carbohydrates": 4,
+    "name": "Banana",
+    "servingSize": "1 ct",
+    "calories": 105,
+    "proteins": 1.3,
+    "carbohydrates": 27,
+    "fats": 0.4
+  },
+  {
+    "name": "Orange-peach-mango juice",
+    "servingSize": "1 cup",
+    "calories": 120,
+    "proteins": 1,
+    "carbohydrates": 29,
     "fats": 0
+  },
+  {
+    "name": "Sage",
+    "servingSize": "1 tbsp",
+    "calories": 6.3,
+    "proteins": 0.2,
+    "carbohydrates": 1.2,
+    "fats": 0.3
+  },
+  {
+    "name": "Italian sausage",
+    "servingSize": "1 oz",
+    "calories": 96,
+    "proteins": 5.4,
+    "carbohydrates": 1.2,
+    "fats": 7.6
+  },
+  {
+    "name": "Gnocchi",
+    "servingSize": "1 oz",
+    "calories": 38,
+    "proteins": 0.67,
+    "carbohydrates": 4.83,
+    "fats": 1.77
+  },
+  {
+    "name": "Salmon",
+    "servingSize": "1 fillet",
+    "calories": 824,
+    "proteins": 80,
+    "carbohydrates": 0,
+    "fats": 54
   }
 ]
