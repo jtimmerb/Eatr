@@ -13,7 +13,6 @@ import TextInput from "../elements/input/text";
 import NumberInput from "../elements/input/number";
 import SelectInput from "../elements/input/select";
 import ListStep from "../elements/createRecipe/listStep";
-
 import { RootState, useAppDispatch } from "../state";
 
 const Divider: React.FC = () => <div className="h-[1px] w-full bg-gray-200" />;
@@ -33,23 +32,9 @@ interface IPrepItem {
 const CreateRecipePage: React.FC = () => {
   const navigate = useNavigate();
 
-  const [items, setItems] = useState<IIngredientItem[]>([
-    { id: 1, name: "tomatoes", amount: "6", checked: false },
-    { id: 2, name: "chicken", amount: "2", checked: false },
-    { id: 3, name: "broccoli", amount: "4", checked: false },
-    { id: 4, name: "beef", amount: "1", checked: false },
-    { id: 5, name: "pasta", amount: "2", checked: true },
-  ]);
+  const [items, setItems] = useState<IIngredientItem[]>([]);
 
-  const [steps, setSteps] = useState<IPrepItem[]>([
-    { name: "step1", content: "step1", checked: false },
-    { name: "step2", content: "step2", checked: false },
-    {
-      name: "step3",
-      content: "step3 looong long long long long long long long long long ",
-      checked: false,
-    },
-  ]);
+  const [steps, setSteps] = useState<IPrepItem[]>([]);
 
   const handleSubmit = () => {};
 
@@ -93,9 +78,7 @@ const CreateRecipePage: React.FC = () => {
     setStepDescr(event.target.value);
   };
 
-  const handleChangeIngr: React.ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
+  const handleChangeIngr = (event: any) => {
     const newItems: IIngredientItem[] = [...items];
 
     const { name, value } = event.target;
@@ -109,9 +92,7 @@ const CreateRecipePage: React.FC = () => {
     setItems(newItems);
   };
 
-  const handleChangeSteps: React.ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
+  const handleChangeSteps = (event: any) => {
     const newSteps: IPrepItem[] = [...steps];
 
     const { name, value } = event.target;
@@ -131,28 +112,20 @@ const CreateRecipePage: React.FC = () => {
         Create Recipe
       </PageHeader>
 
-      <Container className="mt-4 max-h-screen">
+      <Container className="">
         <form onSubmit={() => {}} className="flex flex-col">
-          <div className="mt-4 w-3/4">
-            <label
-              htmlFor="username"
-              className="block text-gray-700 text-sm font-bold"
-            >
-              Username
-            </label>
-            <input
-              type="text"
-              id="recipename"
-              placeholder="Recipe name"
-              name="recipename"
+          <div className="pt-2">
+            <TextInput
+              name="recipe name"
+              inputID="recipe"
               value={recipeName}
-              onChange={handleRecipeNameChange}
-              className="border rounded-md py-2 px-3 w-full text-gray-700 text-sm"
-              required
+              label="Recipe Name"
+              placeholder="Recipe Name"
+              onChange={(e: any) => setRecipeName(e.target.val)}
             />
           </div>
-          <div className="w-full mt-4 flex flex-row items-center">
-            <label className="mr-2">Ingredients</label>
+          <div className="w-full flex flex-row items-center">
+            <p className="text-gray-700 text-sm font-bold p-2">Ingredients</p>
             <RedSolidButton
               className="w-12 h-8 flex items-center justify-center"
               onClick={() => setShowAddIngrModal(true)}
@@ -179,11 +152,11 @@ const CreateRecipePage: React.FC = () => {
               </>
             ))}
           </Card>
-          <div className="w-full flex flex-row items-center mt-4">
-            <label className="mr-2">Preparations</label>
+          <div className="w-full mt-4 flex flex-row items-center">
+            <p className="text-gray-700 text-sm font-bold p-2">Preparations</p>
             <RedSolidButton
               className="w-12 h-8 flex items-center justify-center"
-              onClick={() => setShowAddPrepModal(true)}
+              onClick={() => setShowAddIngrModal(true)}
             >
               Add
             </RedSolidButton>
@@ -208,7 +181,7 @@ const CreateRecipePage: React.FC = () => {
             ))}
           </Card>
           <div className="flex justify-center mt-4">
-            <RedSolidButton className="w-32" onClick={() => null}>
+            <RedSolidButton className="" onClick={() => null}>
               Create
             </RedSolidButton>
           </div>

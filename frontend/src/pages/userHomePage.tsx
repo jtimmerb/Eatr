@@ -100,6 +100,19 @@ const UserHome: React.FC = () => {
             />
           </Link>
         </div>
+
+        <Divider />
+        {/* Create Recipe Section */}
+        <div className="mt-6 mb-5">
+          <SectionHeader>Create Recipe</SectionHeader>
+          <div className="my-2" />
+          <Link to="/create">
+            <HomeCard
+              title={"Create"}
+              background="food-pattern"
+            />
+          </Link>
+        </div>
       </Container>
 
       {showRecipeDetails ? (
