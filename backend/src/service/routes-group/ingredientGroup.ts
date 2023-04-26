@@ -74,4 +74,13 @@ export default class IngredientGroup extends RoutesGroup {
     };
     return ErrorHandler.errorWrapper(handler);
   }
+
+  private listUserHandler() {
+    const handler: RequestHandler = async (req, res, next) => {
+      const {name} = req.query as {[key: string]: string};
+      const users: Ingredient[] = await this.ingredientController.listIngredients(name);
+      res.send(users);
+    };
+    return ErrorHandler.errorWrapper(handler);
+  }
 }

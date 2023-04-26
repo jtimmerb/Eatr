@@ -61,6 +61,12 @@ export default class IngredientRepo implements IngredientRepoInterface {
     return Mapper.fromDB(result.rows[0] as IngredientEntity);
   }
 
+  public async listIngredients(searchQuery: string): Promise<Ingredient[]> {
+    const query = 'SELECT * FROM ingredients WHERE name=$1';
+    const result = await this.psql.query(query, [searchQuery]);
+    return result.rows.map(row => Mapper.fromDB(row));
+  }
+
   async getIngredientTable() {
     const query = 'SELECT * FROM ingredients';
     const result = await this.psql.query(query);
