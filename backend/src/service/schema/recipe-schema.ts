@@ -1,18 +1,22 @@
 import {JSONSchemaType} from 'ajv';
 import {RecipeIngredient} from '../../data/recipe-ingredient/entity';
 
-interface CreateRecipe {
+export interface CreateRecipeRequest {
   recipe: {name: string; steps: string[]; image: string};
   recipeIngredients: RecipeIngredient[];
 }
 
 /** Create recipe schema */
-export const createRecipeSchema: JSONSchemaType<CreateRecipe> = {
+export const createRecipeSchema: JSONSchemaType<CreateRecipeRequest> = {
   type: 'object',
   properties: {
     recipe: {
       type: 'object',
-      properties: {name: {type: 'string'}, steps: {type: 'array', minItems: 1, items: {type: 'string'}}, image: {type: 'string'}},
+      properties: {
+        name: {type: 'string'},
+        steps: {type: 'array', minItems: 1, items: {type: 'string'}},
+        image: {type: 'string'},
+      },
       required: ['name', 'steps', 'image'],
     },
     recipeIngredients: {
@@ -33,15 +37,19 @@ export const createRecipeSchema: JSONSchemaType<CreateRecipe> = {
   required: ['recipe', 'recipeIngredients'],
 };
 
-type UpdateRecipe = CreateRecipe;
+type UpdateRecipe = CreateRecipeRequest;
 
 export const updateRecipeSchema: JSONSchemaType<UpdateRecipe> = {
   type: 'object',
   properties: {
     recipe: {
       type: 'object',
-      properties: {name: {type: 'string'}, steps: {type: 'array', minItems: 1, items: {type: 'string'}}, image: {type: 'string'}},
-      required: ['name', 'steps','image'],
+      properties: {
+        name: {type: 'string'},
+        steps: {type: 'array', minItems: 1, items: {type: 'string'}},
+        image: {type: 'string'},
+      },
+      required: ['name', 'steps', 'image'],
     },
     recipeIngredients: {
       type: 'array',

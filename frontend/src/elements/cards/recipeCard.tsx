@@ -5,7 +5,10 @@ import { useWindowSize, useWindowWidth } from "@react-hook/window-size";
 import { RootState, useAppDispatch } from "../../state";
 import { Recipe } from "../../api/recipe";
 import RecipeInfoCard from "./recipeInfoCard";
-import { getRecipeDetails, removeRecipeDetails } from "../../state/recipes/recipes";
+import {
+  getRecipeDetails,
+  removeRecipeDetails,
+} from "../../state/recipes/recipes";
 import { useSelector } from "react-redux";
 
 // Swiping threshold
@@ -61,21 +64,26 @@ const RecipeCard: React.FC<IProps> = (props) => {
   }, [windowSize]);
 
   // console.log(useWindowSize());
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
-  const {recipeDetails} = useSelector((state: RootState) => state.recipes);
+  const { recipeDetails } = useSelector((state: RootState) => state.recipes);
 
   // Fetch Recipe Ingredients
   useEffect(() => {
-    dispatch(getRecipeDetails({
-      recipeID: recipe.recipeId
-    }))
-  }, [])
+    dispatch(
+      getRecipeDetails({
+        recipeID: recipe.recipeId,
+      })
+    );
+  }, []);
 
   // Delete details on unmount
-  useEffect(() => () => {
-    dispatch(removeRecipeDetails(recipe.recipeId));
-  }, [])
+  useEffect(
+    () => () => {
+      dispatch(removeRecipeDetails(recipe.recipeId));
+    },
+    []
+  );
 
   return (
     <div key={key} className={`absolute inset-0 ${hidden ? "hidden" : ""}`}>
@@ -110,8 +118,9 @@ const RecipeCard: React.FC<IProps> = (props) => {
               className="absolute bottom-0 inset-0 z-10 bg-green-500"
               style={{ opacity: greenOpacity }}
             />
-            <div className="absolute left-0 right-0 top-0 bottom-0 z-[9] floral-pattern" />
-            <img className="object-cover h-full w-full " src={recipe.image} />
+            <div className="absolute left-0 right-0 top-0 bottom-0 floral-pattern">
+              <img className="object-cover h-full w-full" src={recipe.image} />
+            </div>
             <p className="absolute bottom-0 inset-x-6 z-10 h-28 text-gray-100 text-3xl font-bold shadow-lg">
               {recipe.name}
             </p>
@@ -133,4 +142,3 @@ const RecipeCard: React.FC<IProps> = (props) => {
 };
 
 export default RecipeCard;
-

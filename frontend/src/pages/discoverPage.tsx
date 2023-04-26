@@ -18,8 +18,11 @@ import {
   addSwipedID,
   resetSwiped,
   resetRecipes,
+  listSavedRecipes,
 } from "../state/recipes/recipes";
 import { listItems } from "../state/pantry/pantry";
+import { MAX_SAVED_RECIPES } from "../utils/config";
+import { Link } from "react-router-dom";
 
 const pop = (array: Recipe[]): Recipe[] =>
   array.filter((_, index) => {
@@ -31,19 +34,26 @@ const DiscoverPage: React.FC = () => {
   const [liked, setLiked] = useState<boolean | undefined>(undefined);
   const [showOptsModal, setShowOptsModal] = useState<boolean>(false);
 
-  const curRecipeId = stack.length ? stack[stack.length - 1].recipeId : null;
-
   const dispatch = useAppDispatch();
 
   const { items } = useSelector((state: RootState) => state.pantry);
-  const { recipes, swipedIDs } = useSelector(
+  const { recipes, swipedIDs, savedRecipes } = useSelector(
     (state: RootState) => state.recipes
   );
 
+  const filterStack = stack.filter(
+    (r) => !savedRecipes.map((r) => r.recipeId).includes(r.recipeId)
+  );
+  const curRecipeId = filterStack.length
+    ? filterStack[filterStack.length - 1].recipeId
+    : null;
+
   // Fetch user ingredients
   useEffect(() => {
-    dispatch(resetRecipes())
+    dispatch(resetRecipes());
     dispatch(listItems({}));
+
+    dispatch(listSavedRecipes({}));
 
     // TODO: Disable this when not debugging
     dispatch(resetSwiped());
@@ -70,7 +80,11 @@ const DiscoverPage: React.FC = () => {
     if (liked !== undefined && curRecipeId) {
       setStack(pop(stack)); // Change redux state
       if (liked) {
-        dispatch(saveRecipe({ recipeId: curRecipeId }));
+        dispatch(saveRecipe({ recipeId: curRecipeId }))
+          .unwrap()
+          .then(() => {
+            dispatch(listSavedRecipes({}));
+          });
       }
       dispatch(addSwipedID(curRecipeId));
     }
@@ -79,7 +93,7 @@ const DiscoverPage: React.FC = () => {
     setLiked(undefined);
   }, [stack]);
 
-  const outOfRecipes = stack.length === 0; //&& !partyMovies.pending;
+  const outOfRecipes = filterStack.length === 0; //&& !partyMovies.pending;
 
   const Head = () => (
     <PageHeader
@@ -111,7 +125,27 @@ const DiscoverPage: React.FC = () => {
       </>
     );
 
-  const queue = stack.slice(stack.length - 11, stack.length);
+  if (savedRecipes.length >= MAX_SAVED_RECIPES)
+    return (
+      <>
+        <Head />
+        <Container>
+          <div className="flex flex-col align-center justify-center w-full h-full">
+            <FadeOut>
+              <p className="text-gray-600 text-center">
+                You may only like a maximum of {MAX_SAVED_RECIPES} recipes.{" "}
+                <br></br>
+                <Link to="/savedrecipes" className="text-red-400 font-bold">
+                  View my liked recipes.
+                </Link>
+              </p>
+            </FadeOut>
+          </div>
+        </Container>
+      </>
+    );
+
+  const queue = filterStack.slice(filterStack.length - 11, filterStack.length);
 
   return (
     <div>
