@@ -5,11 +5,12 @@ interface IProps {
   name: string;
   content: string;
   checked: boolean;
+  label?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
 const ListStep: React.FC<IProps> = (props) => {
-  const { name, content, checked, onChange } = props;
+  const { name, content, checked, label, onChange } = props;
 
   const itemID = "pantry-item-" + name;
 
@@ -24,18 +25,19 @@ const ListStep: React.FC<IProps> = (props) => {
         />
         <label
           className={
-            "text-lg font-medium mx-3 " +
+            "text-lg font-medium mx-3 whitespace-nowrap truncate " +
             (checked ? "text-gray-400" : "text-gray-900")
           }
           htmlFor={itemID}
         >
-          {name}
+          {label ? label : name}
         </label>
       </div>
 
       <p
         className={
-          "text-lg font-medium " + (checked ? "text-gray-400" : "text-gray-500")
+          "text-lg font-medium whitespace-nowrap truncate " +
+          (checked ? "text-gray-400" : "text-gray-500")
         }
       >
         {content}

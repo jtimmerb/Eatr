@@ -110,6 +110,7 @@ const RecipeCard: React.FC<IProps> = (props) => {
               className="absolute bottom-0 inset-0 z-10 bg-green-500"
               style={{ opacity: greenOpacity }}
             />
+            <div className="absolute left-0 right-0 top-0 bottom-0 z-[9] floral-pattern" />
             <img className="object-cover h-full w-full " src={recipe.image} />
             <p className="absolute bottom-0 inset-x-6 z-10 h-28 text-gray-100 text-3xl font-bold shadow-lg">
               {recipe.name}
@@ -117,7 +118,14 @@ const RecipeCard: React.FC<IProps> = (props) => {
 
             <div className="absolute bottom-0 inset-x-0 z-0 h-52 from-black bg-gradient-to-t" />
           </div>
-          <RecipeInfoCard recipe={recipe} ingredients={recipeDetails[recipe.recipeId] ? recipeDetails[recipe.recipeId].details.ingredients : undefined}/>
+          <RecipeInfoCard
+            recipe={recipe}
+            ingredients={
+              recipeDetails[recipe.recipeId]
+                ? recipeDetails[recipe.recipeId].details.ingredients
+                : undefined
+            }
+          />
         </div>
       </motion.div>
     </div>

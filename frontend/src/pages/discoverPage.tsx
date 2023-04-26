@@ -17,6 +17,7 @@ import {
   saveRecipe,
   addSwipedID,
   resetSwiped,
+  resetRecipes,
 } from "../state/recipes/recipes";
 import { listItems } from "../state/pantry/pantry";
 
@@ -41,6 +42,7 @@ const DiscoverPage: React.FC = () => {
 
   // Fetch user ingredients
   useEffect(() => {
+    dispatch(resetRecipes())
     dispatch(listItems({}));
 
     // TODO: Disable this when not debugging
