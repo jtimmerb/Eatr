@@ -93,7 +93,6 @@ const DiscoverPage: React.FC = () => {
     setLiked(undefined);
   }, [stack]);
 
-  console.log(filterStack);
   const outOfRecipes = filterStack.length === 0; //&& !partyMovies.pending;
 
   const Head = () => (
