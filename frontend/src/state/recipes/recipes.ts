@@ -76,6 +76,25 @@ export const saveRecipe = createAsyncThunk(
   }
 );
 
+export const deleteRecipe = createAsyncThunk(
+  "recipes/delete",
+  async (input: { recipeID: number }, { dispatch, getState }) => {
+    try {
+      const userId = (getState() as any).user.userId;
+      const response = await axios.delete<CreateUserRecipeResponse>(
+        `${API_PREFIX}/users/${userId}/recipes/${input.recipeID}`
+      );
+
+      return response.data;
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        dispatch(addAxios(err));
+      }
+      throw err;
+    }
+  }
+);
+
 export const recipesSlice = createSlice({
   name: "recipes",
   initialState: {

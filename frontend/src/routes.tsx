@@ -11,6 +11,7 @@ import UserPantryPage from "./pages/userPantryPage";
 import DiscoverPage from "./pages/discoverPage";
 import { RootState } from "./state";
 import { useSelector } from "react-redux";
+import CreateRecipePage from "./pages/createRecipesPage";
 
 const NO_USER_PATHS = ["/", "/login", "/signup"];
 
@@ -36,6 +37,8 @@ const Router: React.FC = () => {
       <Route path="/home" element={<UserHomePage />} />
       <Route path="/pantry" element={<UserPantryPage />} />
       <Route path="/discover" element={<DiscoverPage />} />
+      <Route path="/savedrecipes" element={<SavedRecipesPage />} />
+      <Route path="/create" element={<CreateRecipePage />} />
       <Route path="/*" element={<ErrorPage />} />
     </Routes>
   );

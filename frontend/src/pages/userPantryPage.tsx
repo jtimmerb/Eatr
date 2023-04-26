@@ -41,11 +41,11 @@ const UserRecipePage: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const [items, setItems] = useState<IPantryItem[]>([
-    { name: "tomatoes", count: 6, checked: false },
-    { name: "chicken", count: 2, checked: false },
-    { name: "broccoli", count: 4, checked: false },
-    { name: "beef", count: 1, checked: false },
-    { name: "pasta", count: 2, checked: true },
+    { id: 1, name: "tomatoes", amount: "6", checked: false },
+    { id: 2, name: "chicken", amount: "2", checked: false },
+    { id: 3, name: "broccoli", amount: "4", checked: false },
+    { id: 4, name: "beef", amount: "1", checked: false },
+    { id: 5, name: "pasta", amount: "2", checked: true },
   ]);
 
   const [showOptsModal, setShowOptsModal] = useState<boolean>(false);
