@@ -11,7 +11,7 @@ import UserPantryPage from "./pages/userPantryPage";
 import DiscoverPage from "./pages/discoverPage";
 import { RootState } from "./state";
 import { useSelector } from "react-redux";
-import CreateRecipePage from "./pages/createRecipesPage";
+// import CreateRecipePage from "./pages/createRecipesPage";
 
 const NO_USER_PATHS = ["/", "/login", "/signup"];
 
