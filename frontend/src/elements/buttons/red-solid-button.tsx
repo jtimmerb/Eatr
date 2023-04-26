@@ -6,13 +6,14 @@ interface IProps {
   className?: string;
   buttonType?: "button" | "submit" | "reset";
   disabled?: boolean;
+  padded?: boolean;
 }
 
 const RedSolidButton: React.FC<IProps> = (props) => {
-  const { onClick, children, className, disabled, buttonType } = props;
+  const { onClick, children, className, disabled, buttonType, padded=false} = props;
   return (
     <button
-      className={`w-52 py-2 disabled:opacity-50 px-4 border border-transparent text-sm font-medium rounded-full text-white bg-red-400 shadow-md ${className}`}
+      className={`${padded ? "" : "w-52"} py-2 disabled:opacity-50 px-4 border border-transparent text-sm font-medium rounded-full text-white bg-red-400 shadow-md ${className}`}
       onClick={(event) => {
         event.preventDefault();
         if (onClick) onClick();

@@ -23,17 +23,32 @@ interface IIngredientItem {
   amount: string;
   checked: boolean;
 }
+
 interface IPrepItem {
   name: string;
   content: string;
   checked: boolean;
 }
 
+const testIngred = [{ id: 1, name: "tomatoes", amount: "6", checked: false },
+    { id: 2, name: "chicken", amount: "2", checked: false },
+    { id: 3, name: "broccoli", amount: "4", checked: false },
+    { id: 4, name: "beef", amount: "1", checked: false },
+    { id: 5, name: "pasta", amount: "2", checked: true },]
+  
+const testSteps = [
+  { name: "step1", content: "step1", checked: false },
+  { name: "step2", content: "step2", checked: false },
+  {
+    name: "step3",
+    content: "step3 looong long long long long long long long long long ",
+    checked: false,
+  },
+];
 const CreateRecipePage: React.FC = () => {
   const navigate = useNavigate();
 
-  const [items, setItems] = useState<IIngredientItem[]>([]);
-
+  const [ingItems, setIngItems] = useState<IIngredientItem[]>(testIngred);
   const [steps, setSteps] = useState<IPrepItem[]>([]);
 
   const handleSubmit = () => {};
@@ -43,6 +58,8 @@ const CreateRecipePage: React.FC = () => {
     { label: "Pound", value: "lb" },
     { label: "Ounce", value: "oz" },
   ];
+
+  console.log(ingItems)
 
   const [showOptsModal, setShowOptsModal] = useState<boolean>(false);
   const [showAddPrepModal, setShowAddPrepModal] = useState<boolean>(false);
@@ -66,10 +83,7 @@ const CreateRecipePage: React.FC = () => {
     return nameValid && countValid && unitValid && validIngredient;
   };
 
-  const navFindRec = () => {
-    console.log("findrec");
-  };
-
+  
   const handleRecipeNameChange = (event: any) => {
     setRecipeName(event.target.value);
   };
@@ -79,7 +93,7 @@ const CreateRecipePage: React.FC = () => {
   };
 
   const handleChangeIngr = (event: any) => {
-    const newItems: IIngredientItem[] = [...items];
+    const newItems: IIngredientItem[] = [...ingItems];
 
     const { name, value } = event.target;
     console.log(name, value);
@@ -89,7 +103,7 @@ const CreateRecipePage: React.FC = () => {
       if (item.name === name) item.checked = !item.checked;
     });
 
-    setItems(newItems);
+    setIngItems(newItems);
   };
 
   const handleChangeSteps = (event: any) => {
@@ -105,6 +119,7 @@ const CreateRecipePage: React.FC = () => {
 
     setSteps(newSteps);
   };
+
 
   return (
     <>
@@ -125,19 +140,29 @@ const CreateRecipePage: React.FC = () => {
             />
           </div>
           <div className="w-full flex flex-row items-center">
-            <p className="text-gray-700 text-sm font-bold p-2">Ingredients</p>
-            <RedSolidButton
-              className="w-12 h-8 flex items-center justify-center"
-              onClick={() => setShowAddIngrModal(true)}
-            >
-              Add
-            </RedSolidButton>
+            <p className="text-gray-700 text-sm font-bold pr-2">Ingredients</p>
+            <div className="flex flex-row space-x-2">
+              <RedSolidButton
+                className="w-12 h-8 flex items-center justify-center"
+                onClick={() => setShowAddIngrModal(true)}
+              >
+                Add
+              </RedSolidButton>
+              <RedSolidButton
+                className="h-8 flex items-center justify-center"
+                onClick={() => setShowAddIngrModal(true)}
+                padded
+                disabled={ingItems.filter((ing) => ing.checked).length == 0}
+              >
+                Remove
+              </RedSolidButton>
+            </div>
           </div>
           <Card
-            className="flex flex-col flex-nowrap h-[14rem] overflow-y-scroll mt-2"
+            className="flex flex-col flex-nowrap max-h-[14rem] overflow-y-scroll mt-2"
             padded={false}
           >
-            {items.map((item, i) => (
+            {ingItems.map((item, i) => (
               <>
                 <div className="px-4">
                   <ListItem
@@ -148,21 +173,38 @@ const CreateRecipePage: React.FC = () => {
                     onChange={handleChangeIngr}
                   ></ListItem>
                 </div>
-                {items.length > 1 && i < items.length - 1 ? <Divider /> : null}
+                {ingItems.length > 1 && i < ingItems.length - 1 ? (
+                  <Divider />
+                ) : null}
               </>
             ))}
+            {ingItems.length === 0 ? (
+              <p className="mx-4 my-4">Add some ingredients to your pantry.</p>
+            ) : null}
           </Card>
           <div className="w-full mt-4 flex flex-row items-center">
-            <p className="text-gray-700 text-sm font-bold p-2">Preparations</p>
-            <RedSolidButton
-              className="w-12 h-8 flex items-center justify-center"
-              onClick={() => setShowAddIngrModal(true)}
-            >
-              Add
-            </RedSolidButton>
+            <p className="text-gray-700 text-sm font-bold pr-2">Preparations</p>
+            <div className="flex flex-row space-x-2">
+              <RedSolidButton
+                className="h-8 flex items-center justify-center"
+                onClick={() => setShowAddIngrModal(true)}
+                padded
+              >
+                Add
+              </RedSolidButton>
+
+              <RedSolidButton
+                className="h-8 flex items-center justify-center"
+                onClick={() => setShowAddIngrModal(true)}
+                padded
+                disabled={ingItems.length > 1}
+              >
+                Remove
+              </RedSolidButton>
+            </div>
           </div>
           <Card
-            className="flex flex-col flex-nowrap h-[14rem] overflow-y-scroll mt-2"
+            className="flex flex-col flex-nowrap max-h-[14rem] overflow-y-scroll mt-2"
             padded={false}
           >
             {steps.map((item, i) => (
@@ -176,14 +218,15 @@ const CreateRecipePage: React.FC = () => {
                     onChange={handleChangeSteps}
                   ></ListStep>
                 </div>
-                {items.length > 1 && i < items.length - 1 ? <Divider /> : null}
+                {ingItems.length > 1 && i < ingItems.length - 1 ? (
+                  <Divider />
+                ) : null}
               </>
             ))}
           </Card>
-          <div className="flex justify-center mt-4">
-            <RedSolidButton className="" onClick={() => null}>
-              Create
-            </RedSolidButton>
+
+          <div className="absolute bottom-16 z-10 inset-x-6 flex justify-center">
+            <RedSolidButton onClick={() => null}>Create</RedSolidButton>
           </div>
         </form>
       </Container>
@@ -214,7 +257,6 @@ const CreateRecipePage: React.FC = () => {
                 onChange={(event) => setIngredientUnit(event.target.value)}
               />
             </div>
-
             <div className="w-full mt-4">
               <RedSolidButton
                 className="w-full"
