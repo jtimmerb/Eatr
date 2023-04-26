@@ -120,8 +120,8 @@ export default class UserGroup extends RoutesGroup {
   private getUserRecipesHandler() {
     const handler: RequestHandler = async (req, res, next) => {
       const userId = parseInt(req.params.userId);
-      const userRecipes: UserRecipeWithSteps[] = await this.userRecipeController.getUsersLikedRecipes(userId);
-      res.send(userRecipes);
+      const recipes: Recipe[] = await this.userRecipeController.getUsersLikedRecipes(userId);
+      res.send(recipes);
     };
     return ErrorHandler.errorWrapper(handler);
   }
