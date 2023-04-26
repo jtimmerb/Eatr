@@ -30,7 +30,7 @@ export default class UserRecipeController {
     if (!(await this.userController.existUserById(userID))) throw new NotFound(userID.toString(), 'userID');
     if (!(await this.recipeController.existsRecipe(recipeID))) throw new NotFound(recipeID.toString(), 'recipeID');
 
-    if ((await this.getMembershipCount(userID)) > 10)
+    if ((await this.getMembershipCount(userID)) > 9)
       throw new BadRequest('User has recipe maximum of 10 liked recipes');
 
     const userRecipe: UserRecipe = {
