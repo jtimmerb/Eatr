@@ -43,7 +43,7 @@ const UserHome: React.FC = () => {
 
   return (
     <>
-      <PageHeader backAddr="/login">Home</PageHeader>
+      <PageHeader backAddr="/logout">Home</PageHeader>
       <Container className="mt-4">
         {/* Discover section */}
         <div className="mt-6 mb-5">

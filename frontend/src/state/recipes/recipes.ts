@@ -126,6 +126,13 @@ export const recipesSlice = createSlice({
     pending: false,
   } as State,
   reducers: {
+    reset: (state) => {
+      state.recipes = [];
+      state.savedRecipes = [];
+      state.swipedIDs = [];
+      state.recipeDetails = {};
+      return state;
+    },
     addSwipedID: (state, action: PayloadAction<number>) => {
       state.swipedIDs.push(action.payload);
       return state;
@@ -188,6 +195,7 @@ export const {
   resetSwiped,
   removeRecipeDetails,
   resetRecipeDetails,
+  reset,
 } = recipesSlice.actions;
 
 export default recipesSlice.reducer;

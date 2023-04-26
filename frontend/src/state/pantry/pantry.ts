@@ -115,7 +115,12 @@ export const pantrySlice = createSlice({
     items: [],
     pending: false,
   } as State,
-  reducers: {},
+  reducers: {
+    reset: (state) => {
+      state.items = [];
+      return state;
+    },
+  },
   extraReducers: (builder) => {
     // Create pantry item
     builder.addCase(createItem.fulfilled, (state) => {
@@ -168,5 +173,7 @@ export const pantrySlice = createSlice({
     });
   },
 });
+
+export const { reset } = pantrySlice.actions;
 
 export default pantrySlice.reducer;
