@@ -6,12 +6,14 @@ import ExpandIcon from "../../images/expandIcon";
 import TrashIcon from "../../images/trashIcon";
 
 interface IProps {
+  onDelete?: () => void;
+  onExpand?: () => void;
   title: string;
   hasMargin?: boolean;
 }
 
 const SavedRecipeCard: React.FC<IProps> = (props) => {
-  const { title, hasMargin } = props;
+  const { title, hasMargin, onDelete, onExpand } = props;
 
   return (
     <div
@@ -30,11 +32,15 @@ const SavedRecipeCard: React.FC<IProps> = (props) => {
           <p>yes</p>
         </div>
       </Card>
-      <div className="absolute top-[-6px] right-[-6px] z-30 rounded-full bg-slate-600 p-1.5 shadow-base overflow-visible">
-        <ExpandIcon className="stroke-white w-4 h-4" />
+      <div className="absolute flex justify-center top-[-6px] right-[-6px] z-30 rounded-full bg-slate-600 p-1.5 shadow-base overflow-visible">
+        <button type="button" onClick={onExpand}>
+          <ExpandIcon className="stroke-white w-4 h-4" />
+        </button>
       </div>
       <div className="absolute flex justify-center top-[-6px] left-[-6px] z-30 rounded-full bg-red-500 p-1.5 shadow-base overflow-visible">
-        <TrashIcon className="stroke-white w-4 h-4" />
+        <button type="button" onClick={onDelete}>
+          <TrashIcon className="stroke-white w-4 h-4" />
+        </button>
       </div>
     </div>
   );
