@@ -36,3 +36,5 @@ export interface RecipeDetails {
 }
 
 export type GetRecipeDetails = RecipeDetails;
+
+export type ListSavedRecipes = Recipe[];

@@ -57,7 +57,6 @@ const UserRecipePage: React.FC = () => {
     const newItems: IPantryItem[] = [...items];
 
     const { name, value } = event.target;
-    console.log(name, value);
 
     // Toggle checked
     newItems.forEach((item) => {

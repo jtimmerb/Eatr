@@ -6,10 +6,12 @@ import PageHeader from "../elements/pageHeader";
 import Container from "../elements/layout/container";
 import RedSolidButton from "../elements/buttons/red-solid-button";
 import SavedRecipeCard from "../elements/layout/savedRecipeCard";
-import { useAppDispatch } from "../state";
-import { useState } from "react";
+import { RootState, useAppDispatch } from "../state";
+import { useEffect, useState } from "react";
 
-import { deleteRecipe } from "../state/recipes/recipes";
+import { deleteRecipe, listSavedRecipes } from "../state/recipes/recipes";
+import Backdrop from "../elements/layout/backdrop";
+import RecipeCard from "../elements/cards/recipeCard";
 
 interface IProps {}
 
@@ -24,113 +26,55 @@ const SavedRecipesPage: React.FC<IProps> = () => {
   const dispatch = useAppDispatch();
 
   const navFindRec = () => {
-    console.log("findrec");
     navigate("/discover");
   };
 
   const handleShowDeleteRecipe = (index: number) => {
     setShowDeleteModal(true);
     setIndex(index);
-    setDescription(recipes[index].description);
-    setName(recipes[index].name);
   };
 
   const handleDeleteRecipe = (index: number) => {
-    const updatedRecipes = [...recipes];
-    updatedRecipes.splice(index, 1);
-    setRecipes(updatedRecipes);
     setShowDeleteModal(false);
-    dispatch(deleteRecipe({ recipeID: recipes[index].id }));
+    dispatch(deleteRecipe({ recipeID: savedRecipes[index].recipeId }))
+      .unwrap()
+      .then(() => dispatch(listSavedRecipes({})));
   };
 
   const handleExpandRecipe = (index: number) => {
-    setDescription(recipes[index].description);
-    setName(recipes[index].name);
     setShowDescription(true);
+    setIndex(index);
   };
 
-  const [name, setName] = useState("");
   const [index, setIndex] = useState(0);
-  const [description, setDescription] = useState("");
   const [showDescription, setShowDescription] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const [recipes, setRecipes] = useState<IRecipe[]>([
-    {
-      id: 1,
-      name: "Chicken Parmesan",
-      description:
-        "Combine 1 Tbsp. salt and 10 cups water in a medium pot. \
-        Bring to a boil, then reduce heat to medium to maintain a bare simmer.Combine 1 Tbsp.\
-         salt and 10 cups water in a medium pot. Bring to a boil, then reduce heat to medium to maintain a bare simmer.\
-         Combine 1 Tbsp. salt and 10 cups water in a medium pot. Bring to a boil, then reduce heat to medium to maintain a bare simmer.\
-         Combine 1 Tbsp. salt and 10 cups water in a medium pot. Bring to a boil, then reduce heat to medium to maintain a bare simmer.",
-    },
-    {
-      id: 1,
-      name: "Mushroom Risotto",
-      description:
-        "Combine 1 Tbsp. salt and 10 cups water in a medium pot. Bring to a boil, then reduce heat to medium to maintain a bare simmer.",
-    },
-    {
-      id: 1,
-      name: "Sunday Gravy",
-      description:
-        "Combine 1 Tbsp. salt and 10 cups water in a medium pot. Bring to a boil, then reduce heat to medium to maintain a bare simmer.",
-    },
-    {
-      id: 1,
-      name: "Chicken Parmesan1",
-      description:
-        "Combine 1 Tbsp. salt and 10 cups water in a medium pot. Bring to a boil, then reduce heat to medium to maintain a bare simmer.",
-    },
-    {
-      id: 1,
-      name: "Mushroom Risotto1",
-      description:
-        "Combine 1 Tbsp. salt and 10 cups water in a medium pot. Bring to a boil, then reduce heat to medium to maintain a bare simmer.",
-    },
-    {
-      id: 1,
-      name: "Sunday Gravy1",
-      description:
-        "Combine 1 Tbsp. salt and 10 cups water in a medium pot. Bring to a boil, then reduce heat to medium to maintain a bare simmer.",
-    },
-    {
-      id: 1,
-      name: "Chicken Parmesan2",
-      description:
-        "Combine 1 Tbsp. salt and 10 cups water in a medium pot. Bring to a boil, then reduce heat to medium to maintain a bare simmer.",
-    },
-    {
-      id: 1,
-      name: "Mushroom Risotto2",
-      description:
-        "Combine 1 Tbsp. salt and 10 cups water in a medium pot. Bring to a boil, then reduce heat to medium to maintain a bare simmer.",
-    },
-    {
-      id: 1,
-      name: "Sunday Gravy2",
-      description:
-        "Combine 1 Tbsp. salt and 10 cups water in a medium pot. Bring to a boil, then reduce heat to medium to maintain a bare simmer.",
-    },
-  ]);
+  const { savedRecipes } = useSelector((state: RootState) => state.recipes);
+
+  useEffect(() => {
+    dispatch(listSavedRecipes({}));
+  }, []);
+
+  const curRecipe =
+    savedRecipes.length > index ? savedRecipes[index] : undefined;
 
   return (
     <>
       <Container>
         <PageHeader backAddr="/home">Saved Recipes</PageHeader>
-        {recipes.length == 0 ? (
+        {savedRecipes.length == 0 ? (
           <div className="mt-20 flex justify-center text-gray-400">
             You do not have any liked recipes yet
           </div>
         ) : (
           <div className="flex flex-col flex-nowrap max-h-[40rem] overflow-y-scroll mt-4 py-2">
-            {recipes.map((recipe, i) => (
+            {savedRecipes.map((recipe, i) => (
               <SavedRecipeCard
-                key={recipe.name}
+                key={recipe.recipeId}
                 hasMargin={i > 0}
                 title={recipe.name}
+                image={recipe.image}
                 onDelete={() => handleShowDeleteRecipe(i)}
                 onExpand={() => handleExpandRecipe(i)}
               />
@@ -146,14 +90,15 @@ const SavedRecipesPage: React.FC<IProps> = () => {
         </div>
       </Container>
       {showDescription ? (
-        <Modal
-          onClose={() => {
-            setShowDescription(false);
-          }}
-          title={name}
-        >
-          <div className="text-sm">{description}</div>
-        </Modal>
+        <Backdrop onClose={() => setShowDescription(false)}>
+          <Container>
+            <div className="flex flex-col space-y-8 w-full h-full">
+              <div className="relative h-[70vh] mt-[10vh]">
+                {curRecipe ? <RecipeCard recipe={curRecipe} /> : null}
+              </div>
+            </div>
+          </Container>
+        </Backdrop>
       ) : null}
       {showDeleteModal ? (
         <Modal
@@ -162,7 +107,7 @@ const SavedRecipesPage: React.FC<IProps> = () => {
           }}
           title="Remove Recipe"
         >
-          Remove {name} from saved recipes?
+          Remove {curRecipe?.name} from saved recipes?
           <RedSolidButton
             className="mt-4 w-full"
             onClick={() => handleDeleteRecipe(index)}
