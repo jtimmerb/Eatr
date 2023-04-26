@@ -8,12 +8,10 @@ const LandingPage: React.FC = () => {
   const navigate = useNavigate();
 
   const changeToLogin = () => {
-    console.log("login");
     navigate("login");
   };
 
   const changeToSignUp = () => {
-    console.log("signup");
     navigate("signup");
   };
 
@@ -24,8 +22,8 @@ const LandingPage: React.FC = () => {
           Eatr
         </h1>
         <div className="flex flex-col items-center justify-center space-y-3">
-         <RedSolidButton onClick={changeToLogin}>Login</RedSolidButton>
-         <WhiteSolidButton onClick={changeToSignUp}>Sign Up</WhiteSolidButton>
+          <RedSolidButton onClick={changeToLogin}>Login</RedSolidButton>
+          <WhiteSolidButton onClick={changeToSignUp}>Sign Up</WhiteSolidButton>
         </div>
       </div>
     </div>

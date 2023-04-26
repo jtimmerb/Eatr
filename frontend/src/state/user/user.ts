@@ -73,14 +73,10 @@ export const userSlice = createSlice({
     pending: false,
   } as State,
   reducers: {
-    updateId: (state, action) => {
-      state.userId = action.payload;
-    },
-    updateName: (state, action) => {
-      state.name = action.payload;
-    },
-    updateRecipes: (state, action) => {
-      state.likedRecipes = action.payload;
+    logout: (state) => {
+      state.userId = undefined;
+      state.name = undefined;
+      return state;
     },
   },
   extraReducers: (builder) => {
@@ -112,6 +108,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { updateName, updateRecipes } = userSlice.actions;
+export const { logout } = userSlice.actions;
 
 export default userSlice.reducer;

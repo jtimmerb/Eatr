@@ -9,6 +9,7 @@ import UserHomePage from "./pages/userHomePage";
 import SavedRecipesPage from "./pages/savedRecipesPage";
 import UserPantryPage from "./pages/userPantryPage";
 import DiscoverPage from "./pages/discoverPage";
+import LogoutPage from "./pages/logoutPage";
 import { RootState } from "./state";
 import { useSelector } from "react-redux";
 import CreateRecipePage from "./pages/createRecipesPage";
@@ -39,6 +40,7 @@ const Router: React.FC = () => {
       <Route path="/discover" element={<DiscoverPage />} />
       <Route path="/savedrecipes" element={<SavedRecipesPage />} />
       <Route path="/create" element={<CreateRecipePage />} />
+      <Route path="/logout" element={<LogoutPage />} />
       <Route path="/*" element={<ErrorPage />} />
     </Routes>
   );
