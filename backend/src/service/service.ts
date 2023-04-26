@@ -78,7 +78,11 @@ export default class EatrService implements Service {
     this.app.get('/', (_, res) => res.end());
     this.app.get(API_VERSION, (_, res) => res.end());
 
-    const recipeGroup = new RecipeGroup(this.recipeController, this.recipeIngredientController);
+    const recipeGroup = new RecipeGroup(
+      this.recipeController,
+      this.recipeIngredientController,
+      this.ingredientController,
+    );
     recipeGroup.mount(API_VERSION + '/recipes', this.app);
 
     const userGroup = new UserGroup(this.userController, this.userPantryController, this.userRecipeController);

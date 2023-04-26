@@ -11,6 +11,8 @@ import RepoController from '../repoController';
 import RecipeController from '../recipe-controller/recipe-controller';
 import IngredientController from '../ingredient-controller/ingredient-controller';
 import UserController from '../user-controller/user-controller';
+import BadRequest from '../../utility/error/badRequest';
+import NotFound from '../../utility/error/notFound';
 
 export default class UserRecipeController {
   private repo: UserRecipeRepo;
@@ -25,49 +27,36 @@ export default class UserRecipeController {
   }
 
   public createUserRecipe = async (userID: number, recipeID: number): Promise<UserRecipe> => {
+    if (!(await this.userController.existUserById(userID))) throw new NotFound(userID.toString(), 'userID');
+    if (!(await this.recipeController.existsRecipe(recipeID))) throw new NotFound(recipeID.toString(), 'recipeID');
+
+    if ((await this.getMembershipCount(userID)) > 9)
+      throw new BadRequest('User has recipe maximum of 10 liked recipes');
+
     const userRecipe: UserRecipe = {
       userRecipeMembershipId: 0,
       userId: userID,
       recipeId: recipeID,
     };
-    //console.log(userRecipe);
-    if(await this.userController.existUserById(userID) && await this.recipeController.existsRecipe(recipeID)){
-      const newUserRecipe: UserRecipe = await this.repo.create(userRecipe);
-      return newUserRecipe;
-    }
-    else{
-      throw new Error();
-    } 
+
+    const newUserRecipe: UserRecipe = await this.repo.create(userRecipe);
+    return newUserRecipe;
   };
 
   public deleteUserRecipe = async (userID: number, recipeID: number): Promise<void> => {
-    if(await this.userController.existUserById(userID) && await this.recipeController.existsRecipe(recipeID)){
-      const userRecipe: UserRecipe = {
-        userRecipeMembershipId: 0,
-        userId: userID,
-        recipeId: recipeID,
-      };
-      await this.repo.deleteByUserAndRecipe(userRecipe);
-    }
-    else{
-      throw new Error()
-    }
+    const userRecipe: UserRecipe = {
+      userRecipeMembershipId: 0,
+      userId: userID,
+      recipeId: recipeID,
+    };
+    await this.repo.deleteByUserAndRecipe(userRecipe);
+    return;
   };
 
   public getMembershipCount = async (userID: number): Promise<number> => {
-    if(await this.userController.existUserById(userID)){
-      const userRecipe: UserRecipe = {
-        userRecipeMembershipId: 0,
-        userId: userID,
-        recipeId: 0,
-      };
-      const recievedUserRecipe: UserRecipe[] = await this.repo.getByUserId(userRecipe);
-      console.log(recievedUserRecipe);
-      return recievedUserRecipe.length;
-    }
-    else{
-      throw new Error()
-    }
+    if (!(await this.userController.existUserById(userID))) throw new NotFound(userID.toString(), 'userID');
+    const recievedUserRecipe: UserRecipe[] = await this.repo.getByUserId(userID);
+    return recievedUserRecipe.length;
   };
 
   public getRecipeFromId = async (userRecipeMembershipID: number): Promise<Recipe> => {
@@ -81,25 +70,22 @@ export default class UserRecipeController {
     return receivedRecipe;
   };
 
-  public getUsersLikedRecipes = async (userID: number): Promise<UserRecipeWithSteps[]> => {
+  public getUsersLikedRecipes = async (userID: number): Promise<Recipe[]> => {
+    if (!(await this.userController.existUserById(userID))) throw new NotFound(userID.toString(), 'userID');
+
     const userRecipe: UserRecipe = {
       userRecipeMembershipId: 0,
       userId: userID,
       recipeId: 0,
     };
-    if (await this.userController.existUserById(userID)) {
-      const receivedUserRecipe: UserRecipe[] = await this.repo.getByUserId(userRecipe);
-      const receivedUserRecipeWithSteps: UserRecipeWithSteps[] = [];
-      for (let i = 0; i < receivedUserRecipe.length; i++) {
-        const userRecipeWithSteps: UserRecipeWithSteps = {
-          userRecipe : receivedUserRecipe[i],
-          recipe: await this.recipeController.getRecipe(receivedUserRecipe[i].recipeId)
-        }
-        receivedUserRecipeWithSteps.push(userRecipeWithSteps);
-      }
-      return receivedUserRecipeWithSteps;
-    } else {
-      throw new Error();
+    const likedRecipes: UserRecipe[] = await this.repo.getByUserId(userID);
+
+    const recipes: Recipe[] = [];
+
+    for (const likedRecipe of likedRecipes) {
+      recipes.push(await this.recipeController.getRecipe(likedRecipe.recipeId));
     }
+
+    return recipes;
   };
 }

@@ -4,19 +4,27 @@ import {JSONSchemaType} from 'ajv';
 import RoutesGroup from './routesGroup';
 import RecipeController from '../../biz/recipe-controller/recipe-controller';
 import RecipeIngredientController from '../../biz/recipeingredient-controller/recipeingredient-controller';
+import IngredientController from '../../biz/ingredient-controller/ingredient-controller';
 import {Recipe} from '../../data/recipes/entity';
 import {RecipeIngredient, RecipeIngredientQuery} from '../../data/recipe-ingredient/entity';
 import ErrorHandler from '../../utility/error/errorHandler';
-import {createRecipeSchema, updateRecipeSchema} from '../schema/recipe-schema';
+import {CreateRecipeRequest, createRecipeSchema, updateRecipeSchema} from '../schema/recipe-schema';
+import BadRequest from '../../utility/error/badRequest';
 
 export default class RecipeGroup extends RoutesGroup {
   private recipeController: RecipeController;
   private recipeIngredientController: RecipeIngredientController;
+  private ingredientController: IngredientController;
 
-  constructor(recipeController: RecipeController, recipeIngredientController: RecipeIngredientController) {
+  constructor(
+    recipeController: RecipeController,
+    recipeIngredientController: RecipeIngredientController,
+    ingredientController: IngredientController,
+  ) {
     super();
     this.recipeController = recipeController;
     this.recipeIngredientController = recipeIngredientController;
+    this.ingredientController = ingredientController;
   }
 
   public init(): void {
@@ -27,7 +35,7 @@ export default class RecipeGroup extends RoutesGroup {
     this.getRouter().get('/:recipeId', this.getRecipeHandler());
 
     // get random recipe endpoint
-    this.getRouter().get('/', this.getRandomRecipesHandler());
+    this.getRouter().get('/', this.getRecipesHandler());
 
     // delete recipe endpoint
     this.getRouter().delete('/:recipeId', this.deleteRecipeHandler());
@@ -41,12 +49,20 @@ export default class RecipeGroup extends RoutesGroup {
     const handler: RequestHandler = async (req, res, next) => {
       this.validateSchema(createRecipeSchema as JSONSchemaType<any>, req.body);
 
-      const reqRecipe = req.body.recipe;
-      const reqRecipeIngredients = req.body.recipeIngredients;
+      const body = req.body as CreateRecipeRequest;
+      const reqRecipe = body.recipe;
+      const reqRecipeIngredients = body.recipeIngredients;
 
       // Get recipe
       const recipe: Recipe = {recipeId: 0, ...reqRecipe};
 
+      // Check that ingredients exist
+      for (const ing of reqRecipeIngredients) {
+        if (!(await this.ingredientController.existsIngredient(ing.ingredientId)))
+          throw new BadRequest(`No ingredient exists with id '${ing.ingredientId}'`);
+      }
+
+      // Create recipe
       const db_recipe = await this.recipeController.createRecipe(recipe);
 
       const recipeIngredientArray: RecipeIngredient[] = reqRecipeIngredients.map(
@@ -65,7 +81,7 @@ export default class RecipeGroup extends RoutesGroup {
       );
 
       const db_recipeIngredient = await this.recipeIngredientController.createRecipeIngredient(recipeIngredientArray);
-      const response = {db_recipe, db_recipeIngredient};
+      const response = {recipe: db_recipe, recipeIngriedents: db_recipeIngredient};
 
       res.send(response);
     };
@@ -76,21 +92,25 @@ export default class RecipeGroup extends RoutesGroup {
     const handler: RequestHandler = async (req, res, next) => {
       const reqRecipeId = parseInt(req.params.recipeId);
 
-      const db_recipe = await this.recipeController.getRecipe(reqRecipeId);
-      const db_recipeIngredients = await this.recipeIngredientController.getRecipeIngredient(db_recipe.recipeId);
+      const recipe = await this.recipeController.getRecipe(reqRecipeId);
+      const details = await this.recipeIngredientController.getRecipeDetails(recipe.recipeId);
 
-      const response = {db_recipe, db_recipeIngredients};
+      const response = {recipe, details};
 
       res.send(response);
     };
     return ErrorHandler.errorWrapper(handler);
   }
 
-  private getRandomRecipesHandler() {
+  private getRecipesHandler() {
     const handler: RequestHandler = async (req, res, next) => {
-      const filterIngredients = req.body.filterIngredients;
+      const {ingredients} = req.query as {[key: string]: string | undefined};
+      const filterIngredients = ingredients?.split(',').map(ing => parseInt(ing, 10));
 
-      const recipes: Recipe[] = await this.recipeIngredientController.getFiveRandomRecipes(filterIngredients);
+      if (!filterIngredients || !ingredients)
+        throw new BadRequest('must specificy a list of ingredients to filter by.');
+
+      const recipes: Recipe[] = await this.recipeIngredientController.getRecipesByIngredients(filterIngredients);
 
       res.send(recipes);
     };

@@ -1,0 +1,393 @@
+[
+  {
+    "recipe": {
+      "recipeId": 0,
+      "name": "Chicken Alfredo",
+      "steps": [
+        "In a large skillet over medium-high heat, heat oil. Add chicken and season with salt and pepper. Cook until golden and cooked through, 8 minutes per side. Let rest 10 minutes, then slice.",
+        "Add milk, broth, and garlic to skillet. Season with salt and pepper and bring to a simmer. Add fettuccine, stirring frequently for about 3 minutes. Let cook until al dente, 8 minutes more.",
+        "Stir in heavy cream and Parmesan until combined. Simmer until sauce thickens.",
+        "Remove from heat and stir in sliced chicken."
+      ],
+      "image": "https://www.budgetbytes.com/wp-content/uploads/2022/07/Chicken-Alfredo-bowl.jpg"
+    },
+    "recipeIngredients": [
+      {
+        "ingredientName": "Olive oil",
+        "ingredientAmount": "2 tbsp"
+      },
+      {
+        "ingredientName": "Chicken breast",
+        "ingredientAmount": "2 fillets"
+      },
+      {
+        "ingredientName": "Salt",
+        "ingredientAmount": "2 tbsp"
+      },
+      {
+        "ingredientName": "Black pepper",
+        "ingredientAmount": "2 tbsp"
+      },
+      {
+        "ingredientName": "Chicken broth",
+        "ingredientAmount": "1.5 cups"
+      },
+      {
+        "ingredientName": "Milk",
+        "ingredientAmount": "1.5 cups"
+      },
+      {
+        "ingredientName": "Garlic",
+        "ingredientAmount": "2 cloves"
+      },
+      {
+        "ingredientName": "Fettucine",
+        "ingredientAmount": "8 oz"
+      },
+      {
+        "ingredientName": "Heavy cream",
+        "ingredientAmount": "0.5 cups"
+      },
+      {
+        "ingredientName": "Parmesan",
+        "ingredientAmount": "1 cup"
+      }
+    ]
+  },
+  {
+    "recipe": {
+      "recipeId": 0,
+      "name": "Grilled Chicken Salad",
+      "steps": [
+        "Heat grill to medium-high. Season chicken with coriander, oregano, salt, and pepper. Grill, covered, turning halfway through, until slightly charred and the thickest part of the breast registers 165ºF when probed with a thermometer, 18 to 22 minutes. Let rest for another 5 minutes, then slice.",
+        "Meanwhile, make dressing. Whisk olive oil, vinegar, and parsley in a small bowl and season with salt and pepper.",
+        "Divide lettuce, cucumbers, tomatoes, avocado among four serving bowls. Top with sliced chicken, then drizzle with dressing."
+      ],
+      "image": "https://nutritiouslife.com/wp-content/uploads/2010/05/shutterstock_274855409-copy-1302x988.jpg"
+    },
+    "recipeIngredients": [
+      {
+        "ingredientName": "Olive oil",
+        "ingredientAmount": "5 tbsp"
+      },
+      {
+        "ingredientName": "Chicken breast",
+        "ingredientAmount": "2 fillets"
+      },
+      {
+        "ingredientName": "Vinegar",
+        "ingredientAmount": "4 tbsp"
+      },
+      {
+        "ingredientName": "Black pepper",
+        "ingredientAmount": "1 tbsp"
+      },
+      {
+        "ingredientName": "Coriander",
+        "ingredientAmount": "1 tsp"
+      },
+      {
+        "ingredientName": "Oregano",
+        "ingredientAmount": "1 tsp"
+      },
+      {
+        "ingredientName": "Salt",
+        "ingredientAmount": "1 tbsp"
+      },
+      {
+        "ingredientName": "Romaine lettuce",
+        "ingredientAmount": "8 cups"
+      },
+      {
+        "ingredientName": "Cherry tomatoes",
+        "ingredientAmount": "1 cup"
+      },
+      {
+        "ingredientName": "Cucumber",
+        "ingredientAmount": "2 cups"
+      },
+      {
+        "ingredientName": "Avocado",
+        "ingredientAmount": "1.5 cups"
+      }
+    ]
+  },
+  {
+    "recipe": {
+      "recipeId": 0,
+      "name": "Baked Cod",
+      "steps": [
+        "Preheat the oven to 400° and pat cod filets with a paper towel until dry. Season all over with salt and pepper.",
+        "Combine olive oil, cherry tomatoes, lemon slices, garlic, and thyme in a 9-x-13 baking dish. Toss to coat and spread into an even layer. Nestle cod pieces into baking dish.",
+        "Bake until fish is opaque and flakes easily with a fork, 15 to 20 minutes, depending on thickness of filets.",
+        "Serve garnished with parsley, more lemon juice, and pan sauce."
+      ],
+      "image": "https://hips.hearstapps.com/hmg-prod/images/delish-baked-cod-horizontal-1530302867.jpg"
+    },
+    "recipeIngredients": [
+      {
+        "ingredientName": "Cod",
+        "ingredientAmount": "4 fillets"
+      },
+      {
+        "ingredientName": "Salt",
+        "ingredientAmount": "1 tbsp"
+      },
+      {
+        "ingredientName": "Black pepper",
+        "ingredientAmount": "1 tbsp"
+      },
+      {
+        "ingredientName": "Olive oil",
+        "ingredientAmount": "4 tbsp"
+      },
+      {
+        "ingredientName": "Lemon",
+        "ingredientAmount": "1 ct"
+      },
+      {
+        "ingredientName": "Garlic",
+        "ingredientAmount": "2 cloves"
+      },
+      {
+        "ingredientName": "Thyme",
+        "ingredientAmount": "1 tsp"
+      }
+    ]
+  },
+  {
+    "recipe": {
+      "recipeId": 0,
+      "name": "Grilled Pineapple",
+      "steps": [
+        "Preheat grill or grill pan to medium-high. In a large bowl, toss together pineapple, lemon juice, and brown sugar.",
+        "Place on grill and cook, turning occasionally, until you can easily insert a paring knife into the center of a piece, 10 to 15 minutes."
+      ],
+      "image": "https://hips.hearstapps.com/hmg-prod/images/delish-grilled-pineapple-1528231579.jpeg"
+    },
+    "recipeIngredients": [
+      {
+        "ingredientName": "Pineapple",
+        "ingredientAmount": "1 ct "
+      },
+      {
+        "ingredientName": "Lemon",
+        "ingredientAmount": "juice of 1 ct"
+      },
+      {
+        "ingredientName": "Brown sugar",
+        "ingredientAmount": "2 tbsp"
+      }
+    ]
+  },
+  {
+    "recipe": {
+      "recipeId": 0,
+      "name": "Bruschetta Chicken",
+      "steps": [
+        "In a small bowl, combine oil, half the lemon juice, 1 teaspoon salt, 1/4 teaspoon pepper, and Italian seasoning (or oregano) and whisk to combine. Transfer to a large re-sealable bag along with chicken; seal and refrigerate for 30 minutes.",
+        "Heat grill over medium-high then add chicken, discarding excess marinade. Grill until charred and cooked to an internal temperature of 155°-160°, about 5 to 7 minutes per side.",
+        "Meanwhile, combine tomatoes, garlic, basil, and remaining lemon juice, and season with salt and pepper. While chicken is still on grill, top each breast with 1 slice mozzarella and cover until cheese is melted, 2 to 3 minutes. Top chicken with tomato mixture.",
+        "Garnish with Parmesan and serve."
+      ],
+      "image": "https://therecipewell.com/wp-content/uploads/2021/06/Bruschetta-Chicken-Bake-feature.jpg"
+    },
+    "recipeIngredients": [
+      {
+        "ingredientName": "Olive oil",
+        "ingredientAmount": "4 tbsp"
+      },
+      {
+        "ingredientName": "Lemon",
+        "ingredientAmount": "juice of 1 ct"
+      },
+      {
+        "ingredientName": "Salt",
+        "ingredientAmount": "1 tsp"
+      },
+      {
+        "ingredientName": "Black pepper",
+        "ingredientAmount": "1/4 tsp"
+      },
+      {
+        "ingredientName": "Oregano",
+        "ingredientAmount": "1 tsp"
+      },
+      {
+        "ingredientName": "Chicken breast",
+        "ingredientAmount": "4 fillets"
+      },
+      {
+        "ingredientName": "Cherry tomatoes",
+        "ingredientAmount": "1 cup"
+      },
+      {
+        "ingredientName": "Garlic",
+        "ingredientAmount": "2 cloves"
+      },
+      {
+        "ingredientName": "Basil",
+        "ingredientAmount": "1 tbsp chopped"
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "ingredientAmount": "4 slices"
+      }
+    ]
+  },
+  {
+    "recipe": {
+      "recipeId": 0,
+      "name": "Grilled Cheese",
+      "steps": [
+        "Preheat a nonstick skillet over medium heat. Generously butter one side of a slice of bread. Place bread butter-side down in the hot skillet; add 1 slice of cheese. Butter a second slice of bread on one side and place butter-side up on top of cheese.",
+        "Cook until lightly browned on one side; flip over and continue cooking until cheese is melted. Repeat with remaining 2 slices of bread, butter, and slice of cheese."
+      ],
+      "image": "https://cdn.loveandlemons.com/wp-content/uploads/2023/01/grilled-cheese-sandwich.jpg"
+    },
+    "recipeIngredients": [
+      {
+        "ingredientName": "White bread",
+        "ingredientAmount": "4 slices"
+      },
+      {
+        "ingredientName": "Butter",
+        "ingredientAmount": "3 tbsp"
+      },
+      {
+        "ingredientName": "Cheddar cheese",
+        "ingredientAmount": "2 slices"
+      }
+    ]
+  },
+  {
+    "recipe": {
+      "recipeId": 0,
+      "name": "Tomato Basil Penne Pasta",
+      "steps": [
+        "Bring a large pot of water to a rolling boil over high heat. Cook pasta in boiling water until cooked through but still firm to the bite, about 10 minutes. Drain and set aside.",
+        "Heat the oil in a large skillet over medium-high heat. Add garlic and cook until soft, 1 to 2 minutes. Add tomatoes, reduce heat to medium, and simmer for 10 minutes. Stir in mozzarella and parmesan cheese. When cheese begins to melt, mix in cooked penne pasta. Season with fresh basil."
+      ],
+      "image": "https://assets.wsimgs.com/wsimgs/ab/images/dp/recipe/202248/0005/img4l.jpg"
+    },
+    "recipeIngredients": [
+      {
+        "ingredientName": "Penne",
+        "ingredientAmount": "4 cups"
+      },
+      {
+        "ingredientName": "Olive oil",
+        "ingredientAmount": "1 tbsp"
+      },
+      {
+        "ingredientName": "Garlic",
+        "ingredientAmount": "3 cloves minced"
+      },
+      {
+        "ingredientName": "Cherry tomatoes",
+        "ingredientAmount": "2 cups"
+      },
+      {
+        "ingredientName": "Mozzarella",
+        "ingredientAmount": "2 slices shredded"
+      },
+      {
+        "ingredientName": "Parmesan",
+        "ingredientAmount": "1/2 cup grated"
+      },
+      {
+        "ingredientName": "Basil",
+        "ingredientAmount": "1 tbsp minced"
+      }
+    ]
+  },
+  {
+    "recipe": {
+      "recipeId": 0,
+      "name": "Fruit Smoothie",
+      "steps": [
+        "Combine strawberries, peaches, and banana in a blender; blend until smooth.",
+        "Add ice and pour in juice; blend again to desired consistency.",
+        "Enjoy!"
+      ],
+      "image": "https://www.eatingwell.com/thmb/eRqGGkiDBhUk8pd1jUTjZKCjah4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Fruit-Yogurt-Smoothie-f48d245e03224ab79001716eb259b558.jpg"
+    },
+    "recipeIngredients": [
+      {
+        "ingredientName": "Strawberry",
+        "ingredientAmount": "1 quart"
+      },
+      {
+        "ingredientName": "Peach",
+        "ingredientAmount": "2 ct"
+      },
+      {
+        "ingredientName": "Banana",
+        "ingredientAmount": "1 ct"
+      },
+      {
+        "ingredientName": "Orange-peach-mango juice",
+        "ingredientAmount": "1 cup"
+      }
+    ]
+  },
+  {
+    "recipe": {
+      "recipeId": 0,
+      "name": "Gnocchi with Sausage",
+      "steps": [
+        "Melt 8 tablespoons butter in a small saucepan over medium-low heat. Cook, swirling occasionally, until golden brown and nutty smelling, 8 to 10 minutes. Add sage and cook, until crisp, 5 to 10 seconds.",
+        "Melt remaining 2 tablespoons butter in a medium skillet over medium-high heat. Add sausage and cook, breaking it up with a spoon, until browned and cooked through, 10 to 12 minutes. Transfer to a plate.",
+        "Pour off all but 2 tablespoons fat from skillet; reduce heat to medium. Add gnocchi and spread into a single layer. Cook, without stirring, 2 minutes. Toss, and continue cooking, until golden brown and crispy, 3 to 4 minutes. Add sage butter and sausage, and cook until warmed through, 1 to 2 minutes."
+      ],
+      "image": "https://hips.hearstapps.com/hmg-prod/images/crispy-gnocchi-with-sausage-and-sage-brown-butter-1663854652.jpg"
+    },
+    "recipeIngredients": [
+      {
+        "ingredientName": "Butter",
+        "ingredientAmount": "10 tbsp"
+      },
+      {
+        "ingredientName": "Sage",
+        "ingredientAmount": "2 tbsp chopped"
+      },
+      {
+        "ingredientName": "Italian sausage",
+        "ingredientAmount": "12 oz"
+      },
+      {
+        "ingredientName": "Gnocchi",
+        "ingredientAmount": "18 oz"
+      }
+    ]
+  },
+  {
+    "recipe": {
+      "recipeId": 0,
+      "name": "Crispy Pan Seared Salmon",
+      "steps": [
+        "Pat salmon fillets dry with paper towels. Season with salt and pepper. Heat oil in a large nonstick skillet over medium-high heat. Cook salmon, skin side down, until skin is crispy, 5 to 7 minutes. Flip and cook until just cooked through, 1 to 2 minutes.",
+        "Serve with your favorite side dish."
+      ],
+      "image": "https://www.healthyseasonalrecipes.com/wp-content/uploads/2022/11/crispy-seared-salmon-hero-sq-32-640x480.jpg"
+    },
+    "recipeIngredients": [
+      {
+        "ingredientName": "Salmon",
+        "ingredientAmount": "4 fillets"
+      },
+      {
+        "ingredientName": "Olive oil",
+        "ingredientAmount": "1 tbsp"
+      },
+      {
+        "ingredientName": "Salt",
+        "ingredientAmount": "1 tsp"
+      },
+      {
+        "ingredientName": "Black pepper",
+        "ingredientAmount": "1/2 tsp"
+      }
+    ]
+  }
+]

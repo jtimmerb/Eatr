@@ -50,34 +50,32 @@ export default class UserGroup extends RoutesGroup {
     this.getRouter().delete('/:userId', this.deleteUserHandler());
 
     // add recipe to user's recipe list
-    this.getRouter().post('/recipes/:userId', this.addUserRecipeHandler());
+    this.getRouter().post('/:userId/recipes/', this.addUserRecipeHandler());
 
     // get list of user's recipes
-    this.getRouter().get('/recipes/:userId', this.getUserRecipesHandler());
+    this.getRouter().get('/:userId/recipes/', this.getUserRecipesHandler());
 
     // remove a recipe from user's liked recipes
-    this.getRouter().delete('/recipes/:userId/:recipeId', this.deleteUserRecipeHandler());
+    this.getRouter().delete('/:userId/recipes/:recipeId', this.deleteUserRecipeHandler());
 
     // add ingredient to user's pantry
-    this.getRouter().post('/ingredients/:userId', this.addUserPantryHandler());
+    this.getRouter().post('/:userId/ingredients', this.addUserPantryHandler());
 
     // get list user's pantry
-    this.getRouter().get('/ingredients/:userId', this.getUserPantryHandler());
+    this.getRouter().get('/:userId/ingredients', this.getUserPantryHandler());
 
     //update user's pantry
-    this.getRouter().put('/ingredients/:userId', this.updateUserPantryHandler());
+    this.getRouter().put('/:userId/ingredients', this.updateUserPantryHandler());
 
     // remove item from user's pantry
-    this.getRouter().delete('/ingredients/:userId/:ingredientId', this.deleteUserPantryHandler());
+    this.getRouter().delete('/:userId/ingredients/:ingredientId', this.deleteUserPantryHandler());
   }
 
   private createUserHandler() {
     const handler: RequestHandler = async (req, res, next) => {
       this.validateSchema(createUserSchema as JSONSchemaType<any>, req.body);
-      console.log('Service route group', req.body.name);
       const user = await this.userController.createUser(req.body.name);
-      console.log('service after create', user);
-      res.status(404).send(user);
+      res.send(user);
     };
     return ErrorHandler.errorWrapper(handler);
   }
@@ -122,8 +120,8 @@ export default class UserGroup extends RoutesGroup {
   private getUserRecipesHandler() {
     const handler: RequestHandler = async (req, res, next) => {
       const userId = parseInt(req.params.userId);
-      const userRecipes: UserRecipeWithSteps[] = await this.userRecipeController.getUsersLikedRecipes(userId);
-      res.send(userRecipes);
+      const recipes: Recipe[] = await this.userRecipeController.getUsersLikedRecipes(userId);
+      res.send(recipes);
     };
     return ErrorHandler.errorWrapper(handler);
   }

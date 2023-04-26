@@ -3,13 +3,13 @@ import Checkbox from "../input/checkbox";
 
 interface IProps {
   name: string;
-  count: number;
+  amount: string;
   checked: boolean;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
 const ListItem: React.FC<IProps> = (props) => {
-  const { name, count, checked, onChange } = props;
+  const { name, amount, checked, onChange } = props;
 
   const itemID = "pantry-item-" + name;
 
@@ -38,7 +38,7 @@ const ListItem: React.FC<IProps> = (props) => {
           "text-lg font-medium " + (checked ? "text-gray-400" : "text-gray-500")
         }
       >
-        {count}
+        {amount}
       </p>
     </div>
   );

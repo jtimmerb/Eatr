@@ -70,10 +70,9 @@ export default class UserRecipeRepo implements UserRecipeRepoInterface {
     return Mapper.fromDB(result.rows[0] as UserRecipeEntity);
   }
 
-  public async getByUserId(userRecipe: UserRecipe): Promise<UserRecipe[]> {
-    const userRecipeEnt = Mapper.toDB(userRecipe);
-    const query = `SELECT * FROM user_recipes WHERE user_id=${userRecipeEnt.user_id}`;
-    const result = await this.psql.query(query);
+  public async getByUserId(userId: number): Promise<UserRecipe[]> {
+    const query = 'SELECT * FROM user_recipes WHERE user_id=$1';
+    const result = await this.psql.query(query, [userId]);
     const entityList = [];
     for (let i = 0; i < result.rowCount; i++) {
       const ent = Mapper.fromDB(result.rows[i] as UserRecipeEntity);

@@ -18,7 +18,7 @@ export default class IngredientGroup extends RoutesGroup {
   public init(): void {
     this.getRouter().post('/', this.createIngredientHandler());
 
-    this.getRouter().get('/', this.getIngredientHandler());
+    this.getRouter().get('/', this.listIngredientsHandler());
 
     this.getRouter().get('/:ingredientId', this.getIngredientHandler());
 
@@ -46,6 +46,15 @@ export default class IngredientGroup extends RoutesGroup {
     return ErrorHandler.errorWrapper(handler);
   }
 
+  private listIngredientsHandler() {
+    const handler: RequestHandler = async (req, res, next) => {
+      const {name} = req.query as {[key: string]: string};
+      const ingredients = await this.ingredientController.getIngredientsByName(name);
+      res.send(ingredients);
+    };
+    return ErrorHandler.errorWrapper(handler);
+  }
+
   private updateIngredientHandler() {
     const handler: RequestHandler = async (req, res, next) => {
       this.validateSchema(updateIngredientSchema as JSONSchemaType<any>, req.body);
@@ -62,15 +71,6 @@ export default class IngredientGroup extends RoutesGroup {
       const ingredientId = parseInt(req.params.ingredientId);
       await this.ingredientController.deleteIngredient(ingredientId);
       res.sendStatus(200);
-    };
-    return ErrorHandler.errorWrapper(handler);
-  }
-
-  private listUserHandler() {
-    const handler: RequestHandler = async (req, res, next) => {
-      const {name} = req.query as {[key: string]: string};
-      const users: Ingredient[] = await this.ingredientController.listIngredients(name);
-      res.send(users);
     };
     return ErrorHandler.errorWrapper(handler);
   }

@@ -76,9 +76,9 @@ export default class RecipeIngredientRepo implements RecipeIngredientRepoInterfa
     return Mapper.fromDB(result.rows[0] as RecipeIngredientEntity);
   }
 
-  public async getByIngredientID(ingredient: Ingredient): Promise<RecipeIngredient[]> {
-    const query = `SELECT * FROM recipe_ingredients WHERE ingredient_id=${ingredient.ingredientId} LIMIT 20`;
-    const result = await this.psql.query(query);
+  public async getByIngredientID(ingredientId: number): Promise<RecipeIngredient[]> {
+    const query = `SELECT * FROM recipe_ingredients WHERE ingredient_id=$1 LIMIT 20`;
+    const result = await this.psql.query(query, [ingredientId]);
     const entityList = [];
     for (let i = 0; i < result.rowCount; i++) {
       const ent = Mapper.fromDB(result.rows[i] as RecipeIngredientEntity);

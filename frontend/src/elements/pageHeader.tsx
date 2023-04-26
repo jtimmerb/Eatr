@@ -3,13 +3,18 @@ import { useNavigate } from "react-router-dom";
 import ArrowIcon from "../images/arrowIcon";
 
 interface IProps {
-  pageName: string;
+  children: React.ReactNode;
   backAddr: string;
+  secondaryIcon?: React.ReactNode;
+  className?: string
 }
 
-const PageHeader: React.FC<IProps> = (props) => {
-  const { backAddr, pageName } = props;
-
+const PageHeader: React.FC<IProps> = ({
+  children,
+  secondaryIcon,
+  backAddr,
+  className
+}) => {
   const navigate = useNavigate();
   const back = () => {
     navigate(backAddr);
@@ -17,14 +22,14 @@ const PageHeader: React.FC<IProps> = (props) => {
 
   return (
     <>
-      <div className="flex items-center justify-between mx-auto pt-10 ">
+      <div className={`flex flex-row items-center justify-between mx-auto pt-10 ${className}`}>
         <button name="backArrow" className="ml-12" type="button" onClick={back}>
           <ArrowIcon className="stroke-red-400" />
         </button>
         <label className="not-italic font-extrabold text-3xl tracking-tighter text-black">
-          {pageName}
+          {children}
         </label>
-        <div className="w-16"></div>
+        <div className="flex flex-row w-16 inline-block">{secondaryIcon}</div>
       </div>
     </>
   );

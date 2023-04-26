@@ -3,6 +3,7 @@ import pg from 'pg';
 import {Ingredient, IngredientEntity} from './entity';
 import {IngredientMapper as Mapper} from './mapper';
 import {Repo} from '..';
+import NotFound from '../../utility/error/notFound';
 
 type IngredientRepoInterface = Repo<Ingredient>;
 
@@ -53,22 +54,22 @@ export default class IngredientRepo implements IngredientRepoInterface {
   }
 
   /** Get user by userID */
-  public async get(ingredient: Ingredient): Promise<Ingredient> {
-    const ingredientEnt = Mapper.toDB(ingredient);
-    const query = `SELECT * FROM ingredients WHERE ingredient_id=${ingredientEnt.ingredient_id}`;
-    const result = await this.psql.query(query);
+  public async getById(ingredientId: number): Promise<Ingredient> {
+    const query = `SELECT * FROM ingredients WHERE ingredient_id=$1`;
+    const result = await this.psql.query(query, [ingredientId]);
+    if (result.rowCount === 0) throw new NotFound(ingredientId + '', 'ingredientId');
     return Mapper.fromDB(result.rows[0] as IngredientEntity);
-  }
-
-  public async listIngredients(searchQuery: string): Promise<Ingredient[]> {
-    const query = 'SELECT * FROM ingredients WHERE name=$1';
-    const result = await this.psql.query(query, [searchQuery]);
-    return result.rows.map(row => Mapper.fromDB(row));
   }
 
   async getIngredientTable() {
     const query = 'SELECT * FROM ingredients';
     const result = await this.psql.query(query);
     console.log(result.rows);
+  }
+
+  public async getByName(name: string): Promise<Ingredient[]> {
+    const query = 'SELECT * FROM ingredients WHERE name=$1';
+    const result = await this.psql.query(query, [name]);
+    return result.rows.map(row => Mapper.fromDB(row));
   }
 }

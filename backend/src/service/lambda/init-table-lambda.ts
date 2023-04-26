@@ -59,6 +59,7 @@ CREATE TABLE recipes
 (
     recipe_id integer NOT NULL DEFAULT nextval('recipes_recipe_id_seq'::regclass),
     name text COLLATE pg_catalog."default" NOT NULL,
+    image text COLLATE pg_catalog."default" NOT NULL,
     steps json,
     CONSTRAINT recipe_pkey PRIMARY KEY (recipe_id)
 );
