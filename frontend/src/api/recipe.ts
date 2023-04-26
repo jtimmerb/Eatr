@@ -38,3 +38,15 @@ export interface RecipeDetails {
 export type GetRecipeDetails = RecipeDetails;
 
 export type ListSavedRecipes = Recipe[];
+
+export interface RecipeIngredient {
+  recipeIngredientMembershipId: number;
+  recipeId: number;
+  ingredientId: number;
+  ingredientAmount: string;
+}
+
+export interface CreateRecipeRequest {
+  recipe: { name: string; steps: string[]; image: string };
+  recipeIngredients: RecipeIngredient[];
+}

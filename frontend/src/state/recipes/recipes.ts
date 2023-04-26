@@ -4,6 +4,7 @@ import axios from "axios";
 import { addAxios } from "../errors/errors";
 import { API_PREFIX } from "../../utils/config";
 import {
+  CreateRecipeRequest,
   CreateUserRecipeRequest,
   CreateUserRecipeResponse,
   GetRecipeDetails,
@@ -116,6 +117,41 @@ export const deleteRecipe = createAsyncThunk(
   }
 );
 
+export const createRecipe = createAsyncThunk(
+  "recipes/create",
+  async (
+    input: {
+      recipeName: string;
+      steps: string[];
+      ingredients: { id: number; amount: string }[];
+    },
+    { dispatch }
+  ) => {
+    try {
+      const body: CreateRecipeRequest = {
+        recipe: {
+          name: input.recipeName,
+          steps: input.steps,
+          image: "",
+        },
+        recipeIngredients: input.ingredients.map((ing) => ({
+          recipeIngredientMembershipId: -1,
+          recipeId: -1,
+          ingredientId: ing.id,
+          ingredientAmount: ing.amount,
+        })),
+      };
+
+      await axios.post<CreateUserRecipeResponse>(`${API_PREFIX}/recipes`, body);
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        dispatch(addAxios(err));
+      }
+      throw err;
+    }
+  }
+);
+
 export const recipesSlice = createSlice({
   name: "recipes",
   initialState: {
@@ -147,6 +183,10 @@ export const recipesSlice = createSlice({
     },
     resetRecipeDetails: (state) => {
       state.recipeDetails = {};
+      return state;
+    },
+    resetRecipes: (state) => {
+      state.recipes = [];
       return state;
     },
   },
@@ -187,6 +227,17 @@ export const recipesSlice = createSlice({
     builder.addCase(getRecipeDetails.rejected, (state, action) => {
       state.pending = false;
     });
+
+    // Create recipe
+    builder.addCase(createRecipe.fulfilled, (state, { payload }) => {
+      state.pending = false;
+    });
+    builder.addCase(createRecipe.pending, (state) => {
+      state.pending = true;
+    });
+    builder.addCase(createRecipe.rejected, (state, action) => {
+      state.pending = false;
+    });
   },
 });
 
@@ -196,6 +247,7 @@ export const {
   removeRecipeDetails,
   resetRecipeDetails,
   reset,
+  resetRecipes,
 } = recipesSlice.actions;
 
 export default recipesSlice.reducer;

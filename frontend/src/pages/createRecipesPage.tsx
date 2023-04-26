@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
+import { v4 } from "uuid";
 import { useSelector } from "react-redux";
-// import { selectName, selectId } from "../states/userSlice";
 import { useNavigate } from "react-router-dom";
+
 import PageHeader from "../elements/pageHeader";
 import Card from "../elements/layout/card";
 import Container from "../elements/layout/container";
@@ -14,6 +14,8 @@ import NumberInput from "../elements/input/number";
 import SelectInput from "../elements/input/select";
 import ListStep from "../elements/createRecipe/listStep";
 import { RootState, useAppDispatch } from "../state";
+import { searchIngredient } from "../state/pantry/pantry";
+import { createRecipe } from "../state/recipes/recipes";
 
 const Divider: React.FC = () => <div className="h-[1px] w-full bg-gray-200" />;
 
@@ -30,74 +32,55 @@ interface IPrepItem {
   checked: boolean;
 }
 
-const testIngred = [{ id: 1, name: "tomatoes", amount: "6", checked: false },
-    { id: 2, name: "chicken", amount: "2", checked: false },
-    { id: 3, name: "broccoli", amount: "4", checked: false },
-    { id: 4, name: "beef", amount: "1", checked: false },
-    { id: 5, name: "pasta", amount: "2", checked: true },]
-  
-const testSteps = [
-  { name: "step1", content: "step1", checked: false },
-  { name: "step2", content: "step2", checked: false },
-  {
-    name: "step3",
-    content: "step3 looong long long long long long long long long long ",
-    checked: false,
-  },
+const unitOptions = [
+  { label: "Unit", value: "unit" },
+  { label: "Pound", value: "lb" },
+  { label: "Ounce", value: "oz" },
+  { label: "Cup", value: "cup" },
+  { label: "Tablespoon", value: "tbsp" },
+  { label: "Teaspoon", value: "tspn" },
 ];
+
+
 const CreateRecipePage: React.FC = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  const [ingItems, setIngItems] = useState<IIngredientItem[]>(testIngred);
-  const [steps, setSteps] = useState<IPrepItem[]>([]);
-
-  const handleSubmit = () => {};
-
-  const unitOptions = [
-    { label: "Unit", value: "unit" },
-    { label: "Pound", value: "lb" },
-    { label: "Ounce", value: "oz" },
-  ];
-
-  console.log(ingItems)
-
-  const [showOptsModal, setShowOptsModal] = useState<boolean>(false);
+  const [ingItems, setIngItems] = useState<IIngredientItem[]>([]);
+  const [prepItems, setPrepItems] = useState<IPrepItem[]>([]);
+  
   const [showAddPrepModal, setShowAddPrepModal] = useState<boolean>(false);
   const [showAddIngrModal, setShowAddIngrModal] = useState<boolean>(false);
   const [recipeName, setRecipeName] = useState("");
-  const [stepDescr, setStepDescr] = useState("");
+  const [prepName, setPrepName] = useState("");
   const [ingredientName, setIngredientName] = useState("");
   const [ingredientCount, setIngredientCount] = useState(1);
   const [ingredientUnit, setIngredientUnit] = useState(unitOptions[0].value);
+
   const { search: ingredient, items: stateItems } = useSelector(
     (state: RootState) => state.pantry
   );
 
-  const formValid = () => {
+  useEffect(() => {
+    dispatch(searchIngredient({ name: ingredientName}))
+  }, [ingredientName])
+
+  const formValidIngr = () => {
     const nameValid = ingredientName !== "";
     const countValid = ingredientCount > 0;
     const unitValid = ingredientUnit !== "";
 
-    const validIngredient = ingredient ? !Number.isNaN(ingredient.id) : false;
+    const validIngredient = ingredient ? (ingredientName == ingredient.name && !Number.isNaN(ingredient.id)) : false;
 
     return nameValid && countValid && unitValid && validIngredient;
   };
 
-  
-  const handleRecipeNameChange = (event: any) => {
-    setRecipeName(event.target.value);
-  };
-
-  const handleStepDescrChange = (event: any) => {
-    setStepDescr(event.target.value);
-  };
+ 
 
   const handleChangeIngr = (event: any) => {
     const newItems: IIngredientItem[] = [...ingItems];
 
     const { name, value } = event.target;
-    console.log(name, value);
-
+    
     // Toggle checked
     newItems.forEach((item) => {
       if (item.name === name) item.checked = !item.checked;
@@ -106,20 +89,78 @@ const CreateRecipePage: React.FC = () => {
     setIngItems(newItems);
   };
 
-  const handleChangeSteps = (event: any) => {
-    const newSteps: IPrepItem[] = [...steps];
+  const handleRemoveIngr = () => {
+    let newItems : IIngredientItem[] = [...ingItems];
+    newItems = newItems.filter((item) => !item.checked)
+    setIngItems(newItems);
+  }
+  
+  const handleChangePrep = (event: any) => {
+    const newSteps: IPrepItem[] = [...prepItems];
 
     const { name, value } = event.target;
-    console.log(name, value);
+
 
     // Toggle checked
     newSteps.forEach((item) => {
       if (item.name === name) item.checked = !item.checked;
     });
 
-    setSteps(newSteps);
+    setPrepItems(newSteps);
   };
 
+  const handleRemovePrep = () => {
+    let newItems: IPrepItem[] = [...prepItems];
+    newItems = newItems.filter((item) => !item.checked);
+    setPrepItems(newItems);
+  };
+
+  const handleAddIngr = () => {
+    if (ingredient === undefined) return;
+    const newIngredient:IIngredientItem = {
+      id: ingredient.id,
+      name: ingredientName,
+      amount: ingredientCount + " "+ingredientUnit,
+      checked: false
+    }
+    setIngItems([...ingItems, newIngredient])
+    setIngredientName("")
+    setIngredientCount(1)
+    setIngredientUnit(unitOptions[0].value);
+    setShowAddIngrModal(false)
+  }
+
+  const handleAddPrep = () => {
+    const newPrep: IPrepItem = {
+      name: v4(),
+      content: prepName,
+      checked: false
+    }
+
+    setPrepItems([...prepItems, newPrep])
+    setPrepName("")
+    setShowAddPrepModal(false)
+  }
+
+  const valid = () => {
+    const hasName = recipeName.length > 0;
+    const hasIng = ingItems.length > 0;
+    const hasPrep = prepItems.length > 0;
+
+    return hasName && hasIng && hasPrep;
+  }
+
+  const handleSubmit = () => {
+    dispatch(createRecipe({
+      recipeName,
+      steps: prepItems.map(item => item.content),
+      ingredients: ingItems,
+    })).unwrap().then(() => {
+      setIngItems([])
+      setPrepItems([])
+      setRecipeName("")
+    })
+  };
 
   return (
     <>
@@ -128,7 +169,7 @@ const CreateRecipePage: React.FC = () => {
       </PageHeader>
 
       <Container className="">
-        <form onSubmit={() => {}} className="flex flex-col">
+        <div className="flex flex-col">
           <div className="pt-2">
             <TextInput
               name="recipe name"
@@ -136,21 +177,22 @@ const CreateRecipePage: React.FC = () => {
               value={recipeName}
               label="Recipe Name"
               placeholder="Recipe Name"
-              onChange={(e: any) => setRecipeName(e.target.val)}
+              onChange={(event) => setRecipeName(event.target.value)}
             />
           </div>
           <div className="w-full flex flex-row items-center">
             <p className="text-gray-700 text-sm font-bold pr-2">Ingredients</p>
             <div className="flex flex-row space-x-2">
               <RedSolidButton
-                className="w-12 h-8 flex items-center justify-center"
+                className="h-8 flex items-center justify-center"
                 onClick={() => setShowAddIngrModal(true)}
+                padded
               >
                 Add
               </RedSolidButton>
               <RedSolidButton
                 className="h-8 flex items-center justify-center"
-                onClick={() => setShowAddIngrModal(true)}
+                onClick={handleRemoveIngr}
                 padded
                 disabled={ingItems.filter((ing) => ing.checked).length == 0}
               >
@@ -163,23 +205,22 @@ const CreateRecipePage: React.FC = () => {
             padded={false}
           >
             {ingItems.map((item, i) => (
-              <>
+              <div key={item.name}>
                 <div className="px-4">
                   <ListItem
-                    key={item.name}
                     name={item.name}
                     checked={item.checked}
-                    amount={"5"}
+                    amount={item.amount}
                     onChange={handleChangeIngr}
                   ></ListItem>
                 </div>
                 {ingItems.length > 1 && i < ingItems.length - 1 ? (
                   <Divider />
                 ) : null}
-              </>
+              </div>
             ))}
             {ingItems.length === 0 ? (
-              <p className="mx-4 my-4">Add some ingredients to your pantry.</p>
+              <p className="mx-4 my-4">Add some ingredients to your recipe.</p>
             ) : null}
           </Card>
           <div className="w-full mt-4 flex flex-row items-center">
@@ -187,7 +228,7 @@ const CreateRecipePage: React.FC = () => {
             <div className="flex flex-row space-x-2">
               <RedSolidButton
                 className="h-8 flex items-center justify-center"
-                onClick={() => setShowAddIngrModal(true)}
+                onClick={() => setShowAddPrepModal(true)}
                 padded
               >
                 Add
@@ -195,9 +236,9 @@ const CreateRecipePage: React.FC = () => {
 
               <RedSolidButton
                 className="h-8 flex items-center justify-center"
-                onClick={() => setShowAddIngrModal(true)}
+                onClick={handleRemovePrep}
                 padded
-                disabled={ingItems.length > 1}
+                disabled={prepItems.filter((prep) => prep.checked).length == 0}
               >
                 Remove
               </RedSolidButton>
@@ -207,28 +248,33 @@ const CreateRecipePage: React.FC = () => {
             className="flex flex-col flex-nowrap max-h-[14rem] overflow-y-scroll mt-2"
             padded={false}
           >
-            {steps.map((item, i) => (
-              <>
+            {prepItems.map((item, i) => (
+              <div key={item.name}>
                 <div className="px-4">
                   <ListStep
-                    key={item.name}
                     name={item.name}
+                    label={`Step ${i + 1}`}
                     checked={item.checked}
                     content={item.content}
-                    onChange={handleChangeSteps}
+                    onChange={handleChangePrep}
                   ></ListStep>
                 </div>
-                {ingItems.length > 1 && i < ingItems.length - 1 ? (
+                {prepItems.length > 1 && i < prepItems.length - 1 ? (
                   <Divider />
                 ) : null}
-              </>
+              </div>
             ))}
+            {prepItems.length === 0 ? (
+              <p className="mx-4 my-4">
+                Add some preparation instructions to your recipe.
+              </p>
+            ) : null}
           </Card>
 
           <div className="absolute bottom-16 z-10 inset-x-6 flex justify-center">
-            <RedSolidButton onClick={() => null}>Create</RedSolidButton>
+            <RedSolidButton onClick={handleSubmit} disabled={!valid()}>Create</RedSolidButton>
           </div>
-        </form>
+        </div>
       </Container>
 
       {showAddIngrModal ? (
@@ -260,8 +306,8 @@ const CreateRecipePage: React.FC = () => {
             <div className="w-full mt-4">
               <RedSolidButton
                 className="w-full"
-                onClick={handleSubmit}
-                disabled={!formValid()}
+                onClick={handleAddIngr}
+                disabled={!formValidIngr()}
               >
                 Add Item
               </RedSolidButton>
@@ -278,25 +324,19 @@ const CreateRecipePage: React.FC = () => {
               id="stepdescr"
               placeholder="Enter preparation step"
               name="stepdescr"
-              value={stepDescr}
-              onChange={handleStepDescrChange}
+              value={prepName}
+              onChange={(e) => setPrepName(e.target.value)}
               className="border rounded-md py-2 px-3 w-full text-gray-700 text-sm"
             />
             <div className="w-full mt-4">
-              <RedSolidButton className="w-full" onClick={() => null}>
+              <RedSolidButton
+                className="w-full"
+                onClick={handleAddPrep}
+                disabled={prepName.length === 0}
+              >
                 Add Step
               </RedSolidButton>
             </div>
-          </div>
-        </Modal>
-      ) : null}
-
-      {showOptsModal ? (
-        <Modal title="Options" onClose={() => setShowOptsModal(false)}>
-          <div className="w-full mt-4">
-            <RedSolidButton className="w-full" onClick={() => null}>
-              Delete Checked Items
-            </RedSolidButton>
           </div>
         </Modal>
       ) : null}

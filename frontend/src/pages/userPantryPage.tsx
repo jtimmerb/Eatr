@@ -102,7 +102,7 @@ const UserRecipePage: React.FC = () => {
     const countValid = ingredientCount > 0;
     const unitValid = ingredientUnit !== "";
 
-    const validIngredient = ingredient ? !Number.isNaN(ingredient.id) : false;
+    const validIngredient = ingredient ? (ingredientName == ingredient.name && !Number.isNaN(ingredient.id)) : false;
 
     return nameValid && countValid && unitValid && validIngredient;
   };
