@@ -23,6 +23,12 @@ import {
 
 const Divider: React.FC = () => <div className="h-[1px] w-full bg-gray-200" />;
 
+const capitalize = (s: string) => {
+  if (s.length > 0) return s.slice(0, 1).toUpperCase() + s.slice(1);
+
+  return s;
+};
+
 interface IPantryItem {
   id: number;
   name: string;
@@ -102,7 +108,9 @@ const UserRecipePage: React.FC = () => {
     const countValid = ingredientCount > 0;
     const unitValid = ingredientUnit !== "";
 
-    const validIngredient = ingredient ? (ingredientName == ingredient.name && !Number.isNaN(ingredient.id)) : false;
+    const validIngredient = ingredient
+      ? ingredientName == ingredient.name && !Number.isNaN(ingredient.id)
+      : false;
 
     return nameValid && countValid && unitValid && validIngredient;
   };
@@ -178,7 +186,9 @@ const UserRecipePage: React.FC = () => {
           <div>
             <TextInput
               label="Name"
-              onChange={(event) => setIngredientName(event.target.value)}
+              onChange={(event) =>
+                setIngredientName(capitalize(event.target.value))
+              }
               placeholder="Enter ingredient name"
               value={ingredientName}
             />
