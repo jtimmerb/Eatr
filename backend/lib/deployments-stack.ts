@@ -1,6 +1,7 @@
 import * as path from 'path';
 import {Construct} from 'constructs';
 import {
+  Tags,
   Stack,
   StackProps,
   Duration,
@@ -71,6 +72,7 @@ export class EatrServiceStack extends Stack {
         },
       ],
     });
+    Tags.of(vpc).add('service', envSpecificName('eatr-backend-lb'));
 
     // create secruity group for eatr
     const dbSecurityGroup = new ec2.SecurityGroup(this, 'eatr-db-sg', {
@@ -145,8 +147,12 @@ export class EatrServiceStack extends Stack {
 
     dbInstance.connections.allowFrom(ecsService, ec2.Port.tcp(PG_PORT));
 
-    const lb = new elbv2.ApplicationLoadBalancer(this, 'LB', {vpc, internetFacing: true});
-    const listener = lb.addListener('Listener', {port: 80});
+    const lb = new elbv2.ApplicationLoadBalancer(this, 'LB', {
+      vpc,
+      internetFacing: true,
+      loadBalancerName: envSpecificName('eatr-backend-lb'),
+    });
+    const listener = lb.addListener('container', {port: 80});
     ecsService.registerLoadBalancerTargets({
       containerName: container.containerName,
       containerPort: 8080,
@@ -159,6 +165,7 @@ export class EatrServiceStack extends Stack {
         },
       }),
     });
+    Tags.of(lb).add('service', envSpecificName('eatr-backend-lb'));
 
     /** Lambda functions */
     const commonLambda = {
@@ -187,127 +194,5 @@ export class EatrServiceStack extends Stack {
     initializeLambda.role?.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('SecretsManagerReadWrite'));
     masterUserSecret.grantRead(initializeLambda);
     dbInstance.connections.allowFrom(initializeLambda, ec2.Port.tcp(PG_PORT));
-
-    // Frontend
-    // S3 bucket -> storing static files
-    // cdn infront of bucket
-    //
-
-    const websiteBucket = new s3.Bucket(this, 'eatrfrontend-bucket', {
-      websiteIndexDocument: 'index.html',
-      removalPolicy: RemovalPolicy.DESTROY,
-      autoDeleteObjects: true,
-      publicReadAccess: true,
-    });
-
-    // const originAccessIdentity = new cloudfront.OriginAccessIdentity(
-    //   this,
-    //   envSpecificName('eatr-frontend-origin-access'),
-    // );
-    // websiteBucket.grantRead(originAccessIdentity);
-
-    // Cloudfront Distribution
-    const dist = new cloudfront.Distribution(this, envSpecificName('eatr-frontend-dist'), {
-      defaultRootObject: 'index.html',
-      errorResponses: [
-        {
-          httpStatus: 404,
-          responseHttpStatus: 200,
-          responsePagePath: '/index.html',
-        },
-      ],
-      defaultBehavior: {
-        // origin: new origins.S3Origin(websiteBucket, {originAccessIdentity}),
-        origin: new origins.S3Origin(websiteBucket),
-      },
-    });
-
-    new CfnOutput(this, envSpecificName('cloudfront-url'), {
-      value: dist.domainName,
-      description: 'The URL of the cloudfront distribution.',
-      exportName: envSpecificName('cloudfront-url'),
-    });
-
-    new s3deploy.BucketDeployment(this, 'deploy-eatr-frontent', {
-      sources: [s3deploy.Source.asset(path.join(__dirname, '/../../frontend/dist'))],
-      distribution: dist,
-      destinationBucket: websiteBucket,
-    });
-
-    // API gateway
-    // const api = new apigateway.RestApi(this, envSpecificName('eatr-frontend-api'), {
-    //   description: 'Frontend gateway for eatr application',
-    //   deployOptions: {
-    //     stageName: getDeploymentEnv(),
-    //     tracingEnabled: true,
-    //     dataTraceEnabled: true,
-    //   },
-    //   binaryMediaTypes: ['*/*'],
-    // });
-
-    const api = new apigwv2.HttpApi(this, envSpecificName('eatr-ingress-api'), {
-      description: 'Frontend gateway for eatr application',
-      defaultIntegration: new HttpUrlIntegration('cloudfront-proxy', `https://${dist.domainName}`),
-    });
-
-    // Create backend route
-    const albIntegration = new HttpAlbIntegration('alb-proxy', listener);
-    api.addRoutes({
-      path: '/api/v1/{proxy+}',
-      methods: [apigwv2.HttpMethod.GET, apigwv2.HttpMethod.POST, apigwv2.HttpMethod.PUT, apigwv2.HttpMethod.DELETE],
-      integration: albIntegration,
-    });
-
-    new CfnOutput(this, envSpecificName('api-url'), {
-      value: api.url || '',
-      description: 'The URL of the API gateway.',
-      exportName: envSpecificName('api-url'),
-    });
-
-    // Proxy cloudfront
-    // api.root.addMethod('GET', new apigateway.HttpIntegration(`https://${dist.domainName}`));
-
-    // const distIntegration = new apigateway.HttpIntegration(`https://${dist.domainName}/{proxy}`, {
-    //   proxy: true,
-    //   options: {
-    //     requestParameters: {
-    //       'integration.request.path.proxy': 'method.request.path.proxy',
-    //     },
-    //   },
-    // });
-    // api.root.addProxy({
-    //   defaultIntegration: distIntegration,
-    //   defaultMethodOptions: {
-    //     requestParameters: {
-    //       'method.request.path.proxy': true,
-    //     },
-    //   },
-    // });
-
-    // // Proxy backend
-    // const backendIntegration = new apigateway.HttpIntegration(`http://${lb.loadBalancerDnsName}/api/v1/{proxy}`, {
-    //   proxy: true,
-    //   httpMethod: 'ANY',
-    //   options: {
-    //     requestParameters: {
-    //       'integration.request.path.proxy': 'method.request.path.proxy',
-    //     },
-    //   },
-    // });
-    // const v1 = api.root.addResource('api').addResource('v1');
-    // const methodOptions = {
-    //   requestParameters: {
-    //     'method.request.path.proxy': true,
-    //   },
-    // };
-    // const proxy = v1.addProxy({
-    //   anyMethod: false,
-    //   defaultIntegration: backendIntegration,
-    //   defaultMethodOptions: {...methodOptions},
-    // });
-    // proxy.addMethod('GET', backendIntegration, methodOptions);
-    // proxy.addMethod('POST', backendIntegration, methodOptions);
-    // proxy.addMethod('PUT', backendIntegration, methodOptions);
-    // proxy.addMethod('DELETE', backendIntegration, methodOptions);
   }
 }
